@@ -8,6 +8,7 @@ import { Estimate } from '../components/ui';
 import { go } from '../router';
 import { PHOTOS } from '../data/photos';
 import SendToGpt from '../components/SendToGpt';
+import { youtubeSuggestions } from '../lib/youtube';
 import { recipeText, GPT_RECIPE_PROMPT } from '../lib/share';
 
 const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -203,6 +204,22 @@ export default function RecipePage({ id, query }) {
         </ol>
         {recipe.tip && <p className="notice">💡 {recipe.tip}</p>}
         <p className="muted small">출처: {recipe.source}</p>
+      </section>
+
+      <section className="card no-print">
+        <h2><span aria-hidden>▶️</span> 유튜브 추천 영상</h2>
+        <p className="muted small">누르면 유튜브에서 이 메뉴의 조리 영상 검색 결과가 열려요.</p>
+        <ul className="yt-list">
+          {youtubeSuggestions(recipe).map((y) => (
+            <li key={y.q}>
+              <a href={y.url} target="_blank" rel="noopener noreferrer">
+                <span className="yt-ico" aria-hidden>▶</span>
+                <span className="yt-body"><b>{y.label}</b><span className="muted small">{y.desc}</span></span>
+                <span aria-hidden>›</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <div className="row wrap no-print">

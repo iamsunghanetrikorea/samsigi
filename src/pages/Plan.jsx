@@ -16,7 +16,7 @@ export default function Plan({ route }) {
     <div className="stack">
       <div className="row between wrap">
         <h1>식단</h1>
-        <Seg label="보기" value={view} onChange={(v) => go(`/plan?view=${v}&d=${d}`)} options={[{ value: 'week', label: '주간' }, { value: 'month', label: '월간' }]} />
+        <div className="hide-narrow"><Seg label="보기" value={view} onChange={(v) => go(`/plan?view=${v}&d=${d}`)} options={[{ value: 'week', label: '주간' }, { value: 'month', label: '월간' }]} /></div>
       </div>
       {view === 'month' ? <Month d={d} /> : <Week d={d} />}
     </div>
@@ -65,13 +65,13 @@ function Week({ d }) {
 
   return (
     <>
-      <div className="pager">
+      <div className="pager hide-narrow">
         <button className="btn ghost" onClick={() => go(`/plan?view=week&d=${addDays(dates[0], -7)}`)} aria-label="지난 주">◀ 지난 주</button>
         <div className="center"><b>{fmtDate(dates[0])} ~ {fmtDate(dates[6]).replace(/^\d+월 /, '')}</b>{weekStart(today()) === dates[0] && <div className="muted small">이번 주</div>}</div>
         <button className="btn ghost" onClick={() => go(`/plan?view=week&d=${addDays(dates[0], 7)}`)} aria-label="다음 주">다음 주 ▶</button>
       </div>
 
-      <div className="row wrap no-print">
+      <div className={`row wrap no-print ${filled ? 'hide-narrow' : ''}`}>
         <button className="btn primary" onClick={() => (filled ? setConfirm('regen') : regen())}>{filled ? '주 전체 다시 만들기' : '이 주 식단 만들기 (21끼)'}</button>
         {filled > 0 && filled < 7 && <button className="btn" onClick={() => { const r = generate(dates, { overwrite: false }); notify(r.warnings[0] || '빈 끼니를 채웠어요'); }}>빈 끼니만 채우기</button>}
         {hasPrev && <button className="btn ghost" onClick={() => setConfirm('copy')}>지난주 식단 복사</button>}
@@ -80,7 +80,7 @@ function Week({ d }) {
       </div>
 
       {avg && (
-        <section className="card">
+        <section className="card hide-narrow">
           <h2>이번 주 하루 평균 <span className="est">추정치</span></h2>
           <NutrientBars totals={avg} targets={targets} />
           <p className="muted small">가정식 예상 재료비(1인분 기준): 주 {won(weekCost)}</p>
