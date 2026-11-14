@@ -4,13 +4,13 @@ import { RECIPE_BY_ID, MEAL_LABEL, FOOD_GROUPS, foodGroup, shortTitle } from '..
 import { ING } from '../data/ingredients';
 import { MEAL_KEYS, entryNutrition, dayTotals, round } from '../lib/nutrition';
 import { buildShopping } from '../lib/shopping';
-import { today, weekDates, weekStart, monthDates, monthKey, parse, WD, fmtMonth } from '../lib/date';
+import { today, weekDates, weekStart, monthDates, monthKey, parse, WD, fmtMonth, fmtDate } from '../lib/date';
 import { Modal } from './ui';
 import Plate from './Plate';
 import { MealCard } from './meal';
 import { mapLinks } from '../pages/Restaurants';
 import { go } from '../router';
-import { todayRecipesText, GPT_PROMPT } from '../lib/share';
+import { todayRecipesText, GPT_PROMPT, recipeText, GPT_RECIPE_PROMPT, sendToChatGptNow } from '../lib/share';
 import SendToGpt from './SendToGpt';
 
 export const MEAL_ICON = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
@@ -126,7 +126,7 @@ export function NutritionDonut({ date }) {
 
 // 다음 끼니 레시피
 export function TodayRecipe() {
-  const { state, targets } = useStore();
+  const { state, targets, notify } = useStore();
   const [sending, setSending] = useState(false);
   const d = today();
   const hasPlan = Object.values(state.plans[d] || {}).some((e) => e?.recipeId);
@@ -154,8 +154,12 @@ export function TodayRecipe() {
             {r.steps.slice(0, 3).map(([s], i) => <li key={i}>{s}</li>)}
           </ol>
           <div className="row wrap">
-            <button className="btn primary" onClick={() => go(`/recipe/${r.id}?date=${d}&meal=${k}`)}>자세한 레시피 보기</button>
+            <button className="btn primary" onClick={() => {
+              sendToChatGptNow(`${GPT_RECIPE_PROMPT}\n\n${recipeText({ recipe: r, items: n.items, servings: e.servings || 1, nutrition: n, mealLabel: MEAL_LABEL[k], dateLabel: fmtDate(d) })}`, notify);
+              go(`/recipe/${r.id}?date=${d}&meal=${k}`);
+            }}>자세한 레시피 보기</button>
           </div>
+          <p className="muted small">누르면 ChatGPT(외부 서비스)에 이 레시피가 바로 전달되어 자세한 설명을 받을 수 있어요. 건강정보는 보내지 않아요.</p>
         </>
       )}
       <button className="btn soft wide" onClick={() => setSending(true)} disabled={!hasPlan}>📤 레시피 보내기 (ChatGPT)</button>

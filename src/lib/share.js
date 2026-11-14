@@ -65,3 +65,12 @@ export async function copyText(text) {
     } catch { return false; }
   }
 }
+
+// 확인 창 없이 바로 ChatGPT로 보내기 — 팝업 차단을 피하려고 클릭 처리 중에 먼저 창을 연다
+export function sendToChatGptNow(text, notify) {
+  const { url, prefilled } = chatGptUrl(text);
+  window.open(url, '_blank', 'noopener,noreferrer');
+  copyText(text).then((ok) => notify?.(prefilled
+    ? 'ChatGPT 새 대화에 레시피를 담아 열었어요.'
+    : (ok ? '내용이 길어 복사해 두었어요. ChatGPT 입력창에 붙여넣기 해 주세요.' : 'ChatGPT를 열었어요. 레시피 화면에서 내용을 복사해 붙여넣어 주세요.')));
+}
