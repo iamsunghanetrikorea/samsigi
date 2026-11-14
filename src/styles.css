@@ -443,3 +443,4 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 }
 @media (max-width: 340px) { .me { display: none; } }
 .day-date { font-size: .85rem; font-weight: 700; color: var(--primary); margin-left: .3rem; white-space: nowrap; }
+@media (max-width: 899px) { .week-panel .day-kcal { display: none; } }
