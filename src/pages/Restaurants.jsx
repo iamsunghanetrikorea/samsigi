@@ -31,16 +31,23 @@ function dist(a, b) {
 }
 const fmtDist = (m) => (m < 1000 ? `${Math.round(m / 10) * 10}m` : `${(m / 1000).toFixed(1)}km`);
 
-export const mapLinks = (query, pos) => ({
-  naver: `https://map.naver.com/p/search/${encodeURIComponent(query)}`,
-  kakao: `https://map.kakao.com/?q=${encodeURIComponent(query)}`,
-  google: pos ? `https://www.google.com/maps/search/${encodeURIComponent(query)}/@${pos.lat},${pos.lng},16z` : `https://www.google.com/maps/search/${encodeURIComponent(query)}`,
-});
+const isNarrow = () => typeof window !== 'undefined' && !!window.matchMedia?.('(max-width: 899px)').matches;
+
+export const mapLinks = (query, pos) => {
+  const q = encodeURIComponent(query);
+  const google = pos ? `https://www.google.com/maps/search/${q}/@${pos.lat},${pos.lng},16z` : `https://www.google.com/maps/search/${q}`;
+  // 모바일은 브라우저 안에서 열리는 모바일 웹 주소 사용
+  if (isNarrow()) return { naver: `https://m.map.naver.com/search2/search.naver?query=${q}`, kakao: `https://m.map.kakao.com/actions/searchView?q=${q}`, google };
+  return { naver: `https://map.naver.com/p/search/${q}`, kakao: `https://map.kakao.com/?q=${q}`, google };
+};
+
+// 화면 안에 바로 보이는 지도 (구글 지도 임베드, API 키 불필요)
+// 좌표 대신 검색어를 쓰며, '근처' 검색은 구글이 접속 위치를 기준으로 대략적인 동네를 보여 줌
+export const embedMapUrl = (query) => `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&hl=ko&output=embed`;
 
 // 모바일에서는 지도 앱·사이트를 현재 창에서 열고, 넓은 화면에서는 새 창
 export function linkTarget() {
-  const narrow = typeof window !== 'undefined' && window.matchMedia?.('(max-width: 899px)').matches;
-  return narrow ? { rel: 'noreferrer' } : { target: '_blank', rel: 'noopener noreferrer' };
+  return isNarrow() ? { rel: 'noreferrer' } : { target: '_blank', rel: 'noopener noreferrer' };
 }
 
 // 지도에서 뒤로 돌아왔을 때 마지막 검색 결과 복원 (이 탭에서만 유지)
@@ -70,7 +77,8 @@ export default function Restaurants() {
   const [results, setResults] = useState(last.results || null);
   const [radius, setRadius] = useState(last.radius || 1000);
   const [cat, setCat] = useState('전체');
-  const [koreanOnly, setKoreanOnly] = useState(true);
+  const [menuText, setMenuText] = useState('');
+  const [customMenu, setCustomMenu] = useState('');
   const [askConsent, setAskConsent] = useState(null);
   const [eatOut, setEatOut] = useState(null);
   const [editing, setEditing] = useState(null);
@@ -130,8 +138,9 @@ export default function Restaurants() {
     notify(`'${r.name}'을(를) 저장했어요`);
   };
 
-  const shown = (results || []).filter((r) => (cat === '전체' || r.cat === cat) && (!koreanOnly || r.cat !== '기타' || /korean/.test(r.cuisine || '')));
-  const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : ''}${c === '전체' ? '백반' : c.split('·')[0]}`;
+  const shown = (results || []).filter((r) => (cat === '전체' || r.cat === cat));
+  const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : '근처 '}${customMenu || (c === '전체' ? '백반' : c.split('·')[0])}`;
+  const shownQuery = nearQuery(cat);
 
   return (
     <div className="stack">
@@ -140,7 +149,7 @@ export default function Restaurants() {
 
       {tab === 'search' && (
         <>
-          <section className="card stack">
+          <section className="card stack hide-narrow">
             <button className="btn primary big" onClick={locate}>📍 내 위치 주변 찾기</button>
             <form className="row wrap" onSubmit={geocode}>
               <input aria-label="주소 또는 동네" placeholder="또는 동네·주소 입력 (예: 마포구 공덕동)" value={address} onChange={(e) => setAddress(e.target.value)} />
@@ -156,12 +165,20 @@ export default function Restaurants() {
           <section className="card">
             <h2>분류</h2>
             <div className="chips">
-              {['전체', ...CATS.map((c) => c.key)].map((c) => <button key={c} className={`chip ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(c)}>{c}</button>)}
+              {['전체', ...CATS.map((c) => c.key)].map((c) => <button key={c} className={`chip ${!customMenu && cat === c ? 'on' : ''}`} aria-pressed={!customMenu && cat === c} onClick={() => { setCat(c); setCustomMenu(''); setMenuText(''); }}>{c}</button>)}
+              {customMenu && <button className="chip on" aria-pressed="true" onClick={() => { setCustomMenu(''); setMenuText(''); }}>{customMenu} ✕</button>}
             </div>
-            <label className="check"><input type="checkbox" checked={koreanOnly} onChange={(e) => setKoreanOnly(e.target.checked)} /> 한식 위주로 보기</label>
+            <form className="row wrap" onSubmit={(e) => { e.preventDefault(); setCustomMenu(menuText.trim()); }}>
+              <input aria-label="찾을 메뉴 직접 입력" placeholder="다른 메뉴 직접 입력 (예: 냉면, 삼계탕)" value={menuText} onChange={(e) => setMenuText(e.target.value)} />
+              <button className="btn" type="submit" disabled={!menuText.trim()}>찾기</button>
+            </form>
             <div className="stack">
-              <p className="muted small">지도 앱에서 바로 찾기 ({nearQuery(cat)}):</p>
-              <MapLinks query={nearQuery(cat)} pos={pos} />
+              <p className="map-hint"><b>지도 앱에서 바로 찾기</b> <span className="muted">({shownQuery})</span></p>
+              <MapLinks query={shownQuery} pos={pos} />
+              <div className="map-embed">
+                <iframe key={shownQuery} title={`${shownQuery} 지도`} src={embedMapUrl(shownQuery)} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+              </div>
+              <p className="muted small">지도는 구글 지도에서 불러와요. 위치는 인터넷 접속 위치로 대략 잡히니, 확대·이동해 살펴보시고 정확한 검색은 위의 지도 앱 버튼을 이용해 주세요.</p>
             </div>
           </section>
 
