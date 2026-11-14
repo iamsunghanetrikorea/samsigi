@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
-import { today, fmtDate, weekDates, addDays, weekStart } from '../lib/date';
+import { today, weekDates, addDays, weekStart } from '../lib/date';
 import { DayPanel } from '../components/meal';
 import { Modal } from '../components/ui';
 import { WelcomeBanner, WeekTable, NutritionDonut, TodayRecipe, ShoppingPreview, RestaurantPreview, MonthMini } from '../components/dashboard';
@@ -37,7 +37,7 @@ export default function Home() {
 
       <div className="dash-main">
         <section className="panel week-panel">
-          <div className="week-bar">
+          <div className="week-bar hide-narrow">
             <div className="tabs" role="tablist" aria-label="식단 보기">
               <button role="tab" aria-selected="true" className="on">이번 주 식단</button>
               <button role="tab" aria-selected="false" onClick={() => go(`/plan?view=month&d=${anchor}`)}>이번 달 식단</button>
@@ -57,7 +57,7 @@ export default function Home() {
             <>
               <div className="only-wide"><WeekTable dates={dates} /></div>
               <div className="only-narrow">
-                {dates.includes(d) ? <DayPanel date={d} title={`오늘 · ${fmtDate(d)}`} showEaten /> : <p className="muted">아래 ‘주간 식단’에서 이 주를 볼 수 있어요.</p>}
+                {dates.includes(d) ? <DayPanel date={d} title="오늘의 메뉴" showEaten /> : <p className="muted">아래 ‘주간 식단’에서 이 주를 볼 수 있어요.</p>}
                 <button className="btn ghost wide" onClick={() => go(`/plan?view=week&d=${anchor}`)}>이번 주 전체 식단 보기</button>
               </div>
             </>

@@ -430,3 +430,9 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .topnav a span { display: none; }
   .brand small { display: none; }
 }
+
+/* 모바일 홈: 주간 식단 상단 버튼·날짜 숨기고 오늘의 메뉴부터 */
+@media (max-width: 899px) {
+  .hide-narrow { display: none !important; }
+  .week-panel { padding: 0; border: 0; background: none; box-shadow: none; }
+}
