@@ -415,3 +415,11 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .kpi-ico { display: none; }
   .kpis-row b { font-size: .85rem; }
 }
+
+/* 음식 사진 */
+.plate { overflow: hidden; }
+.plate.has-photo { background: var(--surface-2); }
+.plate img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.recipe-photo { margin: 0; border-radius: var(--radius); overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); }
+.recipe-photo img { width: 100%; max-height: 380px; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.recipe-photo figcaption { font-size: .72rem; color: var(--muted); padding: .35rem .7rem; }

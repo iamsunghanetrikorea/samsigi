@@ -7,6 +7,7 @@ import { excludeReason } from '../lib/planner';
 import { leftoverRecipes } from '../lib/shopping';
 import { Seg } from '../components/ui';
 import { go } from '../router';
+import Plate from '../components/Plate';
 
 export default function RecipeList() {
   const { state, targets, update } = useStore();
@@ -27,7 +28,7 @@ export default function RecipeList() {
           <h2>냉장고 재료로 만들 수 있어요</h2>
           <ul className="choice-list">
             {leftovers.map(({ recipe: r, used }) => (
-              <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><span className="meal-emoji" aria-hidden>{r.emoji}</span><span className="choice-body"><b>{r.title}</b><span className="meal-sub">보유 재료: {used.join(', ')}</span></span></button></li>
+              <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><Plate recipe={r} /><span className="choice-body"><b>{r.title}</b><span className="meal-sub">보유 재료: {used.join(', ')}</span></span></button></li>
             ))}
           </ul>
         </section>
@@ -45,7 +46,7 @@ export default function RecipeList() {
           return (
             <li key={r.id}>
               <button className="choice" onClick={() => go(`/recipe/${r.id}`)}>
-                <span className="meal-emoji" aria-hidden>{r.emoji}</span>
+                <Plate recipe={r} />
                 <span className="choice-body">
                   <b>{r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
                   <span className="meal-sub">{r.meals.map((m) => MEAL_LABEL[m]).join('·')} · {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · {r.prep + r.cook}분{why ? ` · 제외됨(${why})` : ''}</span>

@@ -6,6 +6,7 @@ import { MEAL_KEYS, entryNutrition, dayTotals, round } from '../lib/nutrition';
 import { buildShopping } from '../lib/shopping';
 import { today, weekDates, weekStart, monthDates, monthKey, parse, WD, fmtMonth } from '../lib/date';
 import { Modal } from './ui';
+import Plate from './Plate';
 import { MealCard } from './meal';
 import { mapLinks } from '../pages/Restaurants';
 import { go } from '../router';
@@ -13,15 +14,7 @@ import { go } from '../router';
 export const MEAL_ICON = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
 const fmtMD = (d) => `${Number(d.slice(5, 7))}/${Number(d.slice(8))}`;
 
-// 그릇 모양 음식 아이콘 (사진 대신)
-export function Plate({ recipe, eatOut, size = 'md' }) {
-  const g = foodGroup(recipe);
-  return (
-    <span className={`plate ${size}`} style={{ '--ring': g ? FOOD_GROUPS[g].color : '#c9d3e3' }} aria-hidden>
-      {eatOut ? '🍽️' : recipe?.emoji || '＋'}
-    </span>
-  );
-}
+export { Plate };
 
 // 7일 × 3끼 표 — 칸을 누르면 바꾸기·고정·레시피 메뉴
 export function WeekTable({ dates }) {

@@ -6,6 +6,7 @@ import { mealItems, sumItems, round, won } from '../lib/nutrition';
 import { fmtDate } from '../lib/date';
 import { Estimate } from '../components/ui';
 import { go } from '../router';
+import { PHOTOS } from '../data/photos';
 
 const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
 function speak(text) {
@@ -99,7 +100,12 @@ export default function RecipePage({ id, query }) {
   return (
     <article className="stack recipe">
       <button className="btn ghost small no-print" onClick={() => history.back()}>← 뒤로</button>
-      <div className="recipe-hero" aria-hidden>{recipe.emoji}</div>
+      {PHOTOS[id] ? (
+        <figure className="recipe-photo">
+          <img src={`./photos/${id}.webp`} alt={`${recipe.title} 예시 사진`} />
+          <figcaption>예시 사진 · <a href={PHOTOS[id].page} target="_blank" rel="noopener noreferrer">{PHOTOS[id].artist || '작성자 미상'}</a>, {PHOTOS[id].licenseUrl ? <a href={PHOTOS[id].licenseUrl} target="_blank" rel="noopener noreferrer">{PHOTOS[id].license}</a> : PHOTOS[id].license} (Wikimedia Commons)</figcaption>
+        </figure>
+      ) : <div className="recipe-hero" aria-hidden>{recipe.emoji}</div>}
       <div>
         {linked && <p className="muted">{fmtDate(date)} {MEAL_LABEL[meal]}</p>}
         <h1>{recipe.title}</h1>

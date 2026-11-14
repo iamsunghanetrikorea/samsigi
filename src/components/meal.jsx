@@ -6,6 +6,7 @@ import { suggestions } from '../lib/planner';
 import { fmtDate, weekday, WD } from '../lib/date';
 import { Modal, NutrientBars, Estimate } from './ui';
 import { go } from '../router';
+import Plate from './Plate';
 
 export const EATOUT_PRESETS = [
   { cat: '백반·한식', kcal: 700 }, { cat: '생선구이', kcal: 750 }, { cat: '두부요리', kcal: 600 },
@@ -45,7 +46,7 @@ export function MealCard({ date, meal, entry, compact, showEaten }) {
       )}
       {recipe && (
         <button className="meal-main link" onClick={() => go(`/recipe/${recipe.id}?date=${date}&meal=${meal}`)}>
-          <span className="meal-emoji" aria-hidden>{recipe.emoji}</span>
+          <Plate recipe={recipe} />
           <div>
             <div className="meal-title">{recipe.title}</div>
             <div className="meal-sub">
@@ -97,7 +98,7 @@ export function SwapModal({ date, meal, onClose }) {
         {list.map(({ recipe: r, nutrition: n, reasons }) => (
           <li key={r.id}>
             <button className="choice" onClick={() => choose(r)}>
-              <span className="meal-emoji" aria-hidden>{r.emoji}</span>
+              <Plate recipe={r} />
               <span className="choice-body">
                 <b>{r.title}</b>
                 <span className="meal-sub">{round(n.kcal)}kcal · 단백질 {round(n.protein)}g · 나트륨 {round(n.sodium)}mg · {r.prep + r.cook}분 · 약 {won(n.cost)}</span>

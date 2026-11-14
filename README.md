@@ -28,6 +28,7 @@
 - 탄수화물·단백질 4kcal/g, 지방 9kcal/g 교차 검증 표시
 - 간식·음료 열량은 세 끼와 별도 관리
 - 모든 수치는 **추정치**로 표시 — 출처는 `docs/DATA_SOURCES.md`
+- 음식 사진 32장은 Wikimedia Commons 자유 이용 사진(예시 사진) — 출처·라이선스는 `docs/PHOTO_CREDITS.md`, 레시피 화면에도 표기
 
 ## 실행
 
