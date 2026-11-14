@@ -1,0 +1,13 @@
+{
+  "name": "건강한 세 끼 — 맞춤 식단 관리",
+  "short_name": "건강한 세 끼",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf8f1",
+  "theme_color": "#2f6b3a",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
