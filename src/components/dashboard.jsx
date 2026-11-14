@@ -10,8 +10,6 @@ import Plate from './Plate';
 import { MealCard } from './meal';
 import { mapLinks } from '../pages/Restaurants';
 import { go } from '../router';
-import { todayRecipesText, GPT_PROMPT } from '../lib/share';
-import SendToGpt from './SendToGpt';
 
 export const MEAL_ICON = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
 const fmtMD = (d) => `${Number(d.slice(5, 7))}/${Number(d.slice(8))}`;
@@ -127,9 +125,7 @@ export function NutritionDonut({ date }) {
 // 다음 끼니 레시피
 export function TodayRecipe({ className = '' }) {
   const { state, targets } = useStore();
-  const [sending, setSending] = useState(false);
   const d = today();
-  const hasPlan = Object.values(state.plans[d] || {}).some((e) => e?.recipeId);
   const h = new Date().getHours();
   const order = h < 10 ? ['breakfast', 'lunch', 'dinner'] : h < 15 ? ['lunch', 'dinner', 'breakfast'] : ['dinner', 'lunch', 'breakfast'];
   const k = order.find((m) => state.plans[d]?.[m]?.recipeId);
@@ -154,12 +150,10 @@ export function TodayRecipe({ className = '' }) {
             {r.steps.slice(0, 3).map(([s], i) => <li key={i}>{s}</li>)}
           </ol>
           <div className="row wrap">
-            <button className="btn primary" onClick={() => go(`/recipe/${r.id}?date=${d}&meal=${k}`)}>자세한 레시피 보기</button>
+            <button className="btn primary full-narrow" onClick={() => go(`/recipe/${r.id}?date=${d}&meal=${k}`)}>자세한 레시피 보기</button>
           </div>
         </>
       )}
-      <button className="btn soft wide" onClick={() => setSending(true)} disabled={!hasPlan}>📤 레시피 보내기 (ChatGPT)</button>
-      {sending && <SendToGpt title="오늘의 세 끼 레시피 보내기" initialText={`${GPT_PROMPT}\n\n${todayRecipesText(state.plans, targets, d)}`} onClose={() => setSending(false)} />}
     </section>
   );
 }
