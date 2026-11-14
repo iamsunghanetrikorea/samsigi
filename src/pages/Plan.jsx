@@ -87,7 +87,7 @@ function Week({ d }) {
         </section>
       )}
 
-      {filled > 0 && <section className="panel only-wide"><WeekTable dates={dates} /><p className="muted small">칸을 누르면 바꾸기·고정·외식 표시·레시피 보기를 할 수 있어요.</p></section>}
+      {filled > 0 && <section className="panel only-wide"><WeekTable dates={dates} /><p className="muted small">칸을 누르면 메뉴 정보를 볼 수 있고, 메뉴 이름을 누르면 레시피로 이동해요.</p></section>}
       <div className={`week ${filled > 0 ? 'only-narrow' : ''}`}>
         {dates.map((x) => <DayPanel key={x} date={x} compact />)}
       </div>

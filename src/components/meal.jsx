@@ -14,7 +14,7 @@ export const EATOUT_PRESETS = [
   { cat: '면 요리', kcal: 650 }, { cat: '기타', kcal: 700 },
 ];
 
-export function MealCard({ date, meal, entry, compact, showEaten }) {
+export function MealCard({ date, meal, entry, compact, showEaten, readOnly }) {
   const { targets, setEntry, notify } = useStore();
   const [modal, setModal] = useState(null);
   const n = entryNutrition(entry, meal, targets);
@@ -32,7 +32,7 @@ export function MealCard({ date, meal, entry, compact, showEaten }) {
       {!entry && (
         <div className="meal-empty">
           <p>아직 정해진 메뉴가 없어요.</p>
-          <button className="btn" onClick={() => setModal('swap')}>메뉴 고르기</button>
+          {!readOnly && <button className="btn" onClick={() => setModal('swap')}>메뉴 고르기</button>}
         </div>
       )}
       {entry?.eatOut && (
@@ -56,7 +56,7 @@ export function MealCard({ date, meal, entry, compact, showEaten }) {
           </div>
         </button>
       )}
-      {entry && (
+      {entry && !readOnly && (
         <div className="meal-actions no-print">
           {showEaten && (
             <label className="check">

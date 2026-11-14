@@ -63,7 +63,7 @@ export function WeekTable({ dates }) {
       </table>
       {open && (
         <Modal title={`${fmtMD(open.d)} (${WD[parse(open.d).getDay()]}) ${MEAL_LABEL[open.k]}`} onClose={() => setOpen(null)}>
-          <MealCard date={open.d} meal={open.k} entry={state.plans[open.d]?.[open.k]} showEaten />
+          <MealCard date={open.d} meal={open.k} entry={state.plans[open.d]?.[open.k]} readOnly />
         </Modal>
       )}
     </div>
