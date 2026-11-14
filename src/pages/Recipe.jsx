@@ -224,7 +224,6 @@ export default function RecipePage({ id, query }) {
 
       <div className="row wrap no-print">
         {linked && <button className="btn" onClick={() => go(`/plan?view=week&d=${date}`)}>식단으로 돌아가기</button>}
-        <button className="btn ghost" onClick={() => { update('profile', (p) => ({ ...p, dislikes: [...p.dislikes, id], favorites: p.favorites.filter((x) => x !== id) })); notify('이 메뉴는 앞으로 추천하지 않아요 (설정에서 되돌릴 수 있어요)'); }}>이 메뉴 추천하지 않기</button>
       </div>
     </article>
   );
