@@ -208,11 +208,11 @@ export default function RecipePage({ id, query }) {
 
       <section className="card no-print">
         <h2><span aria-hidden>▶️</span> 유튜브 추천 영상</h2>
-        <p className="muted small">누르면 유튜브에서 이 메뉴의 조리 영상 검색 결과가 열려요.</p>
+        <p className="muted small">누르면 지금 창에서 유튜브 조리 영상이 열려요. 다 보신 뒤 <b>뒤로 가기</b>를 누르면 이 레시피로 돌아와요.</p>
         <ul className="yt-list">
           {youtubeSuggestions(recipe).map((y) => (
             <li key={y.q}>
-              <a href={y.url} target="_blank" rel="noopener noreferrer">
+              <a href={y.url} rel="noreferrer">
                 <span className="yt-ico" aria-hidden>▶</span>
                 <span className="yt-body"><b>{y.label}</b><span className="muted small">{y.desc}</span></span>
                 <span aria-hidden>›</span>
