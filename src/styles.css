@@ -423,3 +423,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .recipe-photo { margin: 0; border-radius: var(--radius); overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); }
 .recipe-photo img { width: 100%; max-height: 380px; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
 .recipe-photo figcaption { font-size: .72rem; color: var(--muted); padding: .35rem .7rem; }
+.send-text { min-height: 16rem; font-size: .9rem; line-height: 1.5; resize: vertical; }
+@media (min-width: 1100px) and (max-width: 1440px) {
+  .topnav { flex-wrap: nowrap; gap: 0; }
+  .topnav a { padding: 0 .55rem; font-size: .88rem; }
+  .topnav a span { display: none; }
+  .brand small { display: none; }
+}
