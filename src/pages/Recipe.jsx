@@ -3,12 +3,14 @@ import { useStore } from '../store';
 import { RECIPE_BY_ID, MEAL_LABEL, DIFFICULTY_LABEL, recipeAllergens, RECIPE_SOURCE_NOTE } from '../data/recipes';
 import { ING, formatAmount } from '../data/ingredients';
 import { mealItems, sumItems, round, won } from '../lib/nutrition';
-import { fmtDate } from '../lib/date';
+import { fmtDate, today } from '../lib/date';
 import { Estimate } from '../components/ui';
 import { go } from '../router';
 import { PHOTOS } from '../data/photos';
 import SendToGpt from '../components/SendToGpt';
 import { youtubeSuggestions } from '../lib/youtube';
+import { recipeRefs } from '../data/recipePack';
+import { linkTarget } from './Restaurants';
 import { recipeText, GPT_RECIPE_PROMPT } from '../lib/share';
 
 const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -71,7 +73,8 @@ export default function RecipePage({ id, query }) {
 
   const servings = linked ? entry.servings || 1 : localServ;
   const subs = linked ? entry.subs || {} : localSubs;
-  const mealKcal = targets.perMeal[meal || recipe.meals[0]].kcal;
+  const isSnack = recipe.meals.includes('snack');
+  const mealKcal = isSnack ? undefined : targets.perMeal[meal || recipe.meals[0]]?.kcal;
   const { items, factor } = mealItems(recipe, { kcal: mealKcal, subs });
   const n = sumItems(items.map((i) => [i.id, i.g]));
   const allergens = recipeAllergens(recipe, subs);
@@ -127,6 +130,7 @@ export default function RecipePage({ id, query }) {
         {canSpeak && <button className="btn ghost" onClick={readAll}>🔊 조리법 읽어 주기</button>}
         <button className="btn ghost" onClick={() => window.print()}>인쇄</button>
         <button className="btn soft full-narrow" onClick={() => setSending(true)}>📤 GPT로 보내기</button>
+        {isSnack && <button className="btn full-narrow" onClick={() => { update('snacks', (x) => ({ ...x, [today()]: [...(x[today()] || []), { name: recipe.title, kcal: Math.round(n.kcal * servings) }] })); notify(`오늘 간식에 '${recipe.title}'(${Math.round(n.kcal * servings)}kcal)을 기록했어요`); }}>🥛 오늘 간식으로 기록</button>}
       </div>
       {sending && (
         <SendToGpt title="이 레시피 ChatGPT로 보내기" onClose={() => setSending(false)}
@@ -175,7 +179,7 @@ export default function RecipePage({ id, query }) {
         <h2>1인분 영양정보 <Estimate /></h2>
         <table className="ntable">
           <tbody>
-            <tr><th>열량</th><td>{round(n.kcal)} kcal</td><td className="muted">목표 {round(mealKcal)}</td></tr>
+            <tr><th>열량</th><td>{round(n.kcal)} kcal</td><td className="muted">{isSnack ? `간식 목표 ${targets.snackKcal}` : `목표 ${round(mealKcal)}`}</td></tr>
             <tr><th>탄수화물</th><td>{round(n.carb)} g</td><td className="muted">{round(n.carb * 4 / n.kcal * 100)}%</td></tr>
             <tr><th>단백질</th><td>{round(n.protein)} g</td><td className="muted">{round(n.protein * 4 / n.kcal * 100)}%</td></tr>
             <tr><th>지방</th><td>{round(n.fat)} g</td><td className="muted">{round(n.fat * 9 / n.kcal * 100)}%</td></tr>
@@ -204,6 +208,9 @@ export default function RecipePage({ id, query }) {
         </ol>
         {recipe.tip && <p className="notice">💡 {recipe.tip}</p>}
         <p className="muted small">출처: {recipe.source}</p>
+        {recipe.isNew && (
+          <p className="small">참고 자료: {recipeRefs(recipe).map((x, i) => <span key={x.url}>{i > 0 && ' · '}<a href={x.url} {...linkTarget()}>{x.label}</a></span>)}</p>
+        )}
       </section>
 
       <section className="card no-print">

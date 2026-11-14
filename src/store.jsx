@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { getItem, setItem, clearAll } from './lib/storage';
 import { computeTargets, DEFAULT_PROFILE } from './lib/nutrition';
 import { generatePlans } from './lib/planner';
+import { syncPack, nextUpdate } from './data/recipePack';
 
 export const DEFAULT_STATE = {
   profile: null,
@@ -12,6 +13,7 @@ export const DEFAULT_STATE = {
   snacks: {},           // { date: [{name, kcal}] }
   settings: { fontSize: 20, contrast: false },
   consent: { location: false },
+  addedRecipes: [],     // 업데이트로 추가한 추천 메뉴 id
 };
 const KEYS = Object.keys(DEFAULT_STATE);
 
@@ -30,6 +32,7 @@ export function StoreProvider({ children }) {
         if (v !== undefined) s[k] = v;
       }
       if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
+      syncPack(s.addedRecipes);
       saved.current = s;
       setState(s);
     })();
@@ -93,7 +96,21 @@ export function StoreProvider({ children }) {
     return result;
   }, []);
 
+  // 레시피 업데이트: 분류마다 새 메뉴 하나씩 추가
+  const addRecipeUpdate = useCallback(() => {
+    const s = stateRef.current;
+    const ids = nextUpdate(s.addedRecipes);
+    if (!ids.length) return [];
+    const added = [...s.addedRecipes, ...ids];
+    syncPack(added);
+    const next = { ...s, addedRecipes: added };
+    stateRef.current = next;
+    setState(next);
+    return ids;
+  }, []);
+
   const resetAll = useCallback(async () => {
+    syncPack([]);
     await clearAll();
     saved.current = DEFAULT_STATE;
     setState({ ...DEFAULT_STATE });
@@ -103,11 +120,12 @@ export function StoreProvider({ children }) {
     const s = { ...DEFAULT_STATE };
     for (const k of KEYS) if (data[k] !== undefined) s[k] = data[k];
     if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
+    syncPack(s.addedRecipes);
     setState(s);
   }, []);
 
-  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, notify, toast, resetAll, replaceAll }),
-    [state, update, targets, setEntry, generate, saveProfileAndGenerate, notify, toast, resetAll, replaceAll]);
+  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, notify, toast, resetAll, replaceAll }),
+    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, notify, toast, resetAll, replaceAll]);
 
   if (!state) return <div className="loading" role="status">불러오는 중…</div>;
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

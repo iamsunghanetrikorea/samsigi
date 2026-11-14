@@ -454,3 +454,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .full-narrow { width: 100%; }
   .row > .full-narrow { flex: 1 1 100%; }
 }
+.update-card { border: 2px solid #b9cdf3; background: linear-gradient(100deg, #eef4fe, #ffffff); }
+.update-card h2 { margin-bottom: .2rem; }
+.new-badge { display: inline-block; font-size: .65rem; font-weight: 900; color: #fff; background: var(--accent); border-radius: 6px; padding: 0 .35rem; vertical-align: middle; }

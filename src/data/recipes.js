@@ -268,10 +268,21 @@ export const RECIPES = [
   }),
 ];
 
+// 분류 — 레시피 모음 필터와 업데이트 묶음에 사용
+export const CATEGORIES = ['한식', '중식', '양식', '간식', '찌개', '국'];
+const BASE_CATEGORY = {
+  oat_banana: '양식', egg_toast: '양식', sweetpotato_yogurt: '양식', tomato_egg: '중식',
+  shrimp_fried_rice: '중식', pork_cabbage_stirfry: '중식', chicken_veg_stirfry: '중식',
+  soft_tofu_soup: '국', egg_soup_spinach: '국', miyeok_soup: '국', beansprout_soup: '국', potato_soup: '국',
+  pollock_soup: '국', beef_radish_soup: '국', tteokguk: '국',
+  tofu_mushroom_hotpot: '찌개', kimchi_stew: '찌개', doenjang_stew: '찌개',
+};
+RECIPES.forEach((r) => { r.category = r.category || BASE_CATEGORY[r.id] || '한식'; });
+
 export const RECIPE_BY_ID = Object.fromEntries(RECIPES.map((r) => [r.id, r]));
 
 export const DIFFICULTY_LABEL = { 1: '쉬움', 2: '보통', 3: '어려움' };
-export const MEAL_LABEL = { breakfast: '아침', lunch: '점심', dinner: '저녁' };
+export const MEAL_LABEL = { breakfast: '아침', lunch: '점심', dinner: '저녁', snack: '간식' };
 export const PREFERENCE_TAGS = ['국물', '생선', '고기', '채소', '면', '죽', '빵', '간편'];
 
 export function recipeItems(recipe, subs = {}) {
