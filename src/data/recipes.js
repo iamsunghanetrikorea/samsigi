@@ -285,3 +285,27 @@ export function recipeAllergens(recipe, subs = {}) {
 }
 
 export const RECIPE_SOURCE_NOTE = `영양정보: ${NUTRITION_SOURCE.name} (갱신 ${NUTRITION_SOURCE.updatedAt})`;
+
+// 달력 색 점·범례용 음식 분류
+export const FOOD_GROUPS = {
+  fish: { label: '생선·해산물', color: '#2b66d9' },
+  meat: { label: '닭·육류', color: '#f08a24' },
+  tofu: { label: '두부·콩', color: '#d9a400' },
+  veg: { label: '채소 중심', color: '#2f9e44' },
+};
+const NOT_SEAFOOD = new Set(['broth', 'miyeok', 'laver']);
+export function foodGroup(r) {
+  if (!r) return null;
+  const ids = r.items.map(([id]) => id);
+  if (ids.some((id) => ING[id]?.cat === '수산물' && !NOT_SEAFOOD.has(id))) return 'fish';
+  if (ids.some((id) => ING[id]?.cat === '육류')) return 'meat';
+  if (ids.some((id) => ['tofu', 'soft_tofu', 'black_bean'].includes(id))) return 'tofu';
+  return 'veg';
+}
+
+// 표 칸에 들어갈 짧은 이름: "고등어구이, 시금치된장국과 잡곡밥" → "고등어구이·시금치된장국"
+export function shortTitle(r) {
+  if (!r) return '';
+  const parts = r.title.split(/, |과 |와 /).map((s) => s.trim()).filter(Boolean);
+  return parts.slice(0, 2).join('·');
+}

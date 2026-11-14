@@ -31,6 +31,7 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
       <fieldset className="card">
         <legend>기본 정보</legend>
         <p className="muted small">열량 추정에만 쓰이며, 이 기기에만 저장됩니다.</p>
+        <label className="field"><span>부르실 이름 (선택)</span><input value={p.name || ''} maxLength={20} onChange={(e) => set({ name: e.target.value })} placeholder="예: 홍길동" /></label>
         <div className="grid2">
           <label className="field"><span>나이 (세)</span><input type="number" inputMode="numeric" min={40} max={110} value={p.age} onChange={(e) => set({ age: num(e.target.value) })} required /></label>
           <div className="field"><span>성별 (열량 추정식 선택용)</span>

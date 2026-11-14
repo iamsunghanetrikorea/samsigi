@@ -4,6 +4,7 @@ import { RECIPE_BY_ID, MEAL_LABEL } from '../data/recipes';
 import { MEAL_KEYS, dayTotals, entryNutrition, round, won } from '../lib/nutrition';
 import { today, weekDates, addDays, fmtDate, monthKey, monthDates, addMonths, fmtMonth, weekStart, parse } from '../lib/date';
 import { DayPanel } from '../components/meal';
+import { WeekTable } from '../components/dashboard';
 import { NutrientBars, Seg, Modal } from '../components/ui';
 import { download, toCSV } from '../lib/exporter';
 import { go } from '../router';
@@ -86,7 +87,8 @@ function Week({ d }) {
         </section>
       )}
 
-      <div className="week">
+      {filled > 0 && <section className="panel only-wide"><WeekTable dates={dates} /><p className="muted small">칸을 누르면 바꾸기·고정·외식 표시·레시피 보기를 할 수 있어요.</p></section>}
+      <div className={`week ${filled > 0 ? 'only-narrow' : ''}`}>
         {dates.map((x) => <DayPanel key={x} date={x} compact />)}
       </div>
 

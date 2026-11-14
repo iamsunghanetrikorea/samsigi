@@ -1,16 +1,28 @@
 import { useEffect, useRef } from 'react';
 import { NUTRIENTS, round } from '../lib/nutrition';
 
+// 모달이 겹쳐 열릴 때 Esc는 맨 위 모달만 닫음
+const modalStack = [];
+
 export function Modal({ title, onClose, children, wide }) {
   const ref = useRef(null);
+  const closeRef = useRef(onClose);
+  closeRef.current = onClose;
   useEffect(() => {
     const prev = document.activeElement;
+    const token = {};
+    modalStack.push(token);
     ref.current?.focus();
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e) => { if (e.key === 'Escape' && modalStack[modalStack.length - 1] === token) closeRef.current(); };
     document.addEventListener('keydown', onKey);
     document.body.classList.add('modal-open');
-    return () => { document.removeEventListener('keydown', onKey); document.body.classList.remove('modal-open'); prev?.focus?.(); };
-  }, [onClose]);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      modalStack.splice(modalStack.indexOf(token), 1);
+      if (!modalStack.length) document.body.classList.remove('modal-open');
+      prev?.focus?.();
+    };
+  }, []);
   return (
     <div className="overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={ref}>
