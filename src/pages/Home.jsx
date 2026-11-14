@@ -58,7 +58,6 @@ export default function Home() {
               <div className="only-wide"><WeekTable dates={dates} /></div>
               <div className="only-narrow">
                 {dates.includes(d) ? <DayPanel date={d} title={<>오늘의 메뉴 <span className="day-date">{fmtDate(d)}</span></>} showEaten /> : <p className="muted">아래 ‘주간 식단’에서 이 주를 볼 수 있어요.</p>}
-                <button className="btn ghost wide" onClick={() => go(`/plan?view=week&d=${anchor}`)}>이번 주 전체 식단 보기</button>
                 <TodayRecipe className="mobile-recipe" />
               </div>
             </>
