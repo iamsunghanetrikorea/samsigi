@@ -286,7 +286,7 @@ export function WelcomeBanner() {
     { ico: '💧', label: '지방', val: range(targets.fat) },
   ];
   return (
-    <section className="banner">
+    <section className="banner hide-narrow">
       <div className="banner-text">
         <span className="banner-ico" aria-hidden>🌱</span>
         <div>
