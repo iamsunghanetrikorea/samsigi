@@ -7,6 +7,8 @@ import { fmtDate } from '../lib/date';
 import { Estimate } from '../components/ui';
 import { go } from '../router';
 import { PHOTOS } from '../data/photos';
+import SendToGpt from '../components/SendToGpt';
+import { recipeText, GPT_RECIPE_PROMPT } from '../lib/share';
 
 const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
 function speak(text) {
@@ -63,6 +65,7 @@ export default function RecipePage({ id, query }) {
   const linked = entry && entry.recipeId === id;
   const [localServ, setLocalServ] = useState(state.profile.people || 1);
   const [localSubs, setLocalSubs] = useState({});
+  const [sending, setSending] = useState(false);
   if (!recipe) return <div className="card">레시피를 찾을 수 없어요. <a href="#/recipes">레시피 모음으로</a></div>;
 
   const servings = linked ? entry.servings || 1 : localServ;
@@ -122,7 +125,12 @@ export default function RecipePage({ id, query }) {
         <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}>{fav ? '♥ 즐겨찾기됨' : '♡ 즐겨찾기'}</button>
         {canSpeak && <button className="btn ghost" onClick={readAll}>🔊 조리법 읽어 주기</button>}
         <button className="btn ghost" onClick={() => window.print()}>인쇄</button>
+        <button className="btn soft" onClick={() => setSending(true)}>📤 GPT로 보내기</button>
       </div>
+      {sending && (
+        <SendToGpt title="이 레시피 ChatGPT로 보내기" onClose={() => setSending(false)}
+          initialText={`${GPT_RECIPE_PROMPT}\n\n${recipeText({ recipe, items, servings, nutrition: n, mealLabel: linked ? MEAL_LABEL[meal] : '', dateLabel: linked ? fmtDate(date) : '' })}`} />
+      )}
 
       <section className="card">
         <h2>몇 인분 만들까요?</h2>

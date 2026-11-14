@@ -28,3 +28,20 @@ describe('오늘의 레시피 보내기', () => {
     expect(ok / dates.length).toBeGreaterThan(0.8);
   });
 });
+
+describe('레시피 상세 GPT로 보내기', () => {
+  it('인분·대체 재료가 반영된다', async () => {
+    const { recipeText } = await import('../src/lib/share');
+    const { mealItems, sumItems } = await import('../src/lib/nutrition');
+    const { RECIPE_BY_ID } = await import('../src/data/recipes');
+    const recipe = RECIPE_BY_ID.mackerel_set;
+    const { items } = mealItems(recipe, { subs: { mackerel: 'salmon' } });
+    const nutrition = sumItems(items.map((i) => [i.id, i.g]));
+    const txt = recipeText({ recipe, items, servings: 2, nutrition, mealLabel: '저녁', dateLabel: '11월 14일 (토)' });
+    expect(txt).toContain('[11월 14일 (토) 저녁 레시피] 고등어구이');
+    expect(txt).toContain('2인분');
+    expect(txt).toContain('연어 200g');
+    expect(txt).toContain('바꾼 재료: 고등어 → 연어');
+    expect(txt).toContain('1) 고등어를 씻어');
+  });
+});

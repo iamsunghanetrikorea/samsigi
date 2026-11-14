@@ -12,6 +12,22 @@ const amount = (id, g) => {
   return `${g >= 10 ? Math.round(g) : round(g, 1)}${ing.unit}`;
 };
 
+export const GPT_RECIPE_PROMPT = '아래 레시피를 60세 이상 어르신이 따라 하기 쉽게 단계별로 자세히 설명해 주세요. 손질 요령, 불 세기, 익었는지 확인하는 방법, 싱겁게 먹는 요령, 남은 재료 보관법도 알려 주세요. 영양 수치는 추정치입니다.';
+
+// 레시피 상세 화면의 현재 상태(인분·대체 재료·주식 양 조절)를 그대로 텍스트로
+export function recipeText({ recipe, items, servings, nutrition, mealLabel, dateLabel }) {
+  const out = [`[${dateLabel ? `${dateLabel} ` : ''}${mealLabel ? `${mealLabel} ` : ''}레시피] ${recipe.title}`];
+  out.push(`- ${servings}인분, 준비 ${recipe.prep}분 · 조리 ${recipe.cook}분`);
+  out.push(`- 1인분 영양(추정): ${round(nutrition.kcal)}kcal, 탄수화물 ${round(nutrition.carb)}g, 단백질 ${round(nutrition.protein)}g, 지방 ${round(nutrition.fat)}g, 나트륨 ${round(nutrition.sodium)}mg`);
+  out.push(`- 재료(${servings}인분): ${items.map((i) => `${ING[i.id].name} ${amount(i.id, i.g * servings)}`).join(', ')}`);
+  const subs = items.filter((i) => i.orig && i.orig !== i.id);
+  if (subs.length) out.push(`- 바꾼 재료: ${subs.map((i) => `${ING[i.orig].name} → ${ING[i.id].name}`).join(', ')}`);
+  out.push('- 만드는 법:');
+  recipe.steps.forEach(([t, min], i) => out.push(`  ${i + 1}) ${t}${min ? ` (약 ${min}분)` : ''}`));
+  if (recipe.tip) out.push(`- 팁: ${recipe.tip}`);
+  return out.join('\n');
+}
+
 export function todayRecipesText(plans, targets, date) {
   const day = plans[date] || {};
   const out = [`[${fmtDate(date)} 오늘의 세 끼 레시피]`];
