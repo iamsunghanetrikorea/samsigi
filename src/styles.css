@@ -52,7 +52,7 @@ a { color: var(--primary); }
 .topbar { position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: var(--shadow); padding: .4rem 16px; display: flex; align-items: center; gap: 1rem; }
 .brand { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: .55rem; min-height: 48px; flex: none; }
 .brand b { display: block; font-size: 1.25rem; font-weight: 900; letter-spacing: -.02em; line-height: 1.2; }
-.brand small { display: block; font-size: .7rem; color: var(--muted); }
+.brand small { display: block; font-size: .7rem; color: var(--muted); white-space: nowrap; line-height: 1.3; }
 .topnav { display: none; gap: .25rem; flex: 1; justify-content: center; flex-wrap: wrap; }
 .topnav a { display: inline-flex; align-items: center; gap: .35rem; min-height: 48px; padding: 0 .9rem; border-radius: 12px; color: var(--text); text-decoration: none; font-weight: 700; font-size: .95rem; white-space: nowrap; }
 .topnav a:hover { background: var(--surface-2); }
@@ -398,7 +398,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 @media print { .sidebar, .banner, .dash-cards { display: none !important; } .only-wide { display: block !important; } .only-narrow { display: none !important; } }
 @media (max-width: 639px) {
   .topbar { gap: .4rem; padding: .3rem 12px; }
-  .brand small { display: none; }
   .brand img { width: 36px; height: 36px; }
   .brand b { font-size: 1.05rem; white-space: nowrap; }
   .top-tools { gap: .2rem; }
@@ -428,7 +427,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .topnav { flex-wrap: nowrap; gap: 0; }
   .topnav a { padding: 0 .55rem; font-size: .88rem; }
   .topnav a span { display: none; }
-  .brand small { display: none; }
 }
 
 /* 모바일 홈: 주간 식단 상단 버튼·날짜 숨기고 오늘의 메뉴부터 */
@@ -437,3 +435,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .week-panel { padding: 0; border: 0; background: none; box-shadow: none; }
 }
 .mobile-recipe { margin-top: 1rem; }
+.fontsize { flex: none; flex-wrap: nowrap; white-space: nowrap; }
+@media (max-width: 380px) {
+  .fontsize button { min-width: 36px; }
+  .brand { gap: .4rem; }
+  .brand b { font-size: 1rem; }
+}
+@media (max-width: 340px) { .me { display: none; } }

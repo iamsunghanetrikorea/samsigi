@@ -69,7 +69,7 @@ export default function App() {
       <header className="topbar no-print">
         <a href="#/" className="brand">
           <img src="./icon.svg" alt="" width="44" height="44" />
-          <span><b>건강한 세 끼</b><small>60세 이상 맞춤 식단·레시피·식당 추천</small></span>
+          <span><b>건강한 세 끼</b><small>시니어를 위한 맞춤 식단</small></span>
         </a>
         <nav className="topnav" aria-label="주 메뉴">
           {TOP_NAV.map((n) => (
