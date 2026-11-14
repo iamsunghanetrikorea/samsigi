@@ -88,7 +88,7 @@ export function NutritionDonut({ date }) {
   const naOk = tot.sodium <= targets.sodium;
   const msg = !tot.count ? '오늘 식단이 아직 없어요.' : kcalOk && protOk && naOk ? '권장 범위 내에서 균형이 잘 맞아요!' : !protOk ? '단백질이 조금 부족해요. 달걀·두부·우유를 곁들여 보세요.' : !naOk ? '나트륨이 많아요. 국물은 절반만 드세요.' : tot.kcal > targets.meals.kcal ? '열량이 목표보다 조금 많아요.' : '열량이 목표보다 조금 적어요.';
   return (
-    <section className="panel donut-card">
+    <section className="panel donut-card hide-narrow">
       <h2>오늘의 영양 요약</h2>
       <div className="donut-row">
         <svg viewBox="0 0 140 140" className="donut" role="img" aria-label={`섭취 예상 ${round(tot.kcal)}kcal, 단백질 ${round(tot.protein)}g, 탄수화물 ${round(tot.carb)}g, 지방 ${round(tot.fat)}g`}>
