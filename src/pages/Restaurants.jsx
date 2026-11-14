@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useStore } from '../store';
 import { today } from '../lib/date';
 import { Modal, Seg } from '../components/ui';
@@ -37,13 +37,24 @@ export const mapLinks = (query, pos) => ({
   google: pos ? `https://www.google.com/maps/search/${encodeURIComponent(query)}/@${pos.lat},${pos.lng},16z` : `https://www.google.com/maps/search/${encodeURIComponent(query)}`,
 });
 
+// 모바일에서는 지도 앱·사이트를 현재 창에서 열고, 넓은 화면에서는 새 창
+export function linkTarget() {
+  const narrow = typeof window !== 'undefined' && window.matchMedia?.('(max-width: 899px)').matches;
+  return narrow ? { rel: 'noreferrer' } : { target: '_blank', rel: 'noopener noreferrer' };
+}
+
+// 지도에서 뒤로 돌아왔을 때 마지막 검색 결과 복원 (이 탭에서만 유지)
+const LAST = 'samsigi:lastSearch';
+const loadLast = () => { try { return JSON.parse(sessionStorage.getItem(LAST)) || {}; } catch { return {}; } };
+const saveLast = (v) => { try { sessionStorage.setItem(LAST, JSON.stringify(v)); } catch { /* 저장 불가 */ } };
+
 function MapLinks({ query, pos }) {
   const l = mapLinks(query, pos);
   return (
     <span className="row wrap">
-      <a className="btn small ghost" href={l.naver} target="_blank" rel="noopener noreferrer">네이버지도</a>
-      <a className="btn small ghost" href={l.kakao} target="_blank" rel="noopener noreferrer">카카오맵</a>
-      <a className="btn small ghost" href={l.google} target="_blank" rel="noopener noreferrer">구글지도</a>
+      <a className="btn small ghost" href={l.naver} {...linkTarget()}>네이버지도</a>
+      <a className="btn small ghost" href={l.kakao} {...linkTarget()}>카카오맵</a>
+      <a className="btn small ghost" href={l.google} {...linkTarget()}>구글지도</a>
     </span>
   );
 }
@@ -51,21 +62,24 @@ function MapLinks({ query, pos }) {
 export default function Restaurants() {
   const { state, update, notify } = useStore();
   const [tab, setTab] = useState('search');
-  const [pos, setPos] = useState(null);
-  const [place, setPlace] = useState('');
+  const [last] = useState(loadLast);
+  const [pos, setPos] = useState(last.pos || null);
+  const [place, setPlace] = useState(last.place || '');
   const [address, setAddress] = useState('');
   const [status, setStatus] = useState('');
-  const [results, setResults] = useState(null);
-  const [radius, setRadius] = useState(1000);
+  const [results, setResults] = useState(last.results || null);
+  const [radius, setRadius] = useState(last.radius || 1000);
   const [cat, setCat] = useState('전체');
   const [koreanOnly, setKoreanOnly] = useState(true);
   const [askConsent, setAskConsent] = useState(null);
   const [eatOut, setEatOut] = useState(null);
   const [editing, setEditing] = useState(null);
 
+  const placeRef = useRef(place);
+  placeRef.current = place;
   const withConsent = (fn) => (state.consent.location ? fn() : setAskConsent(() => fn));
 
-  const search = async (p, r = radius) => {
+  const search = async (p, r = radius, label = placeRef.current) => {
     setStatus('주변 식당을 찾는 중…'); setResults(null);
     const q = `[out:json][timeout:20];(nwr["amenity"~"^(restaurant|fast_food|food_court)$"](around:${r},${p.lat},${p.lng}););out center tags 150;`;
     try {
@@ -79,6 +93,7 @@ export default function Restaurants() {
         return { id: `osm-${e.type}-${e.id}`, name: tags['name:ko'] || tags.name, cuisine: tags.cuisine, hours: tags.opening_hours, phone: tags.phone || tags['contact:phone'], address: addr, cat: classify(tags), coords: { lat: c.lat, lng: c.lon }, d: dist(p, { lat: c.lat, lng: c.lon }) };
       }).filter((x) => x.name).sort((a, b) => a.d - b.d);
       setResults(list);
+      saveLast({ pos: p, place: label, results: list, radius: r });
       setStatus(list.length ? '' : '주변에 등록된 식당 정보가 없어요. 아래 지도 앱 검색을 이용해 주세요.');
     } catch {
       setStatus('식당 검색에 실패했어요(네트워크·서버 문제). 아래 지도 앱 검색 버튼을 이용해 주세요.');
@@ -89,7 +104,7 @@ export default function Restaurants() {
     if (!navigator.geolocation) { setStatus('이 기기는 위치 기능을 지원하지 않아요. 동네 이름을 입력해 주세요.'); return; }
     setStatus('현재 위치를 확인하는 중…');
     navigator.geolocation.getCurrentPosition(
-      (g) => { const p = { lat: g.coords.latitude, lng: g.coords.longitude }; setPos(p); setPlace('현재 위치'); search(p); },
+      (g) => { const p = { lat: g.coords.latitude, lng: g.coords.longitude }; setPos(p); setPlace('현재 위치'); search(p, radius, '현재 위치'); },
       () => setStatus('위치 권한이 거부되었거나 확인할 수 없어요. 아래에 주소나 동네 이름을 입력해 주세요.'),
       { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 },
     );
@@ -105,7 +120,7 @@ export default function Restaurants() {
         const [hit] = await res.json();
         if (!hit) { setStatus('주소를 찾지 못했어요. 지도 앱 검색 버튼을 이용해 보세요.'); return; }
         const p = { lat: Number(hit.lat), lng: Number(hit.lon) };
-        setPos(p); setPlace(address); search(p);
+        setPos(p); setPlace(address); search(p, radius, address);
       } catch { setStatus('주소 검색에 실패했어요. 지도 앱 검색 버튼을 이용해 주세요.'); }
     });
   };

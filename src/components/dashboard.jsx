@@ -8,7 +8,7 @@ import { today, weekDates, weekStart, monthDates, monthKey, parse, WD, fmtMonth,
 import { Modal } from './ui';
 import Plate from './Plate';
 import { MealCard } from './meal';
-import { mapLinks } from '../pages/Restaurants';
+import { mapLinks, linkTarget } from '../pages/Restaurants';
 import { go } from '../router';
 
 export const MEAL_ICON = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
@@ -196,7 +196,7 @@ export function RestaurantPreview() {
         <ul className="rest-list">
           {saved.map((r) => (
             <li key={r.id}>
-              <a href={mapLinks(r.address ? `${r.name} ${r.address}` : r.name).naver} target="_blank" rel="noopener noreferrer">
+              <a href={mapLinks(r.address ? `${r.name} ${r.address}` : r.name).naver} {...linkTarget()}>
                 <span className="rest-ico" aria-hidden>🍚</span>
                 <span className="rest-body"><b>{r.name}</b><span className="tags"><em>{r.cat}</em>{r.solo && <em>혼밥 가능</em>}{r.price && <em>{Number(r.price).toLocaleString()}원</em>}</span></span>
                 <span aria-hidden>›</span>
@@ -209,7 +209,7 @@ export function RestaurantPreview() {
           <p className="muted small">근처 백반·생선구이·두부요리 식당을 찾아 저장해 두면 여기에 보여요.</p>
           <ul className="rest-list">
             {[['🍚', '백반·한식'], ['🐟', '생선구이'], ['🥘', '두부요리']].map(([ic, c]) => (
-              <li key={c}><a href={mapLinks(`근처 ${c.split('·')[0]}`).naver} target="_blank" rel="noopener noreferrer"><span className="rest-ico" aria-hidden>{ic}</span><span className="rest-body"><b>근처 {c}</b><span className="muted small">네이버지도에서 찾기</span></span><span aria-hidden>›</span></a></li>
+              <li key={c}><a href={mapLinks(`근처 ${c.split('·')[0]}`).naver} {...linkTarget()}><span className="rest-ico" aria-hidden>{ic}</span><span className="rest-body"><b>근처 {c}</b><span className="muted small">네이버지도에서 찾기</span></span><span aria-hidden>›</span></a></li>
             ))}
           </ul>
         </>
