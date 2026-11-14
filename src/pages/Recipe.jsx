@@ -126,7 +126,7 @@ export default function RecipePage({ id, query }) {
         <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}>{fav ? '♥ 즐겨찾기됨' : '♡ 즐겨찾기'}</button>
         {canSpeak && <button className="btn ghost" onClick={readAll}>🔊 조리법 읽어 주기</button>}
         <button className="btn ghost" onClick={() => window.print()}>인쇄</button>
-        <button className="btn soft" onClick={() => setSending(true)}>📤 GPT로 보내기</button>
+        <button className="btn soft full-narrow" onClick={() => setSending(true)}>📤 GPT로 보내기</button>
       </div>
       {sending && (
         <SendToGpt title="이 레시피 ChatGPT로 보내기" onClose={() => setSending(false)}
