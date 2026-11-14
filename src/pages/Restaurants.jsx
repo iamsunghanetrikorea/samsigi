@@ -35,8 +35,6 @@ const isNarrow = () => typeof window !== 'undefined' && !!window.matchMedia?.('(
 
 export const mapLinks = (query) => {
   const q = encodeURIComponent(query);
-  // 모바일은 브라우저 안에서 열리는 모바일 웹 주소 사용
-  if (isNarrow()) return { naver: `https://m.map.naver.com/search2/search.naver?query=${q}`, kakao: `https://m.map.kakao.com/actions/searchView?q=${q}` };
   return { naver: `https://map.naver.com/p/search/${q}`, kakao: `https://map.kakao.com/?q=${q}` };
 };
 
@@ -73,6 +71,19 @@ export default function Restaurants() {
   const [cat, setCat] = useState('전체');
   const [menuText, setMenuText] = useState('');
   const [customMenu, setCustomMenu] = useState('');
+  const myMenus = state.settings.customMenus || [];
+  const addMenu = (e) => {
+    e.preventDefault();
+    const m = menuText.trim().slice(0, 20);
+    if (!m) return;
+    if (!myMenus.includes(m)) update('settings', (st) => ({ ...st, customMenus: [...(st.customMenus || []), m] }));
+    setCustomMenu(m); setMenuText('');
+    notify(`'${m}'을(를) 분류에 추가했어요`);
+  };
+  const removeMenu = (m) => {
+    update('settings', (st) => ({ ...st, customMenus: (st.customMenus || []).filter((x) => x !== m) }));
+    if (customMenu === m) setCustomMenu('');
+  };
   const [askConsent, setAskConsent] = useState(null);
   const [eatOut, setEatOut] = useState(null);
   const [editing, setEditing] = useState(null);
@@ -159,12 +170,17 @@ export default function Restaurants() {
           <section className="card">
             <h2>분류</h2>
             <div className="chips">
-              {['전체', ...CATS.map((c) => c.key)].map((c) => <button key={c} className={`chip ${!customMenu && cat === c ? 'on' : ''}`} aria-pressed={!customMenu && cat === c} onClick={() => { setCat(c); setCustomMenu(''); setMenuText(''); }}>{c}</button>)}
-              {customMenu && <button className="chip on" aria-pressed="true" onClick={() => { setCustomMenu(''); setMenuText(''); }}>{customMenu} ✕</button>}
+              {['전체', ...CATS.map((c) => c.key)].map((c) => <button key={c} className={`chip ${!customMenu && cat === c ? 'on' : ''}`} aria-pressed={!customMenu && cat === c} onClick={() => { setCat(c); setCustomMenu(''); }}>{c}</button>)}
+              {myMenus.map((m) => (
+                <span key={m} className={`chip my-chip ${customMenu === m ? 'on' : ''}`}>
+                  <button className="chip-main" aria-pressed={customMenu === m} onClick={() => setCustomMenu(m)}>{m}</button>
+                  <button className="chip-x" aria-label={`${m} 메뉴 지우기`} onClick={() => removeMenu(m)}>✕</button>
+                </span>
+              ))}
             </div>
-            <form className="row wrap" onSubmit={(e) => { e.preventDefault(); setCustomMenu(menuText.trim()); }}>
-              <input aria-label="찾을 메뉴 직접 입력" placeholder="다른 메뉴 직접 입력 (예: 냉면, 삼계탕)" value={menuText} onChange={(e) => setMenuText(e.target.value)} />
-              <button className="btn" type="submit" disabled={!menuText.trim()}>찾기</button>
+            <form className="row wrap" onSubmit={addMenu}>
+              <input aria-label="추가할 메뉴 입력" placeholder="메뉴 직접 입력 (예: 냉면, 삼계탕)" value={menuText} onChange={(e) => setMenuText(e.target.value)} />
+              <button className="btn" type="submit" disabled={!menuText.trim()}>메뉴 추가</button>
             </form>
             <div className="stack">
               <p className="map-hint"><b>지도 앱에서 바로 찾기</b> <span className="muted">({shownQuery})</span></p>
