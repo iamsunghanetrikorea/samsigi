@@ -125,7 +125,7 @@ export function NutritionDonut({ date }) {
 }
 
 // 다음 끼니 레시피
-export function TodayRecipe() {
+export function TodayRecipe({ className = '' }) {
   const { state, targets, notify } = useStore();
   const [sending, setSending] = useState(false);
   const d = today();
@@ -137,7 +137,7 @@ export function TodayRecipe() {
   const r = e && RECIPE_BY_ID[e.recipeId];
   const n = entryNutrition(e, k, targets);
   return (
-    <section className="panel">
+    <section className={`panel ${className}`}>
       <h2><span aria-hidden>🍲</span> 오늘의 레시피</h2>
       {!r ? <p className="muted">오늘 집밥 메뉴가 없어요.</p> : (
         <>

@@ -436,3 +436,4 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .hide-narrow { display: none !important; }
   .week-panel { padding: 0; border: 0; background: none; box-shadow: none; }
 }
+.mobile-recipe { margin-top: 1rem; }
