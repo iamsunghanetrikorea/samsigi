@@ -78,7 +78,7 @@ export default function Home() {
         <MonthMini />
       </div>
 
-      <section className="panel">
+      <section className="panel hide-narrow">
         <h2><span aria-hidden>🥛</span> 간식·음료</h2>
         <p className="muted small">오늘 {snackTotal}kcal / 목표 {targets.snackKcal}kcal (세 끼와 따로 관리)</p>
         {snacks.length > 0 && (
