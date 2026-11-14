@@ -53,9 +53,9 @@ const saveLast = (v) => { try { sessionStorage.setItem(LAST, JSON.stringify(v));
 function MapLinks({ query, pos }) {
   const l = mapLinks(query, pos);
   return (
-    <span className="row wrap">
-      <a className="btn small ghost" href={l.naver} {...linkTarget()}>네이버지도</a>
-      <a className="btn small ghost" href={l.kakao} {...linkTarget()}>카카오맵</a>
+    <span className="row wrap map-links">
+      <a className="btn small ghost full-narrow" href={l.naver} {...linkTarget()}>네이버지도 검색</a>
+      <a className="btn small ghost full-narrow" href={l.kakao} {...linkTarget()}>카카오맵 검색</a>
     </span>
   );
 }
