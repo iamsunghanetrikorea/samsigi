@@ -33,17 +33,12 @@ const fmtDist = (m) => (m < 1000 ? `${Math.round(m / 10) * 10}m` : `${(m / 1000)
 
 const isNarrow = () => typeof window !== 'undefined' && !!window.matchMedia?.('(max-width: 899px)').matches;
 
-export const mapLinks = (query, pos) => {
+export const mapLinks = (query) => {
   const q = encodeURIComponent(query);
-  const google = pos ? `https://www.google.com/maps/search/${q}/@${pos.lat},${pos.lng},16z` : `https://www.google.com/maps/search/${q}`;
   // 모바일은 브라우저 안에서 열리는 모바일 웹 주소 사용
-  if (isNarrow()) return { naver: `https://m.map.naver.com/search2/search.naver?query=${q}`, kakao: `https://m.map.kakao.com/actions/searchView?q=${q}`, google };
-  return { naver: `https://map.naver.com/p/search/${q}`, kakao: `https://map.kakao.com/?q=${q}`, google };
+  if (isNarrow()) return { naver: `https://m.map.naver.com/search2/search.naver?query=${q}`, kakao: `https://m.map.kakao.com/actions/searchView?q=${q}` };
+  return { naver: `https://map.naver.com/p/search/${q}`, kakao: `https://map.kakao.com/?q=${q}` };
 };
-
-// 화면 안에 바로 보이는 지도 (구글 지도 임베드, API 키 불필요)
-// 좌표 대신 검색어를 쓰며, '근처' 검색은 구글이 접속 위치를 기준으로 대략적인 동네를 보여 줌
-export const embedMapUrl = (query) => `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&hl=ko&output=embed`;
 
 // 모바일에서는 지도 앱·사이트를 현재 창에서 열고, 넓은 화면에서는 새 창
 export function linkTarget() {
@@ -61,7 +56,6 @@ function MapLinks({ query, pos }) {
     <span className="row wrap">
       <a className="btn small ghost" href={l.naver} {...linkTarget()}>네이버지도</a>
       <a className="btn small ghost" href={l.kakao} {...linkTarget()}>카카오맵</a>
-      <a className="btn small ghost" href={l.google} {...linkTarget()}>구글지도</a>
     </span>
   );
 }
@@ -175,10 +169,6 @@ export default function Restaurants() {
             <div className="stack">
               <p className="map-hint"><b>지도 앱에서 바로 찾기</b> <span className="muted">({shownQuery})</span></p>
               <MapLinks query={shownQuery} pos={pos} />
-              <div className="map-embed">
-                <iframe key={shownQuery} title={`${shownQuery} 지도`} src={embedMapUrl(shownQuery)} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
-              </div>
-              <p className="muted small">지도는 구글 지도에서 불러와요. 위치는 인터넷 접속 위치로 대략 잡히니, 확대·이동해 살펴보시고 정확한 검색은 위의 지도 앱 버튼을 이용해 주세요.</p>
             </div>
           </section>
 
