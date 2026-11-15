@@ -190,7 +190,7 @@ export function EatOutModal({ initial = {}, onClose, fixedDate }) {
   );
 }
 
-export function DayPanel({ date, compact, showEaten, title }) {
+export function DayPanel({ date, compact, showEaten, title, hideRegen }) {
   const { state, targets, generate, notify } = useStore();
   const day = state.plans[date] || {};
   const totals = dayTotals(day, targets);
@@ -219,10 +219,10 @@ export function DayPanel({ date, compact, showEaten, title }) {
           <p className="muted small">세 끼 목표 = 하루 {targets.kcal.toLocaleString()}kcal − 간식·음료 {targets.snackKcal}kcal{snackKcal ? ` · 오늘 간식 ${snackKcal}kcal 기록` : ''}</p>
         </details>
       )}
-      <div className="row no-print">
-        <button className="btn ghost small" onClick={regen}>이 날 다시 만들기</button>
+      {!(hideRegen && !compact) && <div className="row no-print">
+        {!hideRegen && <button className="btn ghost small" onClick={regen}>이 날 다시 만들기</button>}
         {compact && <span className="muted small">단백질 {round(totals.protein)}g · 나트륨 {round(totals.sodium).toLocaleString()}mg · 약 {won(totals.cost)}</span>}
-      </div>
+      </div>}
     </section>
   );
 }

@@ -514,3 +514,12 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .my-dish-name { font-size: .75rem; padding: .1rem .45rem; max-width: 96px; }
   .my-dish-x { width: 28px; height: 28px; top: -6px; right: -2px; }
 }
+
+/* 레시피 모음 검색줄: [메뉴 검색] [입력칸] [전체 검색] */
+.search-row { display: flex; align-items: center; gap: .5rem; }
+.search-row .search-label { flex: none; font-weight: 800; white-space: nowrap; }
+.search-row input { flex: 1 1 auto; min-width: 0; max-width: 22rem; }
+.search-row .btn { flex: none; white-space: nowrap; padding: .4rem .8rem; }
+@media (max-width: 420px) { .search-row .search-label { font-size: .9rem; } .search-row .btn { font-size: .9rem; padding: .3rem .6rem; } }
+.chip.fav-chip { border-color: #f3b5c4; color: #c2255c; }
+.chip.fav-chip.on { background: #d6336c; border-color: #d6336c; color: #fff; }

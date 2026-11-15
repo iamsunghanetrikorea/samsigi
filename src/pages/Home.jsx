@@ -58,7 +58,7 @@ export default function Home() {
             <>
               <div className="only-wide"><WeekTable dates={dates} /></div>
               <div className="only-narrow">
-                {dates.includes(d) ? <DayPanel date={d} title={<>오늘의 메뉴 <span className="day-date">{fmtDate(d)}</span></>} showEaten /> : <p className="muted">아래 ‘주간 식단’에서 이 주를 볼 수 있어요.</p>}
+                {dates.includes(d) ? <DayPanel date={d} title={<>오늘의 메뉴 <span className="day-date">{fmtDate(d)}</span></>} showEaten hideRegen /> : <p className="muted">아래 ‘주간 식단’에서 이 주를 볼 수 있어요.</p>}
                 <TodayRecipe className="mobile-recipe" />
               </div>
             </>

@@ -12,6 +12,8 @@ import Plate from '../components/Plate';
 import RecipeMaker from '../components/RecipeMaker';
 import { MyTableButton } from '../components/MyTable';
 
+const FAV = '즐겨찾기';
+
 export default function RecipeList() {
   const { state, targets, update, addRecipeUpdate, notify } = useStore();
   const [meal, setMeal] = useState('all');
@@ -28,7 +30,7 @@ export default function RecipeList() {
   const [onlyOk, setOnlyOk] = useState(true);
   const leftovers = leftoverRecipes(state.pantry);
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
-    && (cat === '전체' || r.category === cat)
+    && (cat === '전체' || (cat === FAV ? state.profile.favorites.includes(r.id) : r.category === cat))
     && (!q || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q)))
     && (!onlyOk || !excludeReason(r, state.profile)));
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
@@ -65,14 +67,21 @@ export default function RecipeList() {
         </section>
       )}
       <div className="stack">
-        <input type="search" placeholder="메뉴·재료 이름으로 찾기" aria-label="레시피 검색" value={q} onChange={(e) => setQ(e.target.value)} />
+        <form className="search-row" role="search" onSubmit={(e) => { e.preventDefault(); setCat('전체'); setMeal('all'); setOnlyOk(false); }}>
+          <label htmlFor="recipe-q" className="search-label">메뉴 검색</label>
+          <input id="recipe-q" type="search" placeholder="메뉴·재료" value={q} onChange={(e) => setQ(e.target.value)} />
+          <button type="submit" className="btn">전체 검색</button>
+        </form>
         <div className="chips" role="group" aria-label="분류">
-          {['전체', ...CATEGORIES].map((c) => <button key={c} className={`chip ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(c)}>{c}</button>)}
+          {['전체', ...CATEGORIES, FAV].map((c) => <button key={c} className={`chip ${cat === c ? 'on' : ''} ${c === FAV ? 'fav-chip' : ''}`} aria-pressed={cat === c} onClick={() => setCat(c)}>{c === FAV ? `♥ 즐겨찾기 ${state.profile.favorites.length}` : c}</button>)}
         </div>
         <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
         <label className="check"><input type="checkbox" checked={onlyOk} onChange={(e) => setOnlyOk(e.target.checked)} /> 내 조건(알레르기·시간·난이도)에 맞는 것만</label>
       </div>
       <p className="muted">{list.length}개</p>
+      {cat === FAV && list.length === 0 && (
+        <p className="notice">{state.profile.favorites.length ? '즐겨찾기한 메뉴가 위 조건(끼니·검색·내 조건)에 맞지 않아 안 보여요. 조건을 풀어 보세요.' : '아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.'}</p>
+      )}
       <ul className="choice-list">
         {list.map((r) => {
           const n = sumItems(mealItems(r, { kcal: targets.perMeal[r.meals[0]]?.kcal }).items.map((i) => [i.id, i.g]));
