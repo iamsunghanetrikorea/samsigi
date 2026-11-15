@@ -6,11 +6,9 @@ import { makeRecipe, INGREDIENT_OPTIONS } from '../lib/recipeMaker';
 import { sumItems, round } from '../lib/nutrition';
 import { go } from '../router';
 import Plate from './Plate';
-import SyncPanel from './SyncPanel';
 
-const EXAMPLES = ['김치찌개', '제육덮밥', '소고기미역국', '고등어조림', '감자전', '계란말이', '짜장면', '떡볶이'];
 
-// '추천 메뉴 입력': 메뉴 이름을 넣으면 레시피 초안을 만들고, 고쳐서 레시피 모음에 추가
+// '신규 메뉴 입력': 메뉴 이름을 넣으면 레시피 초안을 만들고, 고쳐서 레시피 모음에 추가
 export default function RecipeMaker({ onAdded }) {
   const { state, saveCustomRecipe, removeCustomRecipe, notify } = useStore();
   const [open, setOpen] = useState(false);
@@ -58,18 +56,15 @@ export default function RecipeMaker({ onAdded }) {
   return (
     <div className="maker">
       <button className="btn full-narrow" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        ✏️ 추천 메뉴 입력 {open ? '▲' : '▼'}
+        ✏️ 신규 메뉴 입력 {open ? '▲' : '▼'}
       </button>
       {open && (
         <div className="maker-body">
           <p className="muted small">드시고 싶은 메뉴 이름을 넣으면 앱이 1인분 레시피를 만들어 드려요. 재료와 순서를 고친 뒤 추가하세요.</p>
-          <form className="row wrap" onSubmit={(e) => { e.preventDefault(); create(); }}>
-            <input aria-label="추가할 메뉴 이름" placeholder="메뉴 이름 (예: 김치찌개, 제육덮밥)" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: '1 1 14rem' }} />
+          <form className="row wrap maker-form" onSubmit={(e) => { e.preventDefault(); create(); }}>
+            <input aria-label="추가할 메뉴 이름" placeholder="메뉴 이름 (예: 김치찌개, 감자전)" value={name} onChange={(e) => setName(e.target.value)} />
             <button type="submit" className="btn primary">레시피 만들기</button>
           </form>
-          <div className="chips" role="group" aria-label="예시 메뉴">
-            {EXAMPLES.map((x) => <button key={x} type="button" className="chip" onClick={() => create(x)}>{x}</button>)}
-          </div>
 
           {draft && (
             <div className="maker-draft">
@@ -147,7 +142,6 @@ export default function RecipeMaker({ onAdded }) {
               </ul>
             </>
           )}
-          <SyncPanel />
         </div>
       )}
     </div>

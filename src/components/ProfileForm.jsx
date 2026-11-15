@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ACTIVITY, bmr, maintenanceKcal, computeTargets, MEAL_KEYS, round } from '../lib/nutrition';
 import { ALLERGENS } from '../data/ingredients';
 import { PREFERENCE_TAGS, MEAL_LABEL } from '../data/recipes';
@@ -7,9 +7,14 @@ import { Seg } from './ui';
 
 const num = (v) => (v === '' ? '' : Number(v));
 
-export default function ProfileForm({ initial, onSave, submitLabel = '저장하기', short }) {
+// wizard: 처음 설정용 단계별 화면(한 화면에 한 묶음, 언제든 '기본값으로 바로 시작' 가능)
+export default function ProfileForm({ initial, onSave, submitLabel = '저장하기', short, wizard, initialStep = 0, initialExText, onDraft }) {
   const [p, setP] = useState(initial);
-  const [exText, setExText] = useState((initial.exclusions || []).join(', '));
+  const [exText, setExText] = useState(initialExText ?? (initial.exclusions || []).join(', '));
+  const [step, setStep] = useState(initialStep);
+  const top = useRef(null);
+  // 입력하는 대로 임시 저장 → 중간에 나갔다 와도 이어서 입력
+  useEffect(() => { onDraft?.({ p, exText, step }); }, [p, exText, step]); // eslint-disable-line react-hooks/exhaustive-deps
   const set = (patch) => setP((x) => ({ ...x, ...patch }));
   const toggle = (key, v) => set({ [key]: p[key].includes(v) ? p[key].filter((x) => x !== v) : [...p[key], v] });
 
@@ -20,15 +25,15 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
   const cond = p.conditions || {};
   const okCount = valid ? MEAL_KEYS.map((k) => allowedRecipes({ ...p, exclusions: parseEx(exText) }, k).filter((r) => !r.noAuto).length) : [];
 
-  const submit = (e) => {
-    e.preventDefault();
-    if (!valid || pctSum !== 100 || splitSum !== 100) return;
-    onSave({ ...p, exclusions: parseEx(exText) });
-  };
+  const blocker = !valid ? '나이(40~110세), 키(120~210cm), 몸무게(30~200kg)를 확인해 주세요.'
+    : pctSum !== 100 ? `영양 비율 합계가 ${pctSum}%예요. 100%로 맞춰 주세요.`
+    : splitSum !== 100 ? `끼니 배분 합계가 ${splitSum}%예요. 100%로 맞춰 주세요.` : null;
+  const finish = () => { if (!blocker) onSave({ ...p, exclusions: parseEx(exText) }); };
+  const submit = (e) => { e.preventDefault(); finish(); };
+  const go = (n) => { setStep(n); setTimeout(() => top.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0); };
 
-  return (
-    <form className="form stack" onSubmit={submit}>
-      <fieldset className="card">
+  const sections = [
+      <fieldset className="card" key="basic">
         <legend>기본 정보</legend>
         <p className="muted small">열량 추정에만 쓰이며, 이 기기에만 저장됩니다.</p>
         <label className="field"><span>부르실 이름 (선택)</span><input value={p.name || ''} maxLength={20} onChange={(e) => set({ name: e.target.value })} placeholder="예: 홍길동" /></label>
@@ -40,7 +45,6 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
           <label className="field"><span>키 (cm)</span><input type="number" inputMode="decimal" min={120} max={210} value={p.height} onChange={(e) => set({ height: num(e.target.value) })} required /></label>
           <label className="field"><span>몸무게 (kg)</span><input type="number" inputMode="decimal" min={30} max={200} value={p.weight} onChange={(e) => set({ weight: num(e.target.value) })} required /></label>
         </div>
-        {!valid && <p className="warn">나이(40~110세), 키(120~210cm), 몸무게(30~200kg)를 확인해 주세요.</p>}
         <label className="field"><span>평소 활동량</span>
           <select value={p.activity} onChange={(e) => set({ activity: e.target.value })}>
             {ACTIVITY.map((a) => <option key={a.key} value={a.key}>{a.label}</option>)}
@@ -49,9 +53,9 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
         <div className="field"><span>함께 식사하는 인원 (기본 인분)</span>
           <Seg label="인원" value={p.people} onChange={(v) => set({ people: v })} options={[1, 2, 3, 4].map((n) => ({ value: n, label: `${n}명` }))} />
         </div>
-      </fieldset>
+      </fieldset>,
 
-      <fieldset className="card">
+      <fieldset className="card" key="allergy">
         <legend>알레르기·못 드시는 음식</legend>
         <div className="field-label">알레르기 (해당 재료가 든 메뉴는 추천하지 않아요)</div>
         <div className="chips">
@@ -62,9 +66,9 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
           <Seg label="씹기" value={p.chewing} onChange={(v) => set({ chewing: v })} options={[{ value: 'none', label: '불편 없음' }, { value: 'some', label: '조금 불편' }, { value: 'hard', label: '많이 불편' }]} />
           {p.chewing === 'hard' && <p className="muted small">부드러운 메뉴(죽·찜·국 등)만 추천합니다. 삼킴 곤란이 있으면 의료진·영양사 상담을 권합니다.</p>}
         </div>
-      </fieldset>
+      </fieldset>,
 
-      <fieldset className="card">
+      <fieldset className="card" key="cook">
         <legend>요리 조건과 입맛</legend>
         <div className="grid2">
           <div className="field"><span>조리 난이도</span>
@@ -80,9 +84,9 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
           {PREFERENCE_TAGS.map((a) => <button type="button" key={a} className={`chip ${p.likes.includes(a) ? 'on' : ''}`} aria-pressed={p.likes.includes(a)} onClick={() => toggle('likes', a)}>{a}</button>)}
         </div>
         {valid && <p className={okCount.some((c) => c < 3) ? 'warn' : 'muted small'}>조건에 맞는 메뉴: {MEAL_KEYS.map((k, i) => `${MEAL_LABEL[k]} ${okCount[i]}개`).join(' · ')}</p>}
-      </fieldset>
+      </fieldset>,
 
-      <fieldset className="card">
+      <fieldset className="card" key="health">
         <legend>건강 상태 (선택)</legend>
         <p className="muted small">민감한 건강정보입니다. 이 기기에만 저장되고 외부로 전송되지 않으며, 언제든 삭제할 수 있습니다.</p>
         <label className="check big"><input type="checkbox" checked={!!p.conditionsConsent} onChange={(e) => set({ conditionsConsent: e.target.checked, conditions: e.target.checked ? cond : { diabetes: false, hypertension: false, kidney: false } })} /> 위 내용에 동의하고 건강 상태를 입력합니다</label>
@@ -96,10 +100,10 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
             )}
           </div>
         )}
-      </fieldset>
+      </fieldset>,
 
-      {!short && t && (
-        <fieldset className="card">
+      !short && t && (
+        <fieldset className="card" key="goals">
           <legend>영양 목표</legend>
           <p className="muted small">기초대사량(Mifflin–St Jeor) {round(bmr(p)).toLocaleString()}kcal × 활동계수 = 유지 열량 약 <b>{maintenanceKcal(p).toLocaleString()}kcal</b> (추정치)</p>
           <label className="field"><span>하루 목표 열량 (비우면 자동: {t.auto.toLocaleString()}kcal)</span>
@@ -129,9 +133,44 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
           </label>
           <p className="muted small">나이만으로 일률적인 기준을 적용하지 않습니다. 체중 변화·건강 상태에 따라 목표를 조정해 주세요.</p>
         </fieldset>
-      )}
+      ),
+  ].filter(Boolean);
 
-      <button className="btn primary big" type="submit" disabled={!valid || pctSum !== 100 || splitSum !== 100}>{submitLabel}</button>
+  if (!wizard) {
+    return (
+      <form className="form stack" onSubmit={submit}>
+        {sections}
+        {blocker && <p className="warn">{blocker}</p>}
+        <button className="btn primary big" type="submit" disabled={!!blocker}>{submitLabel}</button>
+      </form>
+    );
+  }
+
+  const last = sections.length - 1;
+  const cur = Math.min(step, last);
+  const titles = ['기본 정보', '알레르기·못 드시는 음식', '요리 조건과 입맛', '건강 상태'];
+  return (
+    <form className="form stack" onSubmit={(e) => { e.preventDefault(); if (cur < last) { if (!blocker) go(cur + 1); } else finish(); }}>
+      <div className="wiz-head" ref={top}>
+        <div className="wiz-steps" aria-hidden>
+          {sections.map((_, i) => <span key={i} className={i < cur ? 'done' : i === cur ? 'now' : ''} />)}
+        </div>
+        <p className="wiz-label"><b>{cur + 1} / {sections.length} 단계</b> · {titles[cur]}{cur > 0 && ' (건너뛰어도 돼요)'}</p>
+      </div>
+      {sections[cur]}
+      {blocker && <p className="warn" role="alert">{blocker}</p>}
+      <div className="wiz-nav">
+        {cur > 0 && <button type="button" className="btn ghost" onClick={() => go(cur - 1)}>← 이전</button>}
+        {cur < last
+          ? <button type="submit" className="btn primary big" disabled={!!blocker}>다음 →</button>
+          : <button type="submit" className="btn primary big" disabled={!!blocker}>{submitLabel}</button>}
+      </div>
+      {cur < last && (
+        <button type="button" className="btn soft wiz-skip" onClick={finish} disabled={!!blocker}>
+          나머지는 기본값으로 바로 시작하기
+        </button>
+      )}
+      {cur < last && <p className="muted small center">나머지 항목은 나중에 ‘내 정보’에서 언제든 바꿀 수 있어요.</p>}
     </form>
   );
 }

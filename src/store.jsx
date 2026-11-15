@@ -3,7 +3,6 @@ import { getItem, setItem, clearAll } from './lib/storage';
 import { computeTargets, DEFAULT_PROFILE } from './lib/nutrition';
 import { generatePlans } from './lib/planner';
 import { syncPack, syncCustom, nextUpdate } from './data/recipePack';
-import { fetchDoc, pushDoc, mergeDocs, sameDoc, sanitizeRecipe } from './lib/sync';
 
 export const DEFAULT_STATE = {
   profile: null,
@@ -17,7 +16,6 @@ export const DEFAULT_STATE = {
   addedRecipes: [],     // 업데이트로 추가한 추천 메뉴 id
   customRecipes: [],    // 사용자가 메뉴 이름을 입력해 만든 레시피
   myTable: [],          // 나의 밥상에 올린 레시피 id
-  sync: { code: null, deleted: [], dirty: false, lastSync: null, error: null }, // 레시피 동기화(코드·삭제 기록)
 };
 const KEYS = Object.keys(DEFAULT_STATE);
 
@@ -36,7 +34,6 @@ export function StoreProvider({ children }) {
         if (v !== undefined) s[k] = v;
       }
       if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
-      s.sync = { ...DEFAULT_STATE.sync, ...s.sync };
       // 예전에 만든 내 메뉴 이름에서 '…와 잡곡밥'·'…과 쌀밥' 떼기
       s.customRecipes = s.customRecipes.map((r) => (/(과|와) (잡곡밥|쌀밥)$/.test(r.title) ? { ...r, title: r.title.replace(/(과|와) (잡곡밥|쌀밥)$/, '') } : r));
       syncPack(s.addedRecipes);
@@ -123,7 +120,7 @@ export function StoreProvider({ children }) {
     const recipe = { ...input, updatedAt: Date.now() };
     const list = s.customRecipes.some((r) => r.id === recipe.id) ? s.customRecipes.map((r) => (r.id === recipe.id ? recipe : r)) : [...s.customRecipes, recipe];
     syncCustom(list);
-    const next = { ...s, customRecipes: list, sync: { ...s.sync, dirty: !!s.sync.code } };
+    const next = { ...s, customRecipes: list };
     stateRef.current = next;
     setState(next);
   }, []);
@@ -131,81 +128,10 @@ export function StoreProvider({ children }) {
     const s = stateRef.current;
     const list = s.customRecipes.filter((r) => r.id !== id);
     syncCustom(list);
-    const deleted = [...s.sync.deleted.filter((t) => t.id !== id), { id, updatedAt: Date.now() }];
-    const next = { ...s, customRecipes: list, plans: dropPlans(s.plans, new Set([id])), sync: { ...s.sync, deleted, dirty: !!s.sync.code } };
+    const next = { ...s, customRecipes: list, plans: dropPlans(s.plans, new Set([id])) };
     stateRef.current = next;
     setState(next);
   }, []);
-
-  // 레시피 동기화: 바뀐 게 있으면 보내고(PUT), 아니면 받아서(GET) 이 기기 것과 합친다
-  const syncing = useRef(false);
-  const runSync = useCallback(async () => {
-    const s = stateRef.current;
-    if (!s?.sync.code || syncing.current) return;
-    syncing.current = true;
-    const { code } = s.sync;
-    try {
-      const local = { recipes: s.customRecipes, deleted: s.sync.deleted };
-      const remote = s.sync.dirty ? await pushDoc(code, local) : await fetchDoc(code);
-      const cur = stateRef.current;
-      if (cur.sync.code !== code) return; // 그사이 연결을 끊었거나 바꿈
-      const merged = mergeDocs({ recipes: cur.customRecipes, deleted: cur.sync.deleted }, remote);
-      const recipes = merged.recipes.map(sanitizeRecipe).filter(Boolean);
-      const gone = new Set(cur.customRecipes.map((r) => r.id).filter((id) => !recipes.some((r) => r.id === id)));
-      const unchanged = sameDoc({ recipes: cur.customRecipes, deleted: cur.sync.deleted }, { recipes, deleted: merged.deleted });
-      if (!unchanged) syncCustom(recipes);
-      const next = {
-        ...cur,
-        customRecipes: unchanged ? cur.customRecipes : recipes,
-        plans: gone.size ? dropPlans(cur.plans, gone) : cur.plans,
-        sync: { ...cur.sync, deleted: merged.deleted, dirty: !sameDoc(merged, remote), lastSync: Date.now(), error: null },
-      };
-      stateRef.current = next;
-      setState(next);
-      if (next.sync.dirty) setTimeout(() => runSyncRef.current(), 1500); // 그사이 바뀐 것 마저 보내기
-    } catch (e) {
-      const cur = stateRef.current;
-      const next = { ...cur, sync: { ...cur.sync, error: e.status === 404 ? '서버에 없는 동기화 코드예요. 연결을 끊고 다시 연결해 주세요.' : e.message } };
-      stateRef.current = next;
-      setState(next);
-    } finally {
-      syncing.current = false;
-    }
-  }, []);
-  const runSyncRef = useRef(runSync);
-  runSyncRef.current = runSync;
-
-  // 동기화 연결·해제. 연결하면 이 기기 레시피와 서버 레시피를 합침
-  const connectSync = useCallback(async (code) => {
-    const s = stateRef.current;
-    const next = { ...s, sync: { ...s.sync, code, dirty: true, error: null } };
-    stateRef.current = next;
-    setState(next);
-    await runSync();
-    return stateRef.current.sync.error;
-  }, [runSync]);
-  const disconnectSync = useCallback(() => {
-    const s = stateRef.current;
-    const next = { ...s, sync: { ...DEFAULT_STATE.sync, deleted: s.sync.deleted } };
-    stateRef.current = next;
-    setState(next);
-  }, []);
-
-  // 자동 동기화: 바뀐 뒤 잠시 후, 앱을 열 때·다시 볼 때, 보고 있는 동안 1분마다
-  useEffect(() => {
-    if (!state?.sync.code || !state.sync.dirty) return;
-    const t = setTimeout(runSync, 1200);
-    return () => clearTimeout(t);
-  }, [state?.sync.code, state?.sync.dirty, state?.customRecipes, runSync]);
-  useEffect(() => {
-    if (!state?.sync.code) return;
-    runSync();
-    const onVisible = () => { if (document.visibilityState === 'visible') runSync(); };
-    document.addEventListener('visibilitychange', onVisible);
-    window.addEventListener('online', runSync);
-    const iv = setInterval(() => { if (document.visibilityState === 'visible') runSync(); }, 60000);
-    return () => { document.removeEventListener('visibilitychange', onVisible); window.removeEventListener('online', runSync); clearInterval(iv); };
-  }, [state?.sync.code, runSync]);
 
   const resetAll = useCallback(async () => {
     syncPack([]);
@@ -219,14 +145,13 @@ export function StoreProvider({ children }) {
     const s = { ...DEFAULT_STATE };
     for (const k of KEYS) if (data[k] !== undefined) s[k] = data[k];
     if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
-    s.sync = { ...DEFAULT_STATE.sync, ...s.sync };
     syncPack(s.addedRecipes);
     syncCustom(s.customRecipes);
     setState(s);
   }, []);
 
-  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, runSync, connectSync, disconnectSync, notify, toast, resetAll, replaceAll }),
-    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, runSync, connectSync, disconnectSync, notify, toast, resetAll, replaceAll]);
+  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, notify, toast, resetAll, replaceAll }),
+    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, notify, toast, resetAll, replaceAll]);
 
   if (!state) return <div className="loading" role="status">불러오는 중…</div>;
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { useStore } from '../store';
 import ProfileForm from '../components/ProfileForm';
-import SyncPanel from '../components/SyncPanel';
 import { Modal, Seg } from '../components/ui';
 import { download } from '../lib/exporter';
 import { today, WD } from '../lib/date';
@@ -57,12 +56,8 @@ export default function Settings() {
       )}
 
       <section className="card stack">
-        <SyncPanel />
-      </section>
-
-      <section className="card stack">
         <h2>데이터 백업·삭제</h2>
-        <p className="muted small">모든 정보는 이 기기(브라우저)에만 저장됩니다(레시피 동기화를 연결하면 직접 추가한 메뉴만 동기화 서버에도 저장돼요). 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업해 두세요.</p>
+        <p className="muted small">모든 정보는 이 기기(브라우저)에만 저장됩니다. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업해 두세요.</p>
         <div className="row wrap">
           <button className="btn" onClick={exportJSON}>백업 파일 내보내기</button>
           <button className="btn ghost" onClick={() => fileRef.current?.click()}>백업 불러오기</button>

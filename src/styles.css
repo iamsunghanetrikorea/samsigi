@@ -464,7 +464,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .my-chip .chip-main { padding: 0 .3rem 0 .9rem; font-weight: 700; }
 .my-chip .chip-x { padding: 0 .7rem 0 .3rem; min-width: 36px; }
 
-/* 추천 메뉴 입력 (레시피 직접 추가) */
+/* 신규 메뉴 입력 (레시피 직접 추가) */
 .maker { margin-top: .8rem; display: flex; flex-direction: column; gap: .6rem; }
 .maker-body { display: flex; flex-direction: column; gap: .5rem; border-top: 1px dashed var(--line); padding-top: .7rem; }
 .maker-draft { display: flex; flex-direction: column; gap: .5rem; background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: .8rem; }
@@ -523,3 +523,19 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 @media (max-width: 420px) { .search-row .search-label { font-size: .9rem; } .search-row .btn { font-size: .9rem; padding: .3rem .6rem; } }
 .chip.fav-chip { border-color: #f3b5c4; color: #c2255c; }
 .chip.fav-chip.on { background: #d6336c; border-color: #d6336c; color: #fff; }
+
+/* 처음 설정 단계 표시 */
+.wiz-head { scroll-margin-top: 80px; }
+.wiz-steps { display: flex; gap: .4rem; }
+.wiz-steps span { flex: 1; height: 8px; border-radius: 999px; background: var(--line); }
+.wiz-steps span.done { background: color-mix(in srgb, var(--primary) 45%, var(--line)); }
+.wiz-steps span.now { background: var(--primary); }
+.wiz-label { margin: .5rem 0 0; }
+.wiz-nav { display: flex; gap: .6rem; }
+.wiz-nav .btn.big { flex: 1; }
+.wiz-skip { width: 100%; }
+.maker-form input { flex: 1 1 14rem; min-width: 0; }
+@media (max-width: 560px) {
+  .maker-form { flex-direction: column; align-items: stretch; }
+  .maker-form input, .maker-form .btn { width: 100%; flex: none; }
+}
