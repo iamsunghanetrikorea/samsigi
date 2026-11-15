@@ -163,6 +163,15 @@ export function syncPack(ids = []) {
   for (const id of want) if (!RECIPE_BY_ID[id]) { RECIPES.push(PACK_BY_ID[id]); RECIPE_BY_ID[id] = PACK_BY_ID[id]; }
 }
 
+// 사용자가 직접 입력해 만든 메뉴(isCustom)를 레시피 목록에 올림
+export function syncCustom(list = []) {
+  const want = new Map(list.map((r) => [r.id, r]));
+  for (let i = RECIPES.length - 1; i >= 0; i--) {
+    if (RECIPES[i].isCustom && want.get(RECIPES[i].id) !== RECIPES[i]) { delete RECIPE_BY_ID[RECIPES[i].id]; RECIPES.splice(i, 1); }
+  }
+  for (const r of list) if (!RECIPE_BY_ID[r.id]) { RECIPES.push(r); RECIPE_BY_ID[r.id] = r; }
+}
+
 // 다음 업데이트로 추가할 메뉴: 분류마다 아직 없는 메뉴 하나씩
 export function nextUpdate(addedIds = []) {
   const added = new Set(addedIds);

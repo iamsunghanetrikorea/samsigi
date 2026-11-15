@@ -463,3 +463,14 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .my-chip button { appearance: none; border: 0; background: none; color: inherit; font: inherit; min-height: 40px; cursor: pointer; }
 .my-chip .chip-main { padding: 0 .3rem 0 .9rem; font-weight: 700; }
 .my-chip .chip-x { padding: 0 .7rem 0 .3rem; min-width: 36px; }
+
+/* 추천 메뉴 입력 (레시피 직접 추가) */
+.maker { margin-top: .8rem; display: flex; flex-direction: column; gap: .6rem; }
+.maker-body { display: flex; flex-direction: column; gap: .5rem; border-top: 1px dashed var(--line); padding-top: .7rem; }
+.maker-draft { display: flex; flex-direction: column; gap: .5rem; background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: .8rem; }
+.maker-draft h3, .maker-body h3 { font-size: 1rem; margin: .4rem 0 0; }
+.maker-meals { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: .2rem 1rem; }
+.maker-items li { gap: .5rem; border-bottom: 1px solid var(--line); padding: .2rem 0; }
+.maker-items input { min-height: 44px; }
+.linklike { appearance: none; background: none; border: 0; padding: .3rem 0; font: inherit; font-weight: 700; color: var(--primary); text-align: left; cursor: pointer; min-height: 44px; }
+.my-badge { display: inline-block; font-size: .65rem; font-weight: 900; color: #fff; background: var(--primary); border-radius: 6px; padding: 0 .35rem; vertical-align: middle; }

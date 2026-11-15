@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { getItem, setItem, clearAll } from './lib/storage';
 import { computeTargets, DEFAULT_PROFILE } from './lib/nutrition';
 import { generatePlans } from './lib/planner';
-import { syncPack, nextUpdate } from './data/recipePack';
+import { syncPack, syncCustom, nextUpdate } from './data/recipePack';
 
 export const DEFAULT_STATE = {
   profile: null,
@@ -14,6 +14,7 @@ export const DEFAULT_STATE = {
   settings: { fontSize: 20, contrast: false },
   consent: { location: false },
   addedRecipes: [],     // 업데이트로 추가한 추천 메뉴 id
+  customRecipes: [],    // 사용자가 메뉴 이름을 입력해 만든 레시피
 };
 const KEYS = Object.keys(DEFAULT_STATE);
 
@@ -33,6 +34,7 @@ export function StoreProvider({ children }) {
       }
       if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
       syncPack(s.addedRecipes);
+      syncCustom(s.customRecipes);
       saved.current = s;
       setState(s);
     })();
@@ -109,8 +111,29 @@ export function StoreProvider({ children }) {
     return ids;
   }, []);
 
+  // 직접 입력한 메뉴 추가·수정·삭제 (삭제하면 그 메뉴가 들어간 식단 칸도 비움)
+  const saveCustomRecipe = useCallback((recipe) => {
+    const s = stateRef.current;
+    const list = s.customRecipes.some((r) => r.id === recipe.id) ? s.customRecipes.map((r) => (r.id === recipe.id ? recipe : r)) : [...s.customRecipes, recipe];
+    syncCustom(list);
+    const next = { ...s, customRecipes: list };
+    stateRef.current = next;
+    setState(next);
+  }, []);
+  const removeCustomRecipe = useCallback((id) => {
+    const s = stateRef.current;
+    const list = s.customRecipes.filter((r) => r.id !== id);
+    syncCustom(list);
+    const plans = {};
+    for (const [d, day] of Object.entries(s.plans)) plans[d] = Object.fromEntries(Object.entries(day).filter(([, e]) => e?.recipeId !== id));
+    const next = { ...s, customRecipes: list, plans };
+    stateRef.current = next;
+    setState(next);
+  }, []);
+
   const resetAll = useCallback(async () => {
     syncPack([]);
+    syncCustom([]);
     await clearAll();
     saved.current = DEFAULT_STATE;
     setState({ ...DEFAULT_STATE });
@@ -121,11 +144,12 @@ export function StoreProvider({ children }) {
     for (const k of KEYS) if (data[k] !== undefined) s[k] = data[k];
     if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
     syncPack(s.addedRecipes);
+    syncCustom(s.customRecipes);
     setState(s);
   }, []);
 
-  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, notify, toast, resetAll, replaceAll }),
-    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, notify, toast, resetAll, replaceAll]);
+  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, notify, toast, resetAll, replaceAll }),
+    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, notify, toast, resetAll, replaceAll]);
 
   if (!state) return <div className="loading" role="status">불러오는 중…</div>;
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

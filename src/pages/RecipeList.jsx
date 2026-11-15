@@ -9,6 +9,7 @@ import { leftoverRecipes } from '../lib/shopping';
 import { Seg } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
+import RecipeMaker from '../components/RecipeMaker';
 
 export default function RecipeList() {
   const { state, targets, update, addRecipeUpdate, notify } = useStore();
@@ -45,10 +46,11 @@ export default function RecipeList() {
         {justAdded.length > 0 && (
           <ul className="choice-list">
             {justAdded.map((id) => RECIPE_BY_ID[id]).filter(Boolean).map((r) => (
-              <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><Plate recipe={r} /><span className="choice-body"><b><span className="new-badge">NEW</span> {r.title}</b><span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')}</span></span></button></li>
+              <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><Plate recipe={r} /><span className="choice-body"><b>{r.isCustom ? <span className="my-badge">내 메뉴</span> : <span className="new-badge">NEW</span>} {r.title}</b><span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')}</span></span></button></li>
             ))}
           </ul>
         )}
+        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat('전체'); setMeal('all'); setQ(''); }} />
         <p className="muted small">새 메뉴는 널리 쓰이는 가정식 조리법을 참고해 작성했어요. 각 레시피의 유튜브·만개의레시피 링크로 확인해 보세요. 식사 메뉴는 식단 자동 추천에도 쓰이고, 간식은 ‘오늘 간식으로 기록’할 수 있어요.</p>
       </section>
       {leftovers.length > 0 && (
@@ -79,7 +81,7 @@ export default function RecipeList() {
               <button className="choice" onClick={() => go(`/recipe/${r.id}`)}>
                 <Plate recipe={r} />
                 <span className="choice-body">
-                  <b>{r.isNew && <span className="new-badge">NEW</span>} {r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
+                  <b>{r.isNew && <span className="new-badge">NEW</span>}{r.isCustom && <span className="my-badge">내 메뉴</span>} {r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
                   <span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')} · {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · {r.prep + r.cook}분{why ? ` · 제외됨(${why})` : ''}</span>
                 </span>
               </button>
