@@ -5,6 +5,7 @@ import { DayPanel } from '../components/meal';
 import { Modal } from '../components/ui';
 import { WelcomeBanner, WeekTable, NutritionDonut, TodayRecipe, ShoppingPreview, RestaurantPreview, MonthMini } from '../components/dashboard';
 import { go } from '../router';
+import { MyTablePanel } from '../components/MyTable';
 
 export default function Home() {
   const { state, targets, generate, notify, update } = useStore();
@@ -106,6 +107,8 @@ export default function Home() {
       {(cond.kidney || cond.diabetes || cond.hypertension) && (
         <p className="notice">입력하신 건강 상태에 맞는 식사는 주치의·임상영양사와 상담해 정해 주세요. 앱의 수치는 추정치입니다.</p>
       )}
+
+      <MyTablePanel />
 
       {confirm && (
         <Modal title="식단 다시 생성" onClose={() => setConfirm(false)}>

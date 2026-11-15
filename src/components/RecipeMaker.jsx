@@ -6,6 +6,7 @@ import { makeRecipe, INGREDIENT_OPTIONS } from '../lib/recipeMaker';
 import { sumItems, round } from '../lib/nutrition';
 import { go } from '../router';
 import Plate from './Plate';
+import SyncPanel from './SyncPanel';
 
 const EXAMPLES = ['김치찌개', '제육덮밥', '소고기미역국', '고등어조림', '감자전', '계란말이', '짜장면', '떡볶이'];
 
@@ -146,6 +147,7 @@ export default function RecipeMaker({ onAdded }) {
               </ul>
             </>
           )}
+          <SyncPanel />
         </div>
       )}
     </div>

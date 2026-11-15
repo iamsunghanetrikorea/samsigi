@@ -10,6 +10,7 @@ import { PHOTOS } from '../data/photos';
 import SendToGpt from '../components/SendToGpt';
 import { youtubeSuggestions } from '../lib/youtube';
 import { recipeRefs } from '../data/recipePack';
+import { MyTableButton } from '../components/MyTable';
 import { linkTarget } from './Restaurants';
 import { recipeText, GPT_RECIPE_PROMPT } from '../lib/share';
 
@@ -127,6 +128,7 @@ export default function RecipePage({ id, query }) {
 
       <div className="row wrap no-print">
         <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}>{fav ? '♥ 즐겨찾기됨' : '♡ 즐겨찾기'}</button>
+        <MyTableButton id={id} />
         {canSpeak && <button className="btn ghost" onClick={readAll}>🔊 조리법 읽어 주기</button>}
         <button className="btn ghost" onClick={() => window.print()}>인쇄</button>
         <button className="btn soft full-narrow" onClick={() => setSending(true)}>📤 GPT로 보내기</button>

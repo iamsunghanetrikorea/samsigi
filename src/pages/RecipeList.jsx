@@ -10,6 +10,7 @@ import { Seg } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
 import RecipeMaker from '../components/RecipeMaker';
+import { MyTableButton } from '../components/MyTable';
 
 export default function RecipeList() {
   const { state, targets, update, addRecipeUpdate, notify } = useStore();
@@ -77,7 +78,7 @@ export default function RecipeList() {
           const n = sumItems(mealItems(r, { kcal: targets.perMeal[r.meals[0]]?.kcal }).items.map((i) => [i.id, i.g]));
           const why = excludeReason(r, state.profile);
           return (
-            <li key={r.id}>
+            <li key={r.id} className="choice-row">
               <button className="choice" onClick={() => go(`/recipe/${r.id}`)}>
                 <Plate recipe={r} />
                 <span className="choice-body">
@@ -85,6 +86,7 @@ export default function RecipeList() {
                   <span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')} · {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · {r.prep + r.cook}분{why ? ` · 제외됨(${why})` : ''}</span>
                 </span>
               </button>
+              <MyTableButton id={r.id} small />
             </li>
           );
         })}
