@@ -158,7 +158,7 @@ export function TodayRecipe({ className = '' }) {
   );
 }
 
-export function ShoppingPreview() {
+export function ShoppingPreview({ className = '' }) {
   const { state, targets, update } = useStore();
   const dates = weekDates(today());
   const { trips } = buildShopping(state, targets, dates, { split: state.shopping.split !== false });
@@ -166,7 +166,7 @@ export function ShoppingPreview() {
   const checked = state.shopping.checked || {};
   const fmt = (g, u) => (g >= 1000 ? `${round(g / 1000, 1)}${u === 'mL' ? 'L' : 'kg'}` : `${Math.round(g)}${u}`);
   return (
-    <section className="panel">
+    <section className={`panel ${className}`}>
       <h2><span aria-hidden>🛒</span> 이번 주 장보기 목록</h2>
       {!rows.length ? <p className="muted">살 재료가 없어요.</p> : (
         <ul className="mini-shop">

@@ -116,7 +116,7 @@ function planDay(date, plans, state, targets, warnings, jitter) {
   const tmpPlans = { ...plans, [date]: day };
   const cands = {};
   for (const k of open) {
-    const pool = allowedRecipes(profile, k);
+    const pool = allowedRecipes(profile, k).filter((r) => !r.noAuto); // 분식 등은 자동 생성에서 빼고 '바꾸기'로만
     if (!pool.length) {
       warnings.add(`${MEAL_LABEL[k]}: 조건(알레르기·제외 재료·조리시간·난이도 등)에 맞는 메뉴가 없습니다. 설정을 완화해 주세요.`);
       delete day[k];

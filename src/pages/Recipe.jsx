@@ -210,7 +210,7 @@ export default function RecipePage({ id, query }) {
         </ol>
         {recipe.tip && <p className="notice">💡 {recipe.tip}</p>}
         <p className="muted small">출처: {recipe.source}</p>
-        {(recipe.isNew || recipe.isCustom) && (
+        {(recipe.isNew || recipe.isCustom || recipe.refs) && (
           <p className="small">참고 자료: {recipeRefs(recipe).map((x, i) => <span key={x.url}>{i > 0 && ' · '}<a href={x.url} {...linkTarget()}>{x.label}</a></span>)}</p>
         )}
       </section>

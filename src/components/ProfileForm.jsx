@@ -18,7 +18,7 @@ export default function ProfileForm({ initial, onSave, submitLabel = '저장하�
   const splitSum = MEAL_KEYS.reduce((s, k) => s + Number(p.split[k] || 0), 0);
   const t = valid ? computeTargets(p) : null;
   const cond = p.conditions || {};
-  const okCount = valid ? MEAL_KEYS.map((k) => allowedRecipes({ ...p, exclusions: parseEx(exText) }, k).length) : [];
+  const okCount = valid ? MEAL_KEYS.map((k) => allowedRecipes({ ...p, exclusions: parseEx(exText) }, k).filter((r) => !r.noAuto).length) : [];
 
   const submit = (e) => {
     e.preventDefault();

@@ -74,7 +74,7 @@ export default function Home() {
 
       <div className="dash-cards">
         <TodayRecipe className="hide-narrow" />
-        <ShoppingPreview />
+        <ShoppingPreview className="hide-narrow" />
         <RestaurantPreview />
         <MonthMini />
       </div>

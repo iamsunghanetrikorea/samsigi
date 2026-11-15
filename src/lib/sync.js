@@ -62,7 +62,7 @@ export function sanitizeRecipe(r) {
   const num = (v, d) => (Number.isFinite(Number(v)) ? Math.max(0, Number(v)) : d);
   return {
     id: r.id,
-    title: r.title.slice(0, 100),
+    title: r.title.replace(/(과|와) (잡곡밥|쌀밥)$/, '').slice(0, 100),
     category: CATEGORIES.includes(r.category) ? r.category : '한식',
     emoji: typeof r.emoji === 'string' ? r.emoji.slice(0, 8) : '🍽️',
     meals,

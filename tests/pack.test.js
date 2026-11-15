@@ -11,7 +11,7 @@ afterAll(() => syncPack([]));
 
 describe('업데이트 추천 메뉴 묶음', () => {
   it('분류마다 6개씩, id 중복 없음, 재료·대체재료가 DB에 있음', () => {
-    for (const c of CATEGORIES) expect(PACK.filter((r) => r.category === c)).toHaveLength(6);
+    for (const c of CATEGORIES.filter((x) => x !== '분식')) expect(PACK.filter((r) => r.category === c)).toHaveLength(6);
     const ids = [...PACK.map((r) => r.id), ...RECIPES.map((r) => r.id)];
     expect(new Set(ids).size).toBe(ids.length);
     for (const r of PACK) {

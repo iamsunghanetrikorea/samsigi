@@ -37,6 +37,8 @@ export function StoreProvider({ children }) {
       }
       if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
       s.sync = { ...DEFAULT_STATE.sync, ...s.sync };
+      // 예전에 만든 내 메뉴 이름에서 '…와 잡곡밥'·'…과 쌀밥' 떼기
+      s.customRecipes = s.customRecipes.map((r) => (/(과|와) (잡곡밥|쌀밥)$/.test(r.title) ? { ...r, title: r.title.replace(/(과|와) (잡곡밥|쌀밥)$/, '') } : r));
       syncPack(s.addedRecipes);
       syncCustom(s.customRecipes);
       saved.current = s;

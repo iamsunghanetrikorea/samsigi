@@ -88,8 +88,6 @@ const list = (ids) => ids.map(nm).join('·');
 
 // 단백질 보충 재료를 주재료처럼 조리 순서에 넣는 요리 종류 (나머지는 '곁들여 주세요' 단계 추가)
 const MERGE_EXTRA = new Set(['찌개', '국', '덮밥', '볶음', '조림', '구이']);
-// 밥이 요리 안에 들어 있어 이름 뒤에 '…와 잡곡밥'을 붙이지 않는 종류
-const RICE_IN = new Set(['죽', '볶음밥', '비빔밥', '덮밥', '김밥']);
 
 function steps(type, items, found, extra) {
   const mains = found.filter(([id]) => isProtein(id)).map(([id]) => id);
@@ -153,7 +151,7 @@ export function makeRecipe(rawName) {
   if (items.some(([id]) => ['mackerel', 'salmon', 'flatfish', 'pollock'].includes(id))) tags.add('생선');
   if (items.filter(([id]) => ING[id]?.cat === '채소').length >= 3) tags.add('채소');
   const staple = items.find(([id]) => ING[id]?.staple);
-  const title = staple && ['multigrain', 'rice'].includes(staple[0]) && !RICE_IN.has(type.key) && !/밥|죽/.test(name) ? `${name}${josa(name, '과', '와')} ${nm(staple[0])}` : name;
+  const title = name; // 곁들이는 밥은 재료에만 넣고 이름에는 붙이지 않음
 
   return {
     id: `my_${Date.now().toString(36)}`,

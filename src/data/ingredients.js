@@ -44,6 +44,10 @@ export const INGREDIENTS = [
 
   I('glass_noodle', '당면(삶은 것)', '곡류', [118, 29, 0.1, 0.1, 4], { staple: true, price: 1000, storage: 365, buyAs: { name: '당면', ratio: 0.33 } }),
   I('pasta', '파스타(삶은 것)', '곡류', [158, 31, 5.8, 0.9, 1], { staple: true, price: 800, storage: 365, allergens: ['밀'], buyAs: { name: '파스타 건면', ratio: 0.45 } }),
+  I('ramen', '라면사리(마른 면)', '곡류', [450, 63, 9, 17, 550], { staple: true, price: 700, storage: 180, allergens: ['밀', '대두'], piece: { label: '개', g: 110 } }),
+  I('jjolmyeon', '쫄면(삶은 것)', '곡류', [150, 32, 4.5, 0.6, 150], { staple: true, price: 700, storage: 30, allergens: ['밀'], buyAs: { name: '쫄면 생면', ratio: 0.6 } }),
+  I('udon', '우동면(삶은 것)', '곡류', [105, 22, 3, 0.4, 150], { staple: true, price: 500, storage: 30, allergens: ['밀'], piece: { label: '봉', g: 200 } }),
+  I('panko', '빵가루', '곡류', [380, 72, 12, 5, 500], { price: 800, storage: 180, allergens: ['밀'] }),
   I('starch', '전분', '양념', [350, 87, 0.2, 0.1, 5], { price: 400, storage: 365, spoon: 3 }),
 
   // 채소
@@ -94,6 +98,8 @@ export const INGREDIENTS = [
   I('pollock', '동태(명태)', '수산물', [75, 0, 17, 0.6, 110], { price: 1300, storage: 2, seasons: [12, 1, 2], allergens: ['생선'] }),
   I('flatfish', '가자미', '수산물', [90, 0, 19, 1.5, 120], { price: 2000, storage: 2, allergens: ['생선'] }),
   I('salmon', '연어', '수산물', [180, 0, 20, 11, 50], { price: 4500, storage: 2, allergens: ['생선'] }),
+  I('tuna', '참치(통조림, 기름 뺀 것)', '수산물', [190, 0, 25, 9, 350], { price: 1800, storage: 3, allergens: ['생선'], piece: { label: '캔', g: 100 } }),
+  I('squid', '오징어', '수산물', [90, 2, 18, 1, 250], { price: 2000, storage: 2, seasons: [7, 8, 9, 10], allergens: ['오징어'], piece: { label: '마리', g: 250 } }),
   I('shrimp', '새우(손질)', '수산물', [85, 0, 19, 0.8, 200], { price: 3000, storage: 3, seasons: [9, 10, 11], allergens: ['새우'] }),
   I('clam', '바지락(살)', '수산물', [60, 3, 10, 0.8, 500], { price: 1500, storage: 2, seasons: [2, 3, 4], allergens: ['조개류'] }),
   I('broth', '멸치육수', '수산물', [5, 0.2, 0.8, 0.1, 60], { price: 3000, storage: 3, unit: 'mL', allergens: ['생선'], buyAs: { name: '육수용 멸치(육수 1L당 약 20g)', ratio: 0.02 } }),
@@ -109,6 +115,9 @@ export const INGREDIENTS = [
 
   // 김치·가공
   I('kimchi', '배추김치', '김치·가공', [25, 4, 2, 0.5, 650], { price: 1000, storage: 30 }),
+  I('danmuji', '단무지', '김치·가공', [25, 5, 0.5, 0.1, 1000], { price: 600, storage: 30 }),
+  I('fishcake', '어묵', '김치·가공', [140, 18, 9, 3.5, 800], { price: 1000, storage: 7, allergens: ['생선', '밀', '대두'], piece: { label: '장', g: 40 } }),
+  I('mandu', '만두(냉동)', '김치·가공', [210, 28, 8, 7, 450], { price: 1000, storage: 90, allergens: ['밀', '돼지고기', '대두'], piece: { label: '개', g: 30 } }),
 
   // 양념
   I('soy', '간장', '양념', [55, 7, 6, 0, 5700], { price: 600, storage: 365, allergens: ['대두', '밀'], spoon: 6 }),
@@ -123,6 +132,9 @@ export const INGREDIENTS = [
   I('oyster_sauce', '굴소스', '양념', [100, 20, 2, 0.3, 4500], { price: 1200, storage: 180, allergens: ['조개류', '대두', '밀'], spoon: 6 }),
   I('perilla_powder', '들깨가루', '양념', [540, 15, 18, 45, 5], { price: 3500, storage: 90, spoon: 2.5 }),
   I('sesame', '깨', '양념', [580, 20, 20, 50, 5], { price: 3000, storage: 180, spoon: 3 }),
+  I('mayo', '마요네즈', '양념', [680, 2, 1.5, 75, 600], { price: 800, storage: 90, allergens: ['난류', '대두'], spoon: 4.5 }),
+  I('ketchup', '토마토케첩', '양념', [110, 26, 1.5, 0.1, 1000], { price: 500, storage: 90, allergens: ['토마토'], spoon: 6 }),
+  I('vinegar', '식초', '양념', [25, 1, 0, 0, 5], { price: 300, storage: 999, spoon: 5 }),
 ];
 
 export const ING = Object.fromEntries(INGREDIENTS.map((i) => [i.id, i]));
