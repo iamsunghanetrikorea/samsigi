@@ -28,11 +28,11 @@ const SIDE_NAV = [
 const TAB_NAV = [
   { path: '/', label: '홈', icon: '🏠' },
   { path: '/plan', label: '식단', icon: '📅' },
-  { path: '/shopping', label: '장보기', icon: '🛒' },
+  { path: '/recipes', label: '레시피', icon: '🍴' },
   { path: '/eat-out', label: '식당', icon: '📍' },
   { path: '/more', label: '더보기', icon: '☰' },
 ];
-const MORE_PATHS = ['/more', '/stats', '/settings', '/recipes', '/help'];
+const MORE_PATHS = ['/more', '/stats', '/settings', '/shopping', '/help'];
 const FONT_STEPS = [18, 20, 22, 24, 26];
 
 export default function App() {
@@ -55,7 +55,7 @@ export default function App() {
   else page = <Home />;
 
   const isOn = (path) => (path === '/' ? p === '/' : path === '/recipes' ? p === '/recipes' || p.startsWith('/recipe/') : p.startsWith(path));
-  const tabOn = (n) => (n.path === '/more' ? MORE_PATHS.includes(p) : n.path === '/plan' ? p.startsWith('/plan') || p.startsWith('/recipe/') : isOn(n.path));
+  const tabOn = (n) => (n.path === '/more' ? MORE_PATHS.includes(p) : isOn(n.path));
   const fs = state.settings.fontSize || 20;
   const setFont = (dir) => {
     const i = Math.max(0, Math.min(FONT_STEPS.length - 1, FONT_STEPS.indexOf(fs) + dir));
