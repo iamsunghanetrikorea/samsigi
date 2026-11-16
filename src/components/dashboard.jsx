@@ -191,11 +191,11 @@ export function ShoppingPreview({ className = '' }) {
   );
 }
 
-export function RestaurantPreview() {
+export function RestaurantPreview({ className = '' }) {
   const { state } = useStore();
   const saved = state.restaurants.slice(0, 3);
   return (
-    <section className="panel">
+    <section className={`panel ${className}`}>
       <h2><span aria-hidden>📍</span> 주변 식당 추천</h2>
       {saved.length ? (
         <ul className="rest-list">

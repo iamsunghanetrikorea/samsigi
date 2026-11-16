@@ -58,14 +58,14 @@ export function MyTablePanel() {
   );
 }
 
-// 홈 '나의 밥상': 차려진 밥상 그림 위 '오늘의 요리' 자리에 오늘의 레시피 사진·이름을 올림
+// 홈 '오늘의 밥상': 차려진 밥상 그림 위 '오늘의 요리' 자리에 오늘의 레시피 사진·이름을 올림
 export function BabSangPanel() {
   const { state } = useStore();
   const { d, k, r } = todayRecipe(state);
   const open = () => r && go(`/recipe/${r.id}?date=${d}&meal=${k}`);
   return (
     <section className="panel bab-sang-panel" aria-labelledby="bab-sang-h">
-      <h2 id="bab-sang-h"><span aria-hidden>🥢</span> 나의 밥상</h2>
+      <h2 id="bab-sang-h"><span aria-hidden>🥢</span> 오늘의 밥상</h2>
       <div className="bab-sang">
         <img src="./bab-sang.webp" alt={`밥, 반찬과 ${r ? r.title : '오늘의 요리'}가 차려진 밥상`} loading="lazy" decoding="async" />
         {r && (
@@ -75,7 +75,6 @@ export function BabSangPanel() {
           </button>
         )}
       </div>
-      <p className="muted small">{r ? '가운데 아래 그릇이 오늘의 레시피예요. 누르면 레시피가 열려요.' : '오늘 식단을 만들면 오늘의 레시피가 밥상에 올라가요.'}</p>
     </section>
   );
 }
