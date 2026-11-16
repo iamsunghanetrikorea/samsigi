@@ -5,7 +5,7 @@ import { DayPanel } from '../components/meal';
 import { Modal } from '../components/ui';
 import { WelcomeBanner, WeekTable, NutritionDonut, TodayRecipe, ShoppingPreview, RestaurantPreview, MonthMini } from '../components/dashboard';
 import { go } from '../router';
-import { MyTablePanel } from '../components/MyTable';
+import { MyTablePanel, BabSangPanel } from '../components/MyTable';
 
 export default function Home() {
   const { state, targets, generate, notify, update } = useStore();
@@ -109,6 +109,7 @@ export default function Home() {
       )}
 
       <MyTablePanel />
+      <BabSangPanel />
 
       {confirm && (
         <Modal title="식단 다시 생성" onClose={() => setConfirm(false)}>

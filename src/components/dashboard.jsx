@@ -122,15 +122,20 @@ export function NutritionDonut({ date }) {
   );
 }
 
-// 다음 끼니 레시피
-export function TodayRecipe({ className = '' }) {
-  const { state, targets } = useStore();
+// 오늘의 레시피: 지금 시각 기준 다음 끼니의 집밥 메뉴
+export function todayRecipe(state) {
   const d = today();
   const h = new Date().getHours();
   const order = h < 10 ? ['breakfast', 'lunch', 'dinner'] : h < 15 ? ['lunch', 'dinner', 'breakfast'] : ['dinner', 'lunch', 'breakfast'];
   const k = order.find((m) => state.plans[d]?.[m]?.recipeId);
   const e = k && state.plans[d][k];
-  const r = e && RECIPE_BY_ID[e.recipeId];
+  return { d, k, e, r: e && RECIPE_BY_ID[e.recipeId] };
+}
+
+// 다음 끼니 레시피
+export function TodayRecipe({ className = '' }) {
+  const { state, targets } = useStore();
+  const { d, k, e, r } = todayRecipe(state);
   const n = entryNutrition(e, k, targets);
   return (
     <section className={`panel ${className}`}>
