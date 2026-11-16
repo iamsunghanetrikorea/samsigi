@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
-import { RECIPES, MEAL_LABEL, CATEGORIES, RECIPE_BY_ID } from '../data/recipes';
+import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
 import { ING } from '../data/ingredients';
 import { mealItems, sumItems, round } from '../lib/nutrition';
@@ -14,30 +14,60 @@ import { MyTableButton } from '../components/MyTable';
 
 const FAV = '즐겨찾기';
 
+// 분류 버튼: 재료·음식 종류로 메뉴 찾기 (같은 버튼을 다시 누르면 해제)
+const has = (r, ids) => r.items.some(([id]) => ids.includes(id));
+const FISH = Object.values(ING).filter((i) => i.cat === '수산물' && !['broth', 'miyeok', 'laver'].includes(i.id)).map((i) => i.id);
+const MEAT = Object.values(ING).filter((i) => i.cat === '육류').map((i) => i.id);
+const NOODLE = ['noodle', 'buckwheat', 'kalguksu', 'pasta', 'ramen', 'jjolmyeon', 'udon'];
+const FILTERS = [
+  ['계란', (r) => has(r, ['egg']) || /계란|달걀/.test(r.title)],
+  ['두부', (r) => has(r, ['tofu', 'soft_tofu']) || r.title.includes('두부')],
+  ['찌개', (r) => r.category === '찌개' || /찌개|전골/.test(r.title)],
+  ['국', (r) => r.category === '국' || /국(?!수)|(?<!볶음)탕(?![면수])/.test(r.title)],
+  ['밥', (r) => /밥|리조또/.test(r.title)],
+  ['면', (r) => has(r, NOODLE) || /면|국수|우동|파스타|라볶이/.test(r.title)],
+  ['빵', (r) => has(r, ['bread']) || /빵|토스트/.test(r.title)],
+  ['고기', (r) => has(r, MEAT)],
+  ['생선', (r) => has(r, FISH)],
+];
+const FILTER_BY = Object.fromEntries(FILTERS);
+
 export default function RecipeList() {
   const { state, targets, update, addRecipeUpdate, notify } = useStore();
   const [meal, setMeal] = useState('all');
-  const [cat, setCat] = useState('전체');
+  const [cat, setCat] = useState('');
   const [justAdded, setJustAdded] = useState([]);
   const remaining = nextUpdate(state.addedRecipes).length;
   const doUpdate = () => {
     const ids = addRecipeUpdate();
     setJustAdded(ids);
-    setCat('전체'); setMeal('all'); setQ('');
+    setCat(''); setMeal('all'); setQ('');
     notify(ids.length ? `새 메뉴 ${ids.length}가지를 레시피 모음에 추가했어요` : '추가할 새 메뉴가 없어요');
   };
   const [q, setQ] = useState('');
   const [onlyOk, setOnlyOk] = useState(true);
   const leftovers = leftoverRecipes(state.pantry);
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
-    && (cat === '전체' || (cat === FAV ? state.profile.favorites.includes(r.id) : r.category === cat))
-    && (!q || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q)))
+    && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : FILTER_BY[cat](r)))
+    && (!q || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q.replace(/계란/g, '달걀'))))
     && (!onlyOk || !excludeReason(r, state.profile)));
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
 
   return (
     <div className="stack">
       <h1>레시피 모음</h1>
+      <section className="card update-card find-card">
+        <form className="search-row" role="search" onSubmit={(e) => { e.preventDefault(); setCat(''); setMeal('all'); setOnlyOk(false); }}>
+          <label htmlFor="recipe-q" className="search-label">🔍 메뉴찾기</label>
+          <input id="recipe-q" type="search" placeholder="메뉴명 입력" value={q} onChange={(e) => setQ(e.target.value)} />
+          <button type="submit" className="btn">검색</button>
+        </form>
+        <div className="chips find-chips" role="group" aria-label="분류">
+          {[...FILTERS.map(([c]) => c), FAV].map((c) => <button key={c} className={`chip ${cat === c ? 'on' : ''} ${c === FAV ? 'fav-chip' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>{c === FAV ? <>♥ 즐겨찾기 <span className="fav-n">{state.profile.favorites.length}</span></> : c}</button>)}
+        </div>
+        <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
+        <label className="check"><input type="checkbox" checked={onlyOk} onChange={(e) => setOnlyOk(e.target.checked)} /> 내 조건(알레르기·시간·난이도)에 맞는 것만</label>
+      </section>
       <section className="card update-card">
         <div className="row between wrap">
           <div>
@@ -53,8 +83,7 @@ export default function RecipeList() {
             ))}
           </ul>
         )}
-        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat('전체'); setMeal('all'); setQ(''); }} />
-        <p className="muted small">새 메뉴는 널리 쓰이는 가정식 조리법을 참고해 작성했어요. 각 레시피의 유튜브·만개의레시피 링크로 확인해 보세요. 식사 메뉴는 식단 자동 추천에도 쓰이고, 간식은 ‘오늘 간식으로 기록’할 수 있어요.</p>
+        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat(''); setMeal('all'); setQ(''); }} />
       </section>
       {leftovers.length > 0 && (
         <section className="card">
@@ -66,18 +95,6 @@ export default function RecipeList() {
           </ul>
         </section>
       )}
-      <div className="stack">
-        <form className="search-row" role="search" onSubmit={(e) => { e.preventDefault(); setCat('전체'); setMeal('all'); setOnlyOk(false); }}>
-          <label htmlFor="recipe-q" className="search-label">메뉴 검색</label>
-          <input id="recipe-q" type="search" placeholder="메뉴·재료" value={q} onChange={(e) => setQ(e.target.value)} />
-          <button type="submit" className="btn">전체 검색</button>
-        </form>
-        <div className="chips" role="group" aria-label="분류">
-          {['전체', ...CATEGORIES, FAV].map((c) => <button key={c} className={`chip ${cat === c ? 'on' : ''} ${c === FAV ? 'fav-chip' : ''}`} aria-pressed={cat === c} onClick={() => setCat(c)}>{c === FAV ? `♥ 즐겨찾기 ${state.profile.favorites.length}` : c}</button>)}
-        </div>
-        <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
-        <label className="check"><input type="checkbox" checked={onlyOk} onChange={(e) => setOnlyOk(e.target.checked)} /> 내 조건(알레르기·시간·난이도)에 맞는 것만</label>
-      </div>
       <p className="muted">{list.length}개</p>
       {cat === FAV && list.length === 0 && (
         <p className="notice">{state.profile.favorites.length ? '즐겨찾기한 메뉴가 위 조건(끼니·검색·내 조건)에 맞지 않아 안 보여요. 조건을 풀어 보세요.' : '아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.'}</p>

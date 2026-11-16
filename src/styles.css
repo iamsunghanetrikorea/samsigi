@@ -464,7 +464,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .my-chip .chip-main { padding: 0 .3rem 0 .9rem; font-weight: 700; }
 .my-chip .chip-x { padding: 0 .7rem 0 .3rem; min-width: 36px; }
 
-/* 신규 메뉴 입력 (레시피 직접 추가) */
+/* 나의 메뉴 추가 (레시피 직접 추가) */
 .maker { margin-top: .8rem; display: flex; flex-direction: column; gap: .6rem; }
 .maker-body { display: flex; flex-direction: column; gap: .5rem; border-top: 1px dashed var(--line); padding-top: .7rem; }
 .maker-draft { display: flex; flex-direction: column; gap: .5rem; background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: .8rem; }
@@ -515,7 +515,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .my-dish-x { width: 28px; height: 28px; top: -6px; right: -2px; }
 }
 
-/* 레시피 모음 검색줄: [메뉴 검색] [입력칸] [전체 검색] */
+/* 레시피 모음 검색줄: [메뉴찾기] [입력칸] [검색] */
 .search-row { display: flex; align-items: center; gap: .5rem; }
 .search-row .search-label { flex: none; font-weight: 800; white-space: nowrap; }
 .search-row input { flex: 1 1 auto; min-width: 0; max-width: 22rem; }
@@ -538,4 +538,25 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 @media (max-width: 560px) {
   .maker-form { flex-direction: column; align-items: stretch; }
   .maker-form input, .maker-form .btn { width: 100%; flex: none; }
+}
+
+/* 레시피 모음 메뉴찾기 상자: 분류 버튼은 모바일에서 두 줄(5칸씩) */
+.find-card { display: flex; flex-direction: column; gap: .5rem; }
+.find-card .chips { margin: 0; }
+@media (max-width: 560px) {
+  .find-chips { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; }
+  .find-chips .chip { padding: .1rem .2rem; font-size: .95rem; line-height: 1.15; min-width: 0; }
+  .find-chips .fav-chip { font-size: .72rem; letter-spacing: -.03em; }
+  .find-chips .fav-n { display: block; font-size: .8rem; }
+}
+
+/* 주변 식당 '메뉴 및 검색': 모바일에서 분류 버튼 두 줄(4칸씩), 검색추가는 한 줄 */
+.eat-add { margin-top: .5rem; }
+.eat-add input { max-width: none; }
+.card > .map-links { margin-top: .6rem; }
+@media (max-width: 560px) {
+  .eat-chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .35rem; }
+  .eat-chips .chip { padding: .1rem .2rem; font-size: .8rem; line-height: 1.15; min-width: 0; word-break: keep-all; }
+  .eat-chips .my-chip { grid-column: span 2; justify-content: space-between; }
+  .eat-chips .my-chip .chip-main { padding: 0 .2rem 0 .6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }

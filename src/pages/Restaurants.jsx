@@ -52,8 +52,8 @@ function MapLinks({ query, pos }) {
   const l = mapLinks(query, pos);
   return (
     <span className="row wrap map-links">
-      <a className="btn small ghost full-narrow" href={l.naver} {...linkTarget()}>네이버지도 검색</a>
-      <a className="btn small ghost full-narrow" href={l.kakao} {...linkTarget()}>카카오맵 검색</a>
+      <a className="btn small ghost full-narrow" href={l.naver} {...linkTarget()}>네이버로 식당 찾기</a>
+      <a className="btn small ghost full-narrow" href={l.kakao} {...linkTarget()}>카카오로 식당 찾기</a>
     </span>
   );
 }
@@ -68,7 +68,7 @@ export default function Restaurants() {
   const [status, setStatus] = useState('');
   const [results, setResults] = useState(last.results || null);
   const [radius, setRadius] = useState(last.radius || 1000);
-  const [cat, setCat] = useState('전체');
+  const [cat, setCat] = useState('');
   const [menuText, setMenuText] = useState('');
   const [customMenu, setCustomMenu] = useState('');
   const myMenus = state.settings.customMenus || [];
@@ -78,7 +78,7 @@ export default function Restaurants() {
     if (!m) return;
     if (!myMenus.includes(m)) update('settings', (st) => ({ ...st, customMenus: [...(st.customMenus || []), m] }));
     setCustomMenu(m); setMenuText('');
-    notify(`'${m}'을(를) 분류에 추가했어요`);
+    notify(`'${m}'을(를) 검색에 추가했어요`);
   };
   const removeMenu = (m) => {
     update('settings', (st) => ({ ...st, customMenus: (st.customMenus || []).filter((x) => x !== m) }));
@@ -143,14 +143,14 @@ export default function Restaurants() {
     notify(`'${r.name}'을(를) 저장했어요`);
   };
 
-  const shown = (results || []).filter((r) => (cat === '전체' || r.cat === cat));
-  const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : '근처 '}${customMenu || (c === '전체' ? '백반' : c.split('·')[0])}`;
+  const shown = (results || []).filter((r) => (!cat || r.cat === cat));
+  const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : '근처 '}${customMenu || (!c ? '백반' : c.split('·')[0])}`;
   const shownQuery = nearQuery(cat);
 
   return (
     <div className="stack">
       <h1>주변 식당</h1>
-      <Seg label="보기" value={tab} onChange={setTab} options={[{ value: 'search', label: '찾기' }, { value: 'saved', label: `저장한 식당 ${state.restaurants.length}` }]} />
+      <div className="hide-narrow"><Seg label="보기" value={tab} onChange={setTab} options={[{ value: 'search', label: '찾기' }, { value: 'saved', label: `저장한 식당 ${state.restaurants.length}` }]} /></div>
 
       {tab === 'search' && (
         <>
@@ -168,9 +168,9 @@ export default function Restaurants() {
           </section>
 
           <section className="card">
-            <h2>분류</h2>
-            <div className="chips">
-              {['전체', ...CATS.map((c) => c.key)].map((c) => <button key={c} className={`chip ${!customMenu && cat === c ? 'on' : ''}`} aria-pressed={!customMenu && cat === c} onClick={() => { setCat(c); setCustomMenu(''); }}>{c}</button>)}
+            <h2>메뉴 및 검색</h2>
+            <div className="chips eat-chips">
+              {CATS.map((c) => c.key).map((c) => <button key={c} className={`chip ${!customMenu && cat === c ? 'on' : ''}`} aria-pressed={!customMenu && cat === c} onClick={() => { setCat(!customMenu && cat === c ? '' : c); setCustomMenu(''); }}>{c}</button>)}
               {myMenus.map((m) => (
                 <span key={m} className={`chip my-chip ${customMenu === m ? 'on' : ''}`}>
                   <button className="chip-main" aria-pressed={customMenu === m} onClick={() => setCustomMenu(m)}>{m}</button>
@@ -178,14 +178,11 @@ export default function Restaurants() {
                 </span>
               ))}
             </div>
-            <form className="row wrap" onSubmit={addMenu}>
-              <input aria-label="추가할 메뉴 입력" placeholder="메뉴 직접 입력 (예: 냉면, 삼계탕)" value={menuText} onChange={(e) => setMenuText(e.target.value)} />
-              <button className="btn" type="submit" disabled={!menuText.trim()}>메뉴 추가</button>
+            <form className="search-row eat-add" onSubmit={addMenu}>
+              <input aria-label="검색추가할 메뉴" placeholder="검색추가 (예: 냉면, 삼계탕)" value={menuText} onChange={(e) => setMenuText(e.target.value)} />
+              <button className="btn" type="submit" disabled={!menuText.trim()}>검색추가</button>
             </form>
-            <div className="stack">
-              <p className="map-hint"><b>지도 앱에서 바로 찾기</b> <span className="muted">({shownQuery})</span></p>
-              <MapLinks query={shownQuery} pos={pos} />
-            </div>
+            <MapLinks query={shownQuery} pos={pos} />
           </section>
 
           {results && (
@@ -210,8 +207,6 @@ export default function Restaurants() {
       )}
 
       {tab === 'saved' && <Saved onEatOut={setEatOut} onEdit={setEditing} />}
-
-      <p className="muted small">식당 메뉴의 공식 영양정보는 대부분 제공되지 않아, 외식 열량은 분류별 추정값으로만 기록합니다. 영업정보는 방문 전 지도 앱에서 다시 확인해 주세요.</p>
 
       {askConsent && (
         <Modal title="위치 정보 사용 동의" onClose={() => setAskConsent(null)}>
