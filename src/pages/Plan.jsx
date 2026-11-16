@@ -18,8 +18,34 @@ export default function Plan({ route }) {
         <h1>식단</h1>
         <div className="hide-narrow"><Seg label="보기" value={view} onChange={(v) => go(`/plan?view=${v}&d=${d}`)} options={[{ value: 'week', label: '주간' }, { value: 'month', label: '월간' }]} /></div>
       </div>
-      {view === 'month' ? <Month d={d} /> : <Week d={d} />}
+      <div className="only-wide stack">{view === 'month' ? <Month d={d} /> : <Week d={d} />}</div>
+      <div className="only-narrow stack"><MonthList d={d} /></div>
     </div>
+  );
+}
+
+// 모바일 식단: 한 달치 메뉴를 날짜별로 모두 펼쳐 보여줌
+function MonthList({ d }) {
+  const { state, generate, notify } = useStore();
+  const ym = monthKey(d);
+  const dates = monthDates(ym);
+  const filled = dates.filter((x) => Object.keys(state.plans[x] || {}).length).length;
+  const fill = () => {
+    const r = generate(dates, { overwrite: false });
+    notify(r.warnings[0] || `${fmtMonth(ym)} 빈 날짜의 식단을 채웠어요`);
+  };
+  return (
+    <>
+      <div className="pager">
+        <button className="btn ghost" onClick={() => go(`/plan?d=${addMonths(ym, -1)}-01`)} aria-label="이전 달">◀</button>
+        <b>{fmtMonth(ym)} 식단</b>
+        <button className="btn ghost" onClick={() => go(`/plan?d=${addMonths(ym, 1)}-01`)} aria-label="다음 달">▶</button>
+      </div>
+      {filled < dates.length && <button className="btn primary" onClick={fill}>{filled ? '빈 날짜 채우기' : `이 달 식단 만들기 (${dates.length * 3}끼)`}</button>}
+      <div className="week">
+        {dates.map((x) => <DayPanel key={x} date={x} compact />)}
+      </div>
+    </>
   );
 }
 

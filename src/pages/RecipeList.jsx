@@ -22,11 +22,14 @@ const NOODLE = ['noodle', 'buckwheat', 'kalguksu', 'pasta', 'ramen', 'jjolmyeon'
 const FILTERS = [
   ['계란', (r) => has(r, ['egg']) || /계란|달걀/.test(r.title)],
   ['두부', (r) => has(r, ['tofu', 'soft_tofu']) || r.title.includes('두부')],
-  ['찌개', (r) => r.category === '찌개' || /찌개|전골/.test(r.title)],
-  ['국', (r) => r.category === '국' || /국(?!수)|(?<!볶음)탕(?![면수])/.test(r.title)],
+  ['감자', (r) => has(r, ['potato']) || r.title.includes('감자')],
+  ['고구마', (r) => has(r, ['sweet_potato']) || r.title.includes('고구마')],
+  ['떡', (r) => has(r, ['rice_cake']) || /떡/.test(r.title)],
+  ['토마토', (r) => has(r, ['tomato']) || r.title.includes('토마토')],
   ['밥', (r) => /밥|리조또/.test(r.title)],
   ['면', (r) => has(r, NOODLE) || /면|국수|우동|파스타|라볶이/.test(r.title)],
   ['빵', (r) => has(r, ['bread']) || /빵|토스트/.test(r.title)],
+  ['국', (r) => ['국', '찌개'].includes(r.category) || /국(?!수)|(?<!볶음)탕(?![면수])|찌개|전골/.test(r.title)],
   ['고기', (r) => has(r, MEAT)],
   ['생선', (r) => has(r, FISH)],
 ];
@@ -63,10 +66,12 @@ export default function RecipeList() {
           <button type="submit" className="btn">검색</button>
         </form>
         <div className="chips find-chips" role="group" aria-label="분류">
-          {[...FILTERS.map(([c]) => c), FAV].map((c) => <button key={c} className={`chip ${cat === c ? 'on' : ''} ${c === FAV ? 'fav-chip' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>{c === FAV ? <>♥ 즐겨찾기 <span className="fav-n">{state.profile.favorites.length}</span></> : c}</button>)}
+          {FILTERS.map(([c]) => <button key={c} className={`chip ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>{c}</button>)}
+        </div>
+        <div className="chips">
+          <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}>♥ 즐겨찾기 <span className="fav-n">{state.profile.favorites.length}</span></button>
         </div>
         <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
-        <label className="check"><input type="checkbox" checked={onlyOk} onChange={(e) => setOnlyOk(e.target.checked)} /> 내 조건(알레르기·시간·난이도)에 맞는 것만</label>
       </section>
       <section className="card update-card">
         <div className="row between wrap">
@@ -97,7 +102,7 @@ export default function RecipeList() {
       )}
       <p className="muted">{list.length}개</p>
       {cat === FAV && list.length === 0 && (
-        <p className="notice">{state.profile.favorites.length ? '즐겨찾기한 메뉴가 위 조건(끼니·검색·내 조건)에 맞지 않아 안 보여요. 조건을 풀어 보세요.' : '아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.'}</p>
+        <p className="notice">{state.profile.favorites.length ? '즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.' : '아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.'}</p>
       )}
       <ul className="choice-list">
         {list.map((r) => {
