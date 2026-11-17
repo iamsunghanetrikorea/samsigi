@@ -78,6 +78,9 @@ export default function RecipeList() {
             </button>
           ))}
         </div>
+        <div className="chips">
+          <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}>♥ 즐겨찾기 <span className="fav-n">{state.profile.favorites.length}</span></button>
+        </div>
         <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
       </section>
       <section className="card update-card">
