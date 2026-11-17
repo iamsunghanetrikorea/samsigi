@@ -62,4 +62,5 @@ export const ING_PHOTOS = {
   "mandu": {"title": "File:Jjin-mandu 1.jpg", "page": "https://commons.wikimedia.org/wiki/File:Jjin-mandu_1.jpg", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "artist": "chomjong"},
   "milk": {"title": "File:Glas melk.jpg", "page": "https://commons.wikimedia.org/wiki/File:Glas_melk.jpg", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "artist": "Amarant"},
   "squid": {"title": "File:Todarodes pacificus (white background).jpg", "page": "https://commons.wikimedia.org/wiki/File:Todarodes_pacificus_(white_background).jpg", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "artist": "Chiswick Chap"},
+  "potato": {"title": "File:20251223 102610 04 potatoes for sale.jpg", "page": "https://commons.wikimedia.org/wiki/File:20251223_102610_04_potatoes_for_sale.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Isaackahoto"},
 };
