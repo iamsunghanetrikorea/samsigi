@@ -6,6 +6,7 @@ export default function More({ route }) {
       <h1>더보기</h1>
       <div className="quick">
         <button className="tile" onClick={() => go('/plan')}><span aria-hidden>📅</span>식단 계획</button>
+        <button className="tile" onClick={() => go('/shopping?view=list')}><span aria-hidden>📝</span>장보기 목록</button>
         <button className="tile" onClick={() => go('/stats')}><span aria-hidden>📊</span>영양 통계</button>
         <button className="tile" onClick={() => go('/settings')}><span aria-hidden>⚙️</span>설정·백업</button>
         <button className="tile" onClick={() => go('/help')}><span aria-hidden>❓</span>사용 안내</button>

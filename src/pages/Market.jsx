@@ -16,8 +16,9 @@ export default function Market({ route }) {
   const result = view === 'pick' && route.query.step === 'result';
   return (
     <div className="stack">
-      <h1>장보기</h1>
-      <div className="no-print">
+      <h1>{view === 'list' ? '장보기 목록' : '장보기'}</h1>
+      {/* 휴대폰에서는 장보기 목록을 '더보기'에서 열기 때문에 전환 단추를 숨김 */}
+      <div className="no-print hide-m">
         <Seg label="장보기 화면" value={view} onChange={(v) => go(v === 'list' ? '/shopping?view=list' : '/shopping')}
           options={[{ value: 'pick', label: '🧺 재료 고르기' }, { value: 'list', label: '📝 장보기 목록' }]} />
       </div>

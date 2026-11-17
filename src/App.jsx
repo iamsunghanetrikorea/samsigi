@@ -55,7 +55,8 @@ export default function App() {
   else page = <Home />;
 
   const isOn = (path) => (path === '/' ? p === '/' : path === '/recipes' ? p === '/recipes' || p.startsWith('/recipe/') : p.startsWith(path));
-  const tabOn = (n) => (n.path === '/more' ? MORE_PATHS.includes(p) : isOn(n.path));
+  const inMore = MORE_PATHS.includes(p) || (p === '/shopping' && route.query.view === 'list'); // 장보기 목록은 휴대폰 '더보기' 안
+  const tabOn = (n) => (n.path === '/more' ? inMore : n.path === '/shopping' ? isOn(n.path) && !inMore : isOn(n.path));
   const fs = state.settings.fontSize || 20;
   const setFont = (dir) => {
     const i = Math.max(0, Math.min(FONT_STEPS.length - 1, FONT_STEPS.indexOf(fs) + dir));
