@@ -34,7 +34,6 @@ export default function Shopping() {
 
   return (
     <div className="stack">
-      <h1>장보기</h1>
       <div className="no-print stack">
         <Seg label="기간" value={range} onChange={setRange} options={[{ value: 'week', label: '이번 주' }, { value: 'next', label: '다음 주' }, { value: 'month', label: '이번 달' }, { value: 'custom', label: '직접' }]} />
         {range === 'custom' && (

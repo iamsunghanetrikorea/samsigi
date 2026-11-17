@@ -16,6 +16,7 @@ export const DEFAULT_STATE = {
   addedRecipes: [],     // 업데이트로 추가한 추천 메뉴 id
   customRecipes: [],    // 사용자가 메뉴 이름을 입력해 만든 레시피
   myTable: [],          // 나의 밥상에 올린 레시피 id
+  market: { picked: [], custom: [] }, // 장보기 '재료 고르기': 고른 재료 id, 사용자가 추가한 재료
 };
 const KEYS = Object.keys(DEFAULT_STATE);
 

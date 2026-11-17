@@ -4,7 +4,7 @@ import Home from './pages/Home';
 import Plan from './pages/Plan';
 import RecipePage from './pages/Recipe';
 import RecipeList from './pages/RecipeList';
-import Shopping from './pages/Shopping';
+import Market from './pages/Market';
 import Restaurants from './pages/Restaurants';
 import Stats from './pages/Stats';
 import Settings from './pages/Settings';
@@ -29,10 +29,11 @@ const TAB_NAV = [
   { path: '/', label: '홈', icon: '🏠' },
   { path: '/plan', label: '식단', icon: '📅' },
   { path: '/recipes', label: '레시피', icon: '🍴' },
+  { path: '/shopping', label: '장보기', icon: '🛒' },
   { path: '/eat-out', label: '식당', icon: '📍' },
   { path: '/more', label: '더보기', icon: '☰' },
 ];
-const MORE_PATHS = ['/more', '/stats', '/settings', '/shopping', '/help'];
+const MORE_PATHS = ['/more', '/stats', '/settings', '/help'];
 const FONT_STEPS = [18, 20, 22, 24, 26];
 
 export default function App() {
@@ -47,7 +48,7 @@ export default function App() {
   else if (p.startsWith('/plan')) page = <Plan route={route} />;
   else if (p.startsWith('/recipe/')) page = <RecipePage id={route.parts[1]} query={route.query} />;
   else if (p === '/recipes') page = <RecipeList />;
-  else if (p === '/shopping') page = <Shopping />;
+  else if (p === '/shopping') page = <Market route={route} />;
   else if (p === '/eat-out') page = <Restaurants />;
   else if (p === '/stats') page = <Stats />;
   else if (p === '/settings') page = <Settings />;

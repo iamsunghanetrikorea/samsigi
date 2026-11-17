@@ -168,3 +168,8 @@ export function makeRecipe(rawName) {
 
 // 미리 보기 화면에서 고르는 재료 목록
 export const INGREDIENT_OPTIONS = Object.values(ING).map((i) => ({ id: i.id, name: i.name, cat: i.cat }));
+
+// 이름(예: '삼겹살', '애호박 1개')에서 식재료 DB id 찾기 — 장보기 '재료추가'에서 사용
+export function ingredientIdsFromName(name) {
+  return findIngredients(String(name || '')).map(([id]) => id);
+}
