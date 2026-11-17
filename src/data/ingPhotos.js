@@ -65,4 +65,6 @@ export const ING_PHOTOS = {
   "potato": {"title": "File:20251223 102610 04 potatoes for sale.jpg", "page": "https://commons.wikimedia.org/wiki/File:20251223_102610_04_potatoes_for_sale.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Isaackahoto"},
   "chives": {"title": "File:Chinese chives (1).jpg", "page": "https://commons.wikimedia.org/wiki/File:Chinese_chives_(1).jpg", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en", "artist": "Fumikas Sagisavas"},
   "soft_tofu": {"title": "File:Sun-dubu 8.jpg", "page": "https://commons.wikimedia.org/wiki/File:Sun-dubu_8.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Scudsvlad"},
+  "cabbage": {"title": "File:Cabbage in a stack.jpg", "page": "https://commons.wikimedia.org/wiki/File:Cabbage_in_a_stack.jpg", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en", "artist": "Jeffery Martin"},
+  "flatfish": {"title": "File:Pleuronectes platessa.jpg", "page": "https://commons.wikimedia.org/wiki/File:Pleuronectes_platessa.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Hans Hillewaert"},
 };
