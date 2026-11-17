@@ -87,7 +87,7 @@ function Picker() {
         })}
       </div>
 
-      <p className="muted small long-help no-print">사진을 길게 누르면 지울 수 있어요.{hidden.size > 0 && <> <button type="button" className="linklike" onClick={() => set((x) => ({ ...x, hidden: [] }))}>지운 기본 재료 {hidden.size}가지 다시 보이기</button></>}</p>
+      {hidden.size > 0 && <p className="muted small long-help no-print"><button type="button" className="linklike" onClick={() => set((x) => ({ ...x, hidden: [] }))}>지운 기본 재료 {hidden.size}가지 다시 보이기</button></p>}
 
       <div className="pick-bar no-print" role="region" aria-label="고른 재료">
         <div className="pick-box">
