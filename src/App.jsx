@@ -69,8 +69,8 @@ export default function App() {
       <a className="skip" href="#main">본문으로 건너뛰기</a>
       <header className="topbar no-print">
         <a href="#/" className="brand">
-          <img src="./icon.svg" alt="" width="44" height="44" />
-          <span><b>건강한 세 끼</b><small>시니어를 위한 맞춤 식단</small></span>
+          <img src="./cover-cross.png" alt="" width="44" height="44" />
+          <span><b>삼식이家</b><small>시니어를 위한 맞춤 식단</small></span>
         </a>
         <nav className="topnav" aria-label="주 메뉴">
           {TOP_NAV.map((n) => (
