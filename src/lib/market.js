@@ -4,19 +4,20 @@ import { RECIPES } from '../data/recipes';
 import { excludeReason } from './planner';
 import { ingredientIdsFromName } from './recipeMaker';
 
-// 집에 늘 있다고 보는 기본 재료(양념·육수·밥)는 고르지 않아도 되고, 추천 계산에서도 뺀다
+// 집에 늘 있다고 보는 기본 재료(양념·육수·밥): 고르지 않아도 '더 필요'로 치지 않고, 고르면 쓰는 재료로 조금 더 쳐 줌
 export const isBasic = (id) => ING[id]?.cat === '양념' || ['broth', 'rice', 'multigrain'].includes(id);
 
 const MINOR = new Set(['onion', 'green_onion', 'garlic']);
 
-export const PICK_CATS = [...CATEGORY_ORDER.filter((c) => c !== '양념'), '기타'];
+export const PICK_CATS = [...CATEGORY_ORDER.filter((c) => c !== '양념'), '기타', '양념'];
 export const CAT_LABEL = { 곡류: '곡류·면' };
-export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫', 기타: '🍽️' };
+export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫', 기타: '🍽️', 양념: '🧂' };
 
 // 화면에 보일 짧은 이름: '국수(삶은 것)' → '국수', '버섯(느타리·표고)' → '버섯'
 export const shortName = (name) => name.replace(/\s*\(.*?\)\s*/g, '').trim();
 
-export const PICK_ITEMS = INGREDIENTS.filter((i) => !isBasic(i.id) && PICK_CATS.includes(i.cat) && !['panko', 'flour'].includes(i.id));
+// 쌀밥·잡곡밥(곡류 맨 앞)과 양념도 고를 수 있음. 멸치육수·빵가루·밀가루는 뺌
+export const PICK_ITEMS = INGREDIENTS.filter((i) => PICK_CATS.includes(i.cat) && !['broth', 'panko', 'flour'].includes(i.id));
 
 // '기타' 분류: 식재료 DB에는 없지만 고를 수 있는 음식. ids는 해당 식재료, keys는 메뉴 이름에서 찾을 낱말
 export const PICK_EXTRA = [
@@ -55,6 +56,7 @@ export function recommend(picked, custom, profile, limit = 12) {
   const have = new Set(picked.filter((id) => ING[id]));
   const words = pickedWords(picked, custom);
   words.forEach((w) => w.ids.forEach((x) => have.add(x)));
+  const hasMain = [...have].some((id) => !isBasic(id)) || words.some((w) => !w.ids.length);
   if (!have.size && !words.length) return [];
 
   const out = [];
@@ -64,8 +66,10 @@ export function recommend(picked, custom, profile, limit = 12) {
     const need = [];
     const inRecipe = new Set(r.items.map(([id]) => id));
     let subCount = 0;
+    let basicCount = 0;
     for (const [id, g] of r.items) {
-      if (isBasic(id) || !ING[id]) continue;
+      if (!ING[id]) continue;
+      if (isBasic(id)) { if (have.has(id)) { used.push({ id, name: shortName(ING[id].name) }); basicCount++; } continue; }
       if (have.has(id)) { used.push({ id, name: shortName(ING[id].name) }); continue; }
       // 대체 재료: 레시피에 이미 들어간 재료나 이미 대신 쓴 재료는 다시 쓰지 않음
       const alt = (r.subs?.[id] || []).find((x) => have.has(x) && !inRecipe.has(x) && !used.some((u) => u.id === x));
@@ -75,10 +79,12 @@ export function recommend(picked, custom, profile, limit = 12) {
     // DB에 없는 사용자 재료는 메뉴 이름에 들어 있으면 쓰는 것으로 봄
     for (const w of words) if (!w.ids.length && w.keys.some((k) => r.title.includes(k))) used.push({ id: null, name: w.name });
     if (!used.length) continue;
+    // 양념·밥 말고 다른 재료도 골랐다면, 양념·밥만 겹치는 메뉴는 빼서 추천이 흐려지지 않게
+    if (basicCount === used.length && hasMain) continue;
     const time = (r.prep || 0) + (r.cook || 0);
     // 고른 재료를 많이 쓰고, 더 살 재료가 적고, 빨리·쉽게 만드는 메뉴가 위로 (파·양파·마늘은 덜 따짐)
     const needCost = need.reduce((s, n) => s + (MINOR.has(n.id) ? 0.5 : 1.5), 0);
-    const score = (used.length - subCount) * 3 + subCount * 1.5 - needCost - time / 15 - ((r.difficulty || 1) - 1) * 2;
+    const score = (used.length - subCount - basicCount) * 3 + subCount * 1.5 + basicCount * 0.5 - needCost - time / 15 - ((r.difficulty || 1) - 1) * 2;
     out.push({ recipe: r, used, need, time, score });
   }
   out.sort((a, b) => b.score - a.score || a.time - b.time);

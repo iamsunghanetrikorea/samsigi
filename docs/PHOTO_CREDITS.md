@@ -116,3 +116,19 @@
 | 햄버거 (기타) | [NCI Visuals Food Hamburger.jpg](https://commons.wikimedia.org/wiki/File:NCI_Visuals_Food_Hamburger.jpg) | Len Rizzi (photographer) | Public domain |
 | 추어탕 (기타) | [Chueo-tang 1.jpg](https://commons.wikimedia.org/wiki/File:Chueo-tang_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 쓰시 (기타) | [Nigirizushi at Luckiefun's Redi in June 2024.jpg](https://commons.wikimedia.org/wiki/File:Nigirizushi_at_Luckiefun%27s_Redi_in_June_2024.jpg) | JIP | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 전분 (양념) | [Potato flour2.jpg](https://commons.wikimedia.org/wiki/File:Potato_flour2.jpg) | Jon Pallbo | Public domain |
+| 간장 (양념) | [Bowl of soy sauce, the sequel.jpg](https://commons.wikimedia.org/wiki/File:Bowl_of_soy_sauce,_the_sequel.jpg) | Bodhi Peace | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 된장 (양념) | [Doenjang (cropped).jpg](https://commons.wikimedia.org/wiki/File:Doenjang_(cropped).jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
+| 고추장 (양념) | [Gochujang (chilli paste) 2.jpg](https://commons.wikimedia.org/wiki/File:Gochujang_(chilli_paste)_2.jpg) | 온맘으로 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
+| 소금 (양념) | [Kosher Salt.JPG](https://commons.wikimedia.org/wiki/File:Kosher_Salt.JPG) | Glane23 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 설탕 (양념) | [A Bowl of Sugar 2.jpg](https://commons.wikimedia.org/wiki/File:A_Bowl_of_Sugar_2.jpg) | Sparkveela | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 참기름 (양념) | [ILUAMUTHU SESAME OIL.jpg](https://commons.wikimedia.org/wiki/File:ILUAMUTHU_SESAME_OIL.jpg) | ILUAMUTHU | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 식용유 (양념) | [Bottle 1 liter Sunflower refined oil.jpg](https://commons.wikimedia.org/wiki/File:Bottle_1_liter_Sunflower_refined_oil.jpg) | Exgsp Gmbh LLC BOTTLE 1 liter Sunflower refined oil | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 고춧가루 (양념) | [Gochugaru.jpg](https://commons.wikimedia.org/wiki/File:Gochugaru.jpg) | Stacy Spensley | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 올리브유 (양념) | [Bottle of olive oil.jpg](https://commons.wikimedia.org/wiki/File:Bottle_of_olive_oil.jpg) | margenauer from Pixabay | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 굴소스 (양념) | [OysterSauce2.jpg](https://commons.wikimedia.org/wiki/File:OysterSauce2.jpg) | Gossipguy | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 들깨가루 (양념) | [Perilla seeds.jpg](https://commons.wikimedia.org/wiki/File:Perilla_seeds.jpg) | ally j | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 깨 (양념) | [Toasted sesame seeds 1.jpg](https://commons.wikimedia.org/wiki/File:Toasted_sesame_seeds_1.jpg) | dabok2014 | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 마요네즈 (양념) | [Bingham mayo.jpg](https://commons.wikimedia.org/wiki/File:Bingham_mayo.jpg) | Marcusyoder at English Wikipedia | Public domain |
+| 토마토케첩 (양념) | [Stammtisch Ruhrgebiet Januar 2007 Oberhausen Pommes.JPG](https://commons.wikimedia.org/wiki/File:Stammtisch_Ruhrgebiet_Januar_2007_Oberhausen_Pommes.JPG) | JCS | Public domain |
+| 식초 (양념) | [Rice vinegar (Japanese).jpg](https://commons.wikimedia.org/wiki/File:Rice_vinegar_(Japanese).jpg) | Susan Slater | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
