@@ -62,7 +62,7 @@ function Picker() {
                       <label>
                         <input type="checkbox" className="ing-check" checked={on} onChange={() => toggle(i.id)} />
                         <span className="ing-ph">
-                          {ING_PHOTOS[i.id] ? <img src={`./photos/ing/${i.id}.webp`} alt="" loading="lazy" decoding="async" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}
+                          {ING_PHOTOS[i.id] ? <img src={`./photos/ing/${i.id}.webp`} alt="" loading="lazy" decoding="async" /> : i.photo ? <img src={i.photo} alt="" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}
                         </span>
                         <span className="ing-name">{name}</span>
                       </label>
@@ -90,7 +90,7 @@ function Picker() {
         <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피 추천 보기</button>
       </div>
 
-      <AddIngredient onAdd={(name, cat) => {
+      <AddIngredient onAdd={(name, cat, photo) => {
         const same = matchIngredient(name);
         if (same) {
           set((x) => ({ ...x, picked: x.picked.includes(same) ? x.picked : [...x.picked, same] }));
@@ -99,33 +99,69 @@ function Picker() {
         }
         if (m.custom.some((c) => c.name === name)) { notify(`‘${name}’은(는) 이미 추가했어요`); return; }
         const id = `c_${Date.now().toString(36)}`;
-        set((x) => ({ ...x, custom: [...x.custom, { id, name, cat }], picked: [...x.picked, id] }));
+        set((x) => ({ ...x, custom: [...x.custom, { id, name, cat, ...(photo ? { photo } : {}) }], picked: [...x.picked, id] }));
         notify(`‘${name}’ 재료를 추가하고 골라 두었어요`);
       }} />
     </>
   );
 }
 
+// 올린 사진을 가운데 정사각으로 잘라 240px JPEG로 줄임 (기기 안에만 저장)
+function shrinkPhoto(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(img.naturalWidth, img.naturalHeight);
+      const c = document.createElement('canvas');
+      c.width = c.height = 240;
+      c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 240, 240);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('사진을 읽지 못했어요')); };
+    img.src = url;
+  });
+}
+
 function AddIngredient({ onAdd }) {
+  const { notify } = useStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [cat, setCat] = useState('채소');
+  const [photo, setPhoto] = useState('');
+  const pick = async (e) => {
+    const f = e.target.files?.[0];
+    e.target.value = '';
+    if (!f) return;
+    try { setPhoto(await shrinkPhoto(f)); } catch (err) { notify(err.message); }
+  };
   const submit = (e) => {
     e.preventDefault();
     const n = name.trim();
-    if (!n) return;
-    onAdd(n, cat);
-    setName('');
+    if (!n) { notify('새 재료 이름을 적어 주세요'); return; }
+    onAdd(n, cat, photo);
+    setName(''); setPhoto('');
   };
   return (
     <div className="card ing-add no-print">
-      <button type="button" className="btn soft" aria-expanded={open} onClick={() => setOpen((o) => !o)}>＋ 재료추가</button>
+      <button type="button" className="btn soft" aria-expanded={open} onClick={() => setOpen((o) => !o)}>＋ 신규재료추가</button>
       {open && (
-        <form className="row wrap" onSubmit={submit}>
-          <input aria-label="새 재료 이름" placeholder="예: 삼겹살, 연근" value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus />
-          <select aria-label="분류" value={cat} onChange={(e) => setCat(e.target.value)}>
-            {PICK_CATS.map((c) => <option key={c} value={c}>{CAT_LABEL[c] || c}</option>)}
-          </select>
+        <form className="ing-add-form" onSubmit={submit}>
+          <div className="row wrap">
+            <input aria-label="새 재료 이름" placeholder="예: 삼겹살, 연근" value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus />
+            <select aria-label="분류" value={cat} onChange={(e) => setCat(e.target.value)}>
+              {PICK_CATS.map((c) => <option key={c} value={c}>{CAT_LABEL[c] || c}</option>)}
+            </select>
+          </div>
+          <div className="row wrap ing-add-photo">
+            <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt="올린 재료 사진 미리보기" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}</span>
+            <label className="btn ghost small">
+              📷 {photo ? '사진 바꾸기' : '사진 올리기'}
+              <input type="file" accept="image/*" className="sr-file" onChange={pick} />
+            </label>
+            {photo && <button type="button" className="btn ghost small" onClick={() => setPhoto('')}>사진 빼기</button>}
+          </div>
           <button className="btn primary" type="submit">추가</button>
         </form>
       )}

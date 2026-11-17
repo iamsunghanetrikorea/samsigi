@@ -587,7 +587,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 장보기 '재료 고르기': 분류별 재료 사진을 눌러 여러 개 고름 */
 .ing-board { display: flex; flex-direction: column; gap: .8rem; }
 .ing-cat-h { font-size: 1.05rem; margin: 0 0 .4rem; }
-.ing-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(6.2rem, 1fr)); gap: .6rem; }
+.ing-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9.3rem, 1fr)); gap: .7rem; }
 .ing-tile { position: relative; }
 .ing-tile label { display: flex; flex-direction: column; align-items: center; gap: .2rem; padding: .35rem; border: 3px solid var(--line); border-radius: 14px; background: var(--surface); cursor: pointer; height: 100%; -webkit-tap-highlight-color: transparent; }
 .ing-tile.on label { border-color: var(--primary); background: var(--primary-soft); }
@@ -595,9 +595,9 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .ing-tile label:has(.ing-check:focus-visible) { outline: 3px solid var(--primary); outline-offset: 2px; }
 .ing-ph { position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: var(--surface-2); }
 .ing-ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.ing-emoji { font-size: 2.4rem; line-height: 1; }
+.ing-emoji { font-size: 3.6rem; line-height: 1; }
 .ing-tile.on .ing-ph::after { content: '✓'; position: absolute; right: .25rem; bottom: .25rem; width: 1.6rem; height: 1.6rem; border-radius: 999px; display: grid; place-items: center; background: var(--primary); color: #fff; font-weight: 900; font-size: 1rem; line-height: 1; box-shadow: 0 0 0 2px #fff; }
-.ing-name { font-size: .85rem; font-weight: 700; line-height: 1.25; text-align: center; }
+.ing-name { font-size: .95rem; font-weight: 700; line-height: 1.25; text-align: center; }
 .ing-tile.on .ing-name { color: var(--primary); }
 .ing-del { position: absolute; top: .2rem; right: .2rem; z-index: 2; width: 1.6rem; height: 1.6rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: .75rem; line-height: 1; cursor: pointer; padding: 0; }
 .ing-add { display: flex; flex-direction: column; gap: .6rem; align-items: flex-start; }
@@ -628,18 +628,18 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .pick-help { font-size: .8rem; margin: 0; }
   /* 분류마다 새 줄에서 시작: 분류 이름 칸 + 재료 칸 */
   .ing-board { gap: 6px; }
-  .ing-cat { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .ing-cat { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
   .ing-grid { display: contents; }
-  .ing-cat-h { margin: 0; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; background: var(--primary-soft); color: var(--primary); font-size: 10px; line-height: 1.1; text-align: center; letter-spacing: -.04em; word-break: keep-all; }
-  .ing-cat-h span { font-size: 18px; }
+  .ing-cat-h { margin: 0; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; background: var(--primary-soft); color: var(--primary); font-size: 12px; line-height: 1.15; text-align: center; letter-spacing: -.04em; word-break: keep-all; }
+  .ing-cat-h span { font-size: 26px; }
   .ing-tile label { padding: 0; border-width: 2px; border-radius: 8px; gap: 0; }
   .ing-ph { border-radius: 6px; }
-  .ing-emoji { font-size: 22px; }
-  .ing-name { position: absolute; left: 2px; right: 2px; bottom: 2px; padding: 1px 0; border-radius: 0 0 6px 6px; background: rgba(0, 0, 0, .58); color: #fff; font-size: 10px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: clip; letter-spacing: -.06em; }
+  .ing-emoji { font-size: 32px; }
+  .ing-name { position: absolute; left: 2px; right: 2px; bottom: 2px; padding: 1px 0; border-radius: 0 0 6px 6px; background: rgba(0, 0, 0, .58); color: #fff; font-size: 13px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: clip; letter-spacing: -.06em; }
   .ing-tile.on .ing-name { color: #fff; background: var(--primary); }
-  .ing-tile.on .ing-ph::after { top: 2px; left: 2px; right: auto; bottom: auto; width: 16px; height: 16px; font-size: 10px; box-shadow: 0 0 0 1.5px #fff; }
+  .ing-tile.on .ing-ph::after { top: 2px; left: 2px; right: auto; bottom: auto; width: 22px; height: 22px; font-size: 13px; box-shadow: 0 0 0 1.5px #fff; }
   .ing-tile.on label { border-width: 3px; }
-  .ing-del { top: 1px; right: 1px; width: 16px; height: 16px; font-size: 9px; }
+  .ing-del { top: 2px; right: 2px; width: 22px; height: 22px; font-size: 11px; }
   /* 체크박스는 숨기고(화면읽기용으로는 남김) 사진을 눌러 고름 */
   .ing-check { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
   /* 사진 아래: 고른 재료 상자(고정 위치) → 폭 가득 추천 버튼 → 재료추가 */
@@ -659,3 +659,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .only-m { display: inline; }
   .hide-m { display: none; }
 }
+
+/* 신규재료추가: 사진 올리기 */
+.ing-add-form { display: flex; flex-direction: column; gap: .6rem; width: 100%; }
+.ing-add-photo { align-items: center; }
+.ing-add-prev { width: 5rem; flex: none; }
+.ing-add-photo label.btn { position: relative; overflow: hidden; cursor: pointer; }
+.sr-file { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0; }
