@@ -485,9 +485,16 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .choice-row { display: flex; gap: .4rem; align-items: stretch; }
 .choice-row > .choice { flex: 1; min-width: 0; }
 .choice-row > .table-btn { flex: none; white-space: nowrap; align-self: center; min-width: 9.5em; }
+.choice-row { flex-wrap: wrap; }
+.choice-row > .row-btns { flex: none; display: flex; flex-direction: column; gap: .3rem; justify-content: center; }
+.row-btns .btn { white-space: nowrap; min-width: 9.5em; }
+.choice-row > .edit-box { flex: 1 1 100%; border: 2px solid var(--primary); border-radius: 14px; padding: .8rem; background: var(--surface); }
+.edit-badge { display: inline-block; margin-left: .25rem; padding: 0 .4em; border-radius: 6px; background: var(--warn-bg); color: var(--warn); font-size: .7em; font-weight: 800; vertical-align: .15em; }
 @media (max-width: 560px) {
   .choice-row { flex-wrap: wrap; }
   .choice-row > .table-btn { width: 100%; }
+  .choice-row > .row-btns { flex: 1 1 100%; flex-direction: row; }
+  .row-btns .btn { flex: 1; min-width: 0; }
 }
 .my-table-panel h2 { margin-bottom: .3rem; }
 .my-table {

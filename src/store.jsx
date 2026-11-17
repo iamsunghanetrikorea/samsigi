@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { getItem, setItem, clearAll } from './lib/storage';
 import { computeTargets, DEFAULT_PROFILE } from './lib/nutrition';
 import { generatePlans } from './lib/planner';
-import { syncPack, syncCustom, nextUpdate } from './data/recipePack';
+import { syncPack, syncCustom, applyEdits, nextUpdate } from './data/recipePack';
 
 export const DEFAULT_STATE = {
   profile: null,
@@ -16,6 +16,7 @@ export const DEFAULT_STATE = {
   addedRecipes: [],     // 업데이트로 추가한 추천 메뉴 id
   customRecipes: [],    // 사용자가 메뉴 이름을 입력해 만든 레시피
   myTable: [],          // 나의 밥상에 올린 레시피 id
+  recipeEdits: {},      // 기본 메뉴를 '메뉴수정'으로 고친 내용 { recipeId: {title, items, steps, …} }
   market: { picked: [], custom: [] }, // 장보기 '재료 고르기': 고른 재료 id, 사용자가 추가한 재료
 };
 const KEYS = Object.keys(DEFAULT_STATE);
@@ -39,6 +40,7 @@ export function StoreProvider({ children }) {
       s.customRecipes = s.customRecipes.map((r) => (/(과|와) (잡곡밥|쌀밥)$/.test(r.title) ? { ...r, title: r.title.replace(/(과|와) (잡곡밥|쌀밥)$/, '') } : r));
       syncPack(s.addedRecipes);
       syncCustom(s.customRecipes);
+      applyEdits(s.recipeEdits);
       saved.current = s;
       setState(s);
     })();
@@ -125,6 +127,16 @@ export function StoreProvider({ children }) {
     stateRef.current = next;
     setState(next);
   }, []);
+  // 기본 메뉴 고치기(메뉴수정) — edit가 null이면 원래대로
+  const saveRecipeEdit = useCallback((id, edit) => {
+    const s = stateRef.current;
+    const edits = { ...s.recipeEdits };
+    if (edit) edits[id] = { ...edit, editedAt: Date.now() }; else delete edits[id];
+    applyEdits(edits);
+    const next = { ...s, recipeEdits: edits };
+    stateRef.current = next;
+    setState(next);
+  }, []);
   const removeCustomRecipe = useCallback((id) => {
     const s = stateRef.current;
     const list = s.customRecipes.filter((r) => r.id !== id);
@@ -137,6 +149,7 @@ export function StoreProvider({ children }) {
   const resetAll = useCallback(async () => {
     syncPack([]);
     syncCustom([]);
+    applyEdits({});
     await clearAll();
     saved.current = DEFAULT_STATE;
     setState({ ...DEFAULT_STATE });
@@ -148,11 +161,12 @@ export function StoreProvider({ children }) {
     if (s.profile) s.profile = { ...DEFAULT_PROFILE, ...s.profile };
     syncPack(s.addedRecipes);
     syncCustom(s.customRecipes);
+    applyEdits(s.recipeEdits);
     setState(s);
   }, []);
 
-  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, notify, toast, resetAll, replaceAll }),
-    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, removeCustomRecipe, notify, toast, resetAll, replaceAll]);
+  const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, saveRecipeEdit, removeCustomRecipe, notify, toast, resetAll, replaceAll }),
+    [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, saveRecipeEdit, removeCustomRecipe, notify, toast, resetAll, replaceAll]);
 
   if (!state) return <div className="loading" role="status">불러오는 중…</div>;
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

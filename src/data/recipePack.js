@@ -167,10 +167,27 @@ export function syncPack(ids = []) {
 export function syncCustom(list = []) {
   const want = new Map(list.map((r) => [r.id, r]));
   for (let i = RECIPES.length - 1; i >= 0; i--) {
-    if (RECIPES[i].isCustom && want.get(RECIPES[i].id) !== RECIPES[i]) { delete RECIPE_BY_ID[RECIPES[i].id]; RECIPES.splice(i, 1); }
+    const r = RECIPES[i];
+    if (!r.isCustom) continue;
+    const w = want.get(r.id);
+    if (!w) { delete RECIPE_BY_ID[r.id]; RECIPES.splice(i, 1); }
+    else if (w !== r) { RECIPES[i] = w; RECIPE_BY_ID[r.id] = w; } // 고친 메뉴는 같은 자리(같은 메뉴 번호)에 그대로
   }
   for (const r of list) if (!RECIPE_BY_ID[r.id]) { RECIPES.push(r); RECIPE_BY_ID[r.id] = r; }
 }
+
+// 기본·업데이트 메뉴를 사용자가 고친 내용(메뉴수정)을 원래 레시피 위에 덮어씀 — 같은 객체를 고쳐 메뉴 번호·식단 연결 유지
+export const EDIT_FIELDS = ['title', 'category', 'prep', 'cook', 'meals', 'items', 'steps'];
+const ORIGINAL = new Map();
+export function applyEdits(edits = {}) {
+  for (const r of [...RECIPES, ...PACK]) {
+    if (r.isCustom) continue;
+    if (!ORIGINAL.has(r.id)) ORIGINAL.set(r.id, Object.fromEntries(EDIT_FIELDS.map((f) => [f, r[f]])));
+    Object.assign(r, ORIGINAL.get(r.id), edits[r.id] ? Object.fromEntries(EDIT_FIELDS.filter((f) => edits[r.id][f] !== undefined).map((f) => [f, edits[r.id][f]])) : {});
+    r.isEdited = !!edits[r.id];
+  }
+}
+export const originalOf = (id) => ORIGINAL.get(id);
 
 // 다음 업데이트로 추가할 메뉴: 분류마다 아직 없는 메뉴 하나씩
 export function nextUpdate(addedIds = []) {

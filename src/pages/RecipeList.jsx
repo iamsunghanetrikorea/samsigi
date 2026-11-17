@@ -9,7 +9,7 @@ import { leftoverRecipes } from '../lib/shopping';
 import { Seg } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
-import RecipeMaker from '../components/RecipeMaker';
+import RecipeMaker, { RecipeEditor } from '../components/RecipeMaker';
 import { MyTableButton } from '../components/MyTable';
 
 const FAV = '즐겨찾기';
@@ -41,7 +41,8 @@ const FILTER_PHOTO = {
 };
 
 export default function RecipeList() {
-  const { state, targets, update, addRecipeUpdate, notify } = useStore();
+  const { state, targets, update, addRecipeUpdate, saveCustomRecipe, saveRecipeEdit, notify } = useStore();
+  const [editId, setEditId] = useState(null);
   const [meal, setMeal] = useState('all');
   const [cat, setCat] = useState('');
   const [justAdded, setJustAdded] = useState([]);
@@ -119,15 +120,32 @@ export default function RecipeList() {
           const n = sumItems(mealItems(r, { kcal: targets.perMeal[r.meals[0]]?.kcal }).items.map((i) => [i.id, i.g]));
           const why = excludeReason(r, state.profile);
           return (
-            <li key={r.id} className="choice-row">
+            <li key={r.id} className={`choice-row ${editId === r.id ? 'editing' : ''}`}>
               <button className="choice" onClick={() => go(`/recipe/${r.id}`)}>
                 <Plate recipe={r} />
                 <span className="choice-body">
-                  <b><span className="menu-no" aria-label={`메뉴 ${menuNo(r)}번`}>{menuNo(r)}</span>{r.isNew && <span className="new-badge">NEW</span>}{r.isCustom && <span className="my-badge">내 메뉴</span>} {r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
+                  <b><span className="menu-no" aria-label={`메뉴 ${menuNo(r)}번`}>{menuNo(r)}</span>{r.isNew && <span className="new-badge">NEW</span>}{r.isCustom && <span className="my-badge">내 메뉴</span>}{r.isEdited && <span className="edit-badge">수정됨</span>} {r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
                   <span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')} · {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · {r.prep + r.cook}분{why ? ` · 제외됨(${why})` : ''}</span>
                 </span>
               </button>
-              <MyTableButton id={r.id} small />
+              <div className="row-btns">
+                <MyTableButton id={r.id} small />
+                <button className={`btn small ${editId === r.id ? 'on' : 'ghost'} edit-btn`} aria-expanded={editId === r.id} onClick={() => setEditId(editId === r.id ? null : r.id)}>✏️ 메뉴수정</button>
+              </div>
+              {editId === r.id && (
+                <div className="edit-box">
+                  <RecipeEditor key={r.id} initial={r} saveLabel="수정 저장"
+                    note={r.isCustom ? null : '기본 메뉴를 고치면 이 기기에만 저장돼요. 언제든 ‘원래대로’로 되돌릴 수 있어요.'}
+                    extra={r.isEdited && <button type="button" className="btn ghost" onClick={() => { saveRecipeEdit(r.id, null); setEditId(null); notify(`‘${r.title}’을(를) 원래대로 되돌렸어요`); }}>원래대로</button>}
+                    onCancel={() => setEditId(null)}
+                    onSave={(d) => {
+                      const edit = { title: d.title, category: d.category, prep: d.prep, cook: d.cook, meals: d.meals, items: d.items, steps: d.steps };
+                      if (r.isCustom) saveCustomRecipe({ ...r, ...edit }); else saveRecipeEdit(r.id, edit);
+                      setEditId(null);
+                      notify(`‘${d.title}’ 메뉴를 고쳤어요`);
+                    }} />
+                </div>
+              )}
             </li>
           );
         })}
