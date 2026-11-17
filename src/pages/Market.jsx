@@ -45,7 +45,6 @@ function Picker() {
 
   return (
     <>
-      <p className="muted pick-help">오늘 사거나 집에 있는 재료를 <b>사진을 눌러</b> 골라 주세요. 여러 개 고를 수 있어요. 밥·양념·육수는 집에 있다고 보고 계산해요.</p>
       <div className="ing-board">
         {PICK_CATS.map((cat) => {
           const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)];
