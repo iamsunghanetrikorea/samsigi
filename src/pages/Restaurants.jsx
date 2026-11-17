@@ -193,13 +193,13 @@ export default function Restaurants() {
               })}
             </div>
             {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('restHidden', [])}>지운 기본 사진 {hiddenPics.length}개 다시 보이기</button></p>}
-            <AddIngredient label="나의 메뉴 입력" unit="메뉴" placeholder="예: 냉면, 삼계탕" noCat custom={myMenus}
+            <AddIngredient label="검색요리 입력" unit="요리" placeholder="예: 냉면, 삼계탕" noCat custom={myMenus}
               onRemove={(id) => { const x = myMenus.find((m) => m.id === id); setMyMenus((l) => l.filter((m) => m.id !== id)); if (x && customMenu === x.name) setCustomMenu(''); }}
               onAdd={(name, _c, photo, credit) => {
                 if (myMenus.some((x) => x.name === name)) { setCustomMenu(name); setCat(''); notify(`‘${name}’은(는) 이미 있어요`); return; }
                 setMyMenus((l) => [...l, { id: `m_${Date.now().toString(36)}`, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
                 setCustomMenu(name); setCat('');
-                notify(`‘${name}’ 메뉴를 추가했어요`);
+                notify(`‘${name}’ 요리를 추가했어요`);
               }} />
             <MapLinks query={shownQuery} pos={pos} />
           </section>
