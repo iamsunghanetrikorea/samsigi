@@ -327,7 +327,7 @@ function Result() {
 
       {!list.length && !noRecipe.length && (
         <div className="card center stack">
-          <p>고른 재료로 만들 수 있는 레시피를 찾지 못했어요. 재료를 더 골라 보거나, 레시피 모음의 ‘나의 메뉴 추가’로 메뉴를 만들어 보세요.</p>
+          <p>고른 재료로 만들 수 있는 레시피를 찾지 못했어요. 재료를 더 골라 보거나, 레시피 모음의 ‘나의 레시피 추가’로 메뉴를 만들어 보세요.</p>
           <button className="btn" onClick={() => go('/recipes')}>레시피 모음 열기</button>
         </div>
       )}

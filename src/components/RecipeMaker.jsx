@@ -8,7 +8,7 @@ import { go, parseHash } from '../router';
 import Plate from './Plate';
 
 
-// '나의 메뉴 추가': 메뉴 이름을 넣으면 레시피 초안을 만들고, 고쳐서 레시피 모음에 추가
+// '나의 레시피 추가': 메뉴 이름을 넣으면 레시피 초안을 만들고, 고쳐서 레시피 모음에 추가
 export default function RecipeMaker({ onAdded }) {
   const { state, saveCustomRecipe, removeCustomRecipe, notify } = useStore();
   const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ export default function RecipeMaker({ onAdded }) {
   return (
     <div className="maker" ref={box}>
       <button className="btn full-narrow" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        ✏️ 나의 메뉴 추가 {open ? '▲' : '▼'}
+        ✏️ 나의 레시피 추가 {open ? '▲' : '▼'}
       </button>
       {open && (
         <div className="maker-body">
@@ -77,7 +77,7 @@ export default function RecipeMaker({ onAdded }) {
   );
 }
 
-// 레시피 편집 칸 — '나의 메뉴 추가' 초안과 '메뉴수정'에서 같이 씀
+// 레시피 편집 칸 — '나의 레시피 추가' 초안과 '메뉴수정'에서 같이 씀
 export function RecipeEditor({ initial, onSave, onCancel, saveLabel = '저장', note, extra }) {
   const { notify } = useStore();
   const [draft, setDraft] = useState(() => ({ ...initial, items: initial.items.map((x) => [...x]), meals: [...initial.meals] }));
