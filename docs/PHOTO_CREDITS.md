@@ -112,3 +112,7 @@
 | 단무지 | [Takuan by mdid.jpg](https://commons.wikimedia.org/wiki/File:Takuan_by_mdid.jpg) | mdid | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 어묵 | [2016-02-06 Agekamaboko-揚げかまぼこ 大黒天物産 12個 100円 DSCF8724.JPG](https://commons.wikimedia.org/wiki/File:2016-02-06_Agekamaboko-%E6%8F%9A%E3%81%92%E3%81%8B%E3%81%BE%E3%81%BC%E3%81%93_%E5%A4%A7%E9%BB%92%E5%A4%A9%E7%89%A9%E7%94%A3_12%E5%80%8B_100%E5%86%86_DSCF8724.JPG) | 松岡明芳 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 만두 | [Jjin-mandu 1.jpg](https://commons.wikimedia.org/wiki/File:Jjin-mandu_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 떡 (기타) | [Garae-tteok.jpg](https://commons.wikimedia.org/wiki/File:Garae-tteok.jpg) | Sulkkun | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 햄버거 (기타) | [NCI Visuals Food Hamburger.jpg](https://commons.wikimedia.org/wiki/File:NCI_Visuals_Food_Hamburger.jpg) | Len Rizzi (photographer) | Public domain |
+| 추어탕 (기타) | [Chueo-tang 1.jpg](https://commons.wikimedia.org/wiki/File:Chueo-tang_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 쓰시 (기타) | [Nigirizushi at Luckiefun's Redi in June 2024.jpg](https://commons.wikimedia.org/wiki/File:Nigirizushi_at_Luckiefun%27s_Redi_in_June_2024.jpg) | JIP | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |

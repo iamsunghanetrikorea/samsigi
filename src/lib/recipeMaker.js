@@ -16,6 +16,7 @@ const WORDS = [
   [['계란', '달걀', '오므', '에그'], 'egg', 100],
   [['콩나물'], 'bean_sprouts', 80], [['숙주'], 'mung_sprouts', 80], [['시금치'], 'spinach', 70],
   [['단호박', '호박죽'], 'pumpkin', 150], [['애호박', '호박'], 'zucchini', 80], [['감자', '볶음탕', '도리탕', '찜닭'], 'potato', 100],
+  [['햄버거', '버거'], 'beef', 90], [['초밥', '스시', '쓰시'], 'salmon', 60],
   [['고구마'], 'sweet_potato', 120], [['버섯'], 'mushroom', 60], [['가지'], 'eggplant', 100],
   [['양배추'], 'cabbage', 80], [['배추'], 'napa', 80], [['무'], 'radish', 80],
   [['미역'], 'miyeok', 5], [['토마토'], 'tomato', 120], [['부추'], 'chives', 60],
@@ -39,7 +40,7 @@ const TYPES = [
   { key: '김밥', words: ['김밥', '주먹밥'], category: '한식', meals: ['breakfast', 'lunch'], tags: ['간편'], staple: ['rice', 180], base: [['laver', 3], ['carrot', 30], ['cucumber', 30], ['sesame_oil', 3], ['salt', 0.5]], prep: 15, cook: 10, difficulty: 2 },
   { key: '면', words: ['국수', '칼국수', '우동', '라면', '냉면', '소바', '면'], category: '한식', meals: ['lunch'], tags: ['면'], staple: null, base: [['broth', 350], ['zucchini', 40], ['green_onion', 10], ['soy', 5]], prep: 5, cook: 12 },
   { key: '파스타', words: ['파스타', '스파게티'], category: '양식', meals: ['lunch', 'dinner'], tags: ['면'], staple: null, base: [['tomato', 100], ['onion', 30], ['garlic', 4], ['olive_oil', 6], ['salt', 0.5]], prep: 8, cook: 15 },
-  { key: '빵', words: ['토스트', '샌드위치', '빵', '버거'], category: '양식', meals: ['breakfast', 'lunch'], tags: ['빵', '간편'], staple: null, base: [['cabbage', 30], ['tomato', 40], ['milk', 200]], prep: 8, cook: 5 },
+  { key: '빵', words: ['토스트', '샌드위치', '빵', '버거'], category: '양식', meals: ['breakfast', 'lunch'], tags: ['빵', '간편'], staple: null, base: [['bread', 70], ['cabbage', 30], ['tomato', 40], ['milk', 200]], prep: 8, cook: 5 },
   { key: '샐러드', words: ['샐러드'], category: '양식', meals: ['breakfast', 'lunch'], tags: ['채소', '간편'], staple: ['bread', 50], base: [['cabbage', 60], ['tomato', 60], ['cucumber', 40], ['olive_oil', 6], ['salt', 0.3]], prep: 10, cook: 0 },
   { key: '전', words: ['전', '부침', '부침개', '지짐', '파전'], category: '한식', tags: [], staple: ['multigrain', 140], base: [['flour', 40], ['egg', 25], ['green_onion', 15], ['oil', 6], ['salt', 0.5]], prep: 10, cook: 10 },
   { key: '조림', words: ['조림', '찜', '수육', '보쌈', '볶음탕', '도리탕', '찜닭'], category: '한식', soft: true, tags: [], staple: ['multigrain', 150], base: [['radish', 60], ['onion', 30], ['soy', 8], ['sugar', 3], ['garlic', 3], ['green_onion', 10]], prep: 10, cook: 20 },
@@ -48,12 +49,13 @@ const TYPES = [
   { key: '떡볶이', words: ['떡볶이', '라볶이'], category: '간식', meals: ['lunch', 'snack'], tags: ['간편'], staple: null, base: [['broth', 200], ['cabbage', 50], ['onion', 30], ['green_onion', 10], ['gochujang', 10], ['sugar', 3]], prep: 5, cook: 12 },
   { key: '말이', words: ['말이', '오믈렛', '스크램블', '계란찜', '달걀찜'], category: '한식', meals: ['breakfast', 'lunch', 'dinner'], soft: true, tags: ['간편'], staple: ['multigrain', 150], base: [['onion', 20], ['carrot', 15], ['green_onion', 10], ['oil', 4], ['salt', 0.4]], prep: 5, cook: 8 },
   { key: '간식', words: ['떡볶이', '라볶이', '호떡', '경단', '찐', '군', '스무디', '라떼', '과일'], category: '간식', meals: ['snack'], tags: ['간편'], staple: null, base: [], prep: 5, cook: 10 },
+  { key: '초밥', words: ['초밥', '스시', '쓰시'], category: '한식', meals: ['lunch', 'dinner'], tags: [], staple: null, base: [['rice', 180], ['vinegar', 8], ['sugar', 4], ['salt', 0.5], ['soy', 4]], prep: 20, cook: 0, difficulty: 2 },
   { key: '볶음', words: ['볶음', '불고기', '제육', '두루치기', '잡채', '탕수육', '깐풍'], category: '한식', tags: [], staple: ['multigrain', 150], base: [['onion', 40], ['carrot', 20], ['green_onion', 10], ['garlic', 3], ['soy', 6], ['oil', 4]], prep: 10, cook: 10 },
 ];
 const DEFAULT_TYPE = TYPES.find((t) => t.key === '볶음');
 const CHINESE = ['짜장', '짬뽕', '마파', '탕수', '깐풍', '팔보', '유산슬', '양장', '고추잡채', '마라'];
 const WESTERN = ['파스타', '스파게티', '스테이크', '샐러드', '리조또', '그라탕', '수프', '스프', '오믈렛', '피자'];
-const EMOJI = { 죽: '🥣', 찌개: '🍲', 국: '🥣', 볶음밥: '🍳', 비빔밥: '🥗', 덮밥: '🍛', 김밥: '🍙', 면: '🍜', 파스타: '🍝', 빵: '🥪', 샐러드: '🥗', 전: '🥞', 조림: '🍖', 구이: '🍖', 무침: '🥬', 간식: '🍡', 볶음: '🍳' };
+const EMOJI = { 죽: '🥣', 찌개: '🍲', 국: '🥣', 볶음밥: '🍳', 비빔밥: '🥗', 덮밥: '🍛', 김밥: '🍙', 면: '🍜', 파스타: '🍝', 빵: '🥪', 샐러드: '🥗', 전: '🥞', 조림: '🍖', 구이: '🍖', 무침: '🥬', 간식: '🍡', 볶음: '🍳', 초밥: '🍣' };
 
 function findType(name) {
   if (name.includes('짜장')) return TYPES.find((t) => t.key === '덮밥');
@@ -123,6 +125,7 @@ function baseSteps(type, items, mains, vegs) {
     case '무침': return [[`${v === '채소' ? m : v}${josa(v === '채소' ? m : v, '을', '를')} 씻어 손질해 주세요.`], ['끓는 물에 살짝 데쳐 물기를 꼭 짜 주세요.', 2], ['간장·마늘·참기름·깨로 조물조물 무쳐 주세요.'], ['밥과 함께 드세요.']];
     case '떡볶이': return [['떡은 물에 헹구고, 양배추·양파·대파는 먹기 좋게 썰어 주세요.'], ['육수에 고추장 반 숟가락과 설탕 조금을 풀어 끓여 주세요.', 3], ['떡과 채소를 넣고 떡이 말랑해질 때까지 저어 가며 끓여 주세요.', 8], ['대파를 넣고 불을 꺼 주세요. 맵지 않게 고추장은 조금만 넣어요.']];
     case '말이': return [['양파·당근·대파를 아주 잘게 다져 주세요.'], ['달걀을 풀고 다진 채소와 소금 조금을 섞어 주세요.'], ['기름 두른 팬에 약한 불로 얇게 부어 가장자리가 익으면 돌돌 말아 주세요.', 6], ['한 김 식혀 먹기 좋게 썰어 밥과 함께 드세요.']];
+    case '초밥': return [['따뜻한 밥에 식초·설탕·소금 조금을 섞어 식혀 주세요.'], [`${m === '주재료' ? '생선' : m}${josa(m === '주재료' ? '생선' : m, '을', '를')} 얇게 썰어 주세요. 날것이 걱정되면 익힌 새우나 계란말이를 써도 좋아요.`], ['밥을 한입 크기로 쥐어 모양을 잡고 위에 올려 주세요.'], ['간장은 조금만 찍어 드세요.']];
     case '간식': return [['재료를 먹기 좋게 손질해 주세요.'], ['찌거나 데워 익혀 주세요.', 10], ['한 번에 조금씩 천천히 드세요.']];
     default: return [[`${m}${josa(m, '과', '와')} ${v}${josa(v, '을', '를')} 한입 크기로 썰어 주세요.`], [`기름 두른 팬에 ${m}${josa(m, '을', '를')} 먼저 볶아 주세요.`, 4], [`${v}${josa(v, '과', '와')} ${sauce} 양념을 넣어 고루 볶아 주세요.`, 4], ['대파·마늘을 넣고 한 번 더 볶아 밥과 함께 드세요.']];
   }

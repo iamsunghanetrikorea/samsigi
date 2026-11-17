@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
 import { DIFFICULTY_LABEL } from '../data/recipes';
-import { PICK_CATS, PICK_ITEMS, CAT_LABEL, CAT_EMOJI, shortName, matchIngredient, recommend } from '../lib/market';
+import { PICK_CATS, PICK_ITEMS, PICK_EXTRA, EXTRA_BY, CAT_LABEL, CAT_EMOJI, shortName, matchIngredient, recommend, dishesWithoutRecipe } from '../lib/market';
 import { Seg } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
@@ -34,7 +34,7 @@ const useMarket = () => {
   return [m, set];
 };
 
-const label = (id, custom) => (ING[id] ? shortName(ING[id].name) : custom.find((c) => c.id === id)?.name || '');
+const label = (id, custom) => (ING[id] ? shortName(ING[id].name) : EXTRA_BY[id]?.name || custom.find((c) => c.id === id)?.name || '');
 
 function Picker() {
   const { notify } = useStore();
@@ -47,7 +47,7 @@ function Picker() {
     <>
       <div className="ing-board">
         {PICK_CATS.map((cat) => {
-          const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)];
+          const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...PICK_EXTRA.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)];
           if (!items.length) return null;
           return (
             <section key={cat} className="ing-cat" aria-label={CAT_LABEL[cat] || cat}>
@@ -55,8 +55,8 @@ function Picker() {
               <ul className="ing-grid">
                 {items.map((i) => {
                   const on = picked.has(i.id);
-                  const custom = !ING[i.id];
-                  const name = custom ? i.name : shortName(i.name);
+                  const custom = !ING[i.id] && !EXTRA_BY[i.id];
+                  const name = ING[i.id] ? shortName(i.name) : i.name;
                   return (
                     <li key={i.id} className={`ing-tile ${on ? 'on' : ''}`}>
                       <label>
@@ -241,6 +241,7 @@ function Result() {
   const ready = list.filter((x) => !x.need.length);
   const more = list.filter((x) => x.need.length);
   const names = m.picked.map((id) => label(id, m.custom)).filter(Boolean);
+  const noRecipe = dishesWithoutRecipe(m.picked, m.custom);
 
   const addNeed = (x) => {
     update('shopping', (sh) => {
@@ -268,11 +269,20 @@ function Result() {
         <div className="chips">{names.map((n) => <span key={n} className="tag-have">{n}</span>)}</div>
       </section>
 
-      {!list.length && (
+      {!list.length && !noRecipe.length && (
         <div className="card center stack">
           <p>고른 재료로 만들 수 있는 레시피를 찾지 못했어요. 재료를 더 골라 보거나, 레시피 모음의 ‘나의 메뉴 추가’로 메뉴를 만들어 보세요.</p>
           <button className="btn" onClick={() => go('/recipes')}>레시피 모음 열기</button>
         </div>
+      )}
+      {noRecipe.length > 0 && (
+        <section className="card stack">
+          <h2>📝 아직 레시피가 없는 메뉴</h2>
+          <p className="muted small">레시피 모음에 없는 메뉴예요. 누르면 이름으로 1인분 레시피 초안을 만들어 드려요. 고쳐서 저장하면 다음부터 추천에 나와요.</p>
+          <div className="row wrap">
+            {noRecipe.map((n) => <button key={n} className="btn soft" onClick={() => go(`/recipes?make=${encodeURIComponent(n)}`)}>‘{n}’ 레시피 만들기</button>)}
+          </div>
+        </section>
       )}
       {ready.length > 0 && <RecGroup title="✅ 바로 만들 수 있어요" note="더 살 재료 없이 고른 재료와 기본 양념으로 만들어요." list={ready} />}
       {more.length > 0 && <RecGroup title="🛒 조금만 더 사면 돼요" note="빠진 재료는 버튼 한 번으로 장보기 목록에 담을 수 있어요." list={more} onAdd={addNeed} />}

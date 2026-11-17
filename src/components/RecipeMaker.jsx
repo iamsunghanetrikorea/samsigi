@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../store';
 import { CATEGORIES, MEAL_LABEL } from '../data/recipes';
 import { ING, CATEGORY_ORDER } from '../data/ingredients';
 import { makeRecipe, INGREDIENT_OPTIONS } from '../lib/recipeMaker';
 import { sumItems, round } from '../lib/nutrition';
-import { go } from '../router';
+import { go, parseHash } from '../router';
 import Plate from './Plate';
 
 
@@ -25,6 +25,16 @@ export default function RecipeMaker({ onAdded }) {
     setDraft(r);
     setStepsText(r.steps.map(([t]) => t).join('\n'));
   };
+  // 장보기 결과의 '레시피 만들기'로 들어오면(#/recipes?make=이름) 바로 초안을 만들어 보여 줌
+  const box = useRef(null);
+  useEffect(() => {
+    const make = parseHash(window.location.hash).query.make;
+    if (!make) return;
+    setOpen(true);
+    create(make);
+    setTimeout(() => box.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const set = (patch) => setDraft((d) => ({ ...d, ...patch }));
   const setGram = (i, g) => set({ items: draft.items.map((it, j) => (j === i ? [it[0], Math.max(0, Number(g) || 0)] : it)) });
   const removeItem = (i) => set({ items: draft.items.filter((_, j) => j !== i) });
@@ -54,7 +64,7 @@ export default function RecipeMaker({ onAdded }) {
   const grouped = CATEGORY_ORDER.map((c) => [c, INGREDIENT_OPTIONS.filter((o) => o.cat === c)]);
 
   return (
-    <div className="maker">
+    <div className="maker" ref={box}>
       <button className="btn full-narrow" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
         ✏️ 나의 메뉴 추가 {open ? '▲' : '▼'}
       </button>

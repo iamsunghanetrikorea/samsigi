@@ -67,4 +67,8 @@ export const ING_PHOTOS = {
   "soft_tofu": {"title": "File:Sun-dubu 8.jpg", "page": "https://commons.wikimedia.org/wiki/File:Sun-dubu_8.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Scudsvlad"},
   "cabbage": {"title": "File:Cabbage in a stack.jpg", "page": "https://commons.wikimedia.org/wiki/File:Cabbage_in_a_stack.jpg", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en", "artist": "Jeffery Martin"},
   "flatfish": {"title": "File:Pleuronectes platessa.jpg", "page": "https://commons.wikimedia.org/wiki/File:Pleuronectes_platessa.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Hans Hillewaert"},
+  "x_tteok": {"title": "File:Garae-tteok.jpg", "page": "https://commons.wikimedia.org/wiki/File:Garae-tteok.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Sulkkun"},
+  "x_burger": {"title": "File:NCI Visuals Food Hamburger.jpg", "page": "https://commons.wikimedia.org/wiki/File:NCI_Visuals_Food_Hamburger.jpg", "license": "Public domain", "licenseUrl": "", "artist": "Len Rizzi (photographer)"},
+  "x_chueotang": {"title": "File:Chueo-tang 1.jpg", "page": "https://commons.wikimedia.org/wiki/File:Chueo-tang_1.jpg", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "artist": "chomjong"},
+  "x_sushi": {"title": "File:Nigirizushi at Luckiefun's Redi in June 2024.jpg", "page": "https://commons.wikimedia.org/wiki/File:Nigirizushi_at_Luckiefun%27s_Redi_in_June_2024.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "JIP"},
 };

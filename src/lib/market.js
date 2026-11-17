@@ -9,14 +9,39 @@ export const isBasic = (id) => ING[id]?.cat === '양념' || ['broth', 'rice', 'm
 
 const MINOR = new Set(['onion', 'green_onion', 'garlic']);
 
-export const PICK_CATS = CATEGORY_ORDER.filter((c) => c !== '양념');
+export const PICK_CATS = [...CATEGORY_ORDER.filter((c) => c !== '양념'), '기타'];
 export const CAT_LABEL = { 곡류: '곡류·면' };
-export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫' };
+export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫', 기타: '🍽️' };
 
 // 화면에 보일 짧은 이름: '국수(삶은 것)' → '국수', '버섯(느타리·표고)' → '버섯'
 export const shortName = (name) => name.replace(/\s*\(.*?\)\s*/g, '').trim();
 
 export const PICK_ITEMS = INGREDIENTS.filter((i) => !isBasic(i.id) && PICK_CATS.includes(i.cat) && !['panko', 'flour'].includes(i.id));
+
+// '기타' 분류: 식재료 DB에는 없지만 고를 수 있는 음식. ids는 해당 식재료, keys는 메뉴 이름에서 찾을 낱말
+export const PICK_EXTRA = [
+  { id: 'x_tteok', name: '떡', cat: '기타', ids: ['rice_cake'], keys: ['떡'] },
+  { id: 'x_burger', name: '햄버거', cat: '기타', ids: [], keys: ['햄버거', '버거'] },
+  { id: 'x_chueotang', name: '추어탕', cat: '기타', ids: [], keys: ['추어탕', '추어'] },
+  { id: 'x_sushi', name: '쓰시', cat: '기타', ids: [], keys: ['초밥', '스시', '쓰시'] },
+];
+export const EXTRA_BY = Object.fromEntries(PICK_EXTRA.map((x) => [x.id, x]));
+
+// 고른 '기타' 음식·사용자 재료를 [{name, ids, keys}]로 풀어 줌
+function pickedWords(picked, custom) {
+  const out = [];
+  for (const id of picked) {
+    if (EXTRA_BY[id]) { out.push(EXTRA_BY[id]); continue; }
+    const c = custom.find((x) => x.id === id);
+    if (c) out.push({ name: c.name, ids: ingredientIdsFromName(c.name), keys: [c.name] });
+  }
+  return out;
+}
+
+// 레시피 모음에 아직 없는 음식(예: 햄버거) — 결과 화면에서 '레시피 만들기'를 권함
+export function dishesWithoutRecipe(picked, custom) {
+  return pickedWords(picked, custom).filter((w) => !w.ids.length && !RECIPES.some((r) => w.keys.some((k) => r.title.includes(k)))).map((w) => w.name);
+}
 
 // 사용자가 추가한 재료 이름을 식재료 DB와 맞춰 봄 (같은 이름이면 그 재료로 처리)
 export function matchIngredient(name) {
@@ -25,18 +50,11 @@ export function matchIngredient(name) {
   return same?.id || null;
 }
 
-// picked: 고른 id 목록(기본 재료 id 또는 'c_…' 사용자 재료), custom: [{id, name, cat}]
+// picked: 고른 id 목록(식재료 id, 'x_…' 기타 음식, 'c_…' 사용자 재료), custom: [{id, name, cat}]
 export function recommend(picked, custom, profile, limit = 12) {
-  const have = new Set();
-  const words = [];
-  for (const id of picked) {
-    if (ING[id]) { have.add(id); continue; }
-    const c = custom.find((x) => x.id === id);
-    if (!c) continue;
-    const ids = ingredientIdsFromName(c.name);
-    ids.forEach((x) => have.add(x));
-    words.push({ name: c.name, ids });
-  }
+  const have = new Set(picked.filter((id) => ING[id]));
+  const words = pickedWords(picked, custom);
+  words.forEach((w) => w.ids.forEach((x) => have.add(x)));
   if (!have.size && !words.length) return [];
 
   const out = [];
@@ -55,7 +73,7 @@ export function recommend(picked, custom, profile, limit = 12) {
       else need.push({ id, g, name: shortName(ING[id].name) });
     }
     // DB에 없는 사용자 재료는 메뉴 이름에 들어 있으면 쓰는 것으로 봄
-    for (const w of words) if (!w.ids.length && r.title.includes(w.name)) used.push({ id: null, name: w.name });
+    for (const w of words) if (!w.ids.length && w.keys.some((k) => r.title.includes(k))) used.push({ id: null, name: w.name });
     if (!used.length) continue;
     const time = (r.prep || 0) + (r.cook || 0);
     // 고른 재료를 많이 쓰고, 더 살 재료가 적고, 빨리·쉽게 만드는 메뉴가 위로 (파·양파·마늘은 덜 따짐)
