@@ -275,7 +275,7 @@ function Result() {
       <section className="card">
         <div className="row between wrap">
           <h2>고른 재료 {names.length}가지</h2>
-          <button className="btn small ghost" onClick={() => go('/shopping')}>← 재료 다시 고르기</button>
+          <button className="btn ghost repick-btn" onClick={() => go('/shopping')}>← 재료 다시 고르기</button>
         </div>
         <div className="chips">{names.map((n) => <span key={n} className="tag-have">{n}</span>)}</div>
       </section>
