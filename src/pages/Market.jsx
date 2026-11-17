@@ -79,6 +79,17 @@ function Picker() {
         })}
       </div>
 
+      <div className="pick-bar no-print" role="region" aria-label="고른 재료">
+        <div className="pick-box">
+          <div className="pick-sum">
+            <b>{names.length}개 선택</b>
+            <span className="pick-names">{names.length ? names.join(', ') : '사진을 눌러 재료를 골라 주세요'}</span>
+          </div>
+          {names.length > 0 && <button className="btn small ghost" onClick={() => set((x) => ({ ...x, picked: [] }))}>모두 해제</button>}
+        </div>
+        <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피 추천 보기</button>
+      </div>
+
       <AddIngredient onAdd={(name, cat) => {
         const same = matchIngredient(name);
         if (same) {
@@ -91,15 +102,6 @@ function Picker() {
         set((x) => ({ ...x, custom: [...x.custom, { id, name, cat }], picked: [...x.picked, id] }));
         notify(`‘${name}’ 재료를 추가하고 골라 두었어요`);
       }} />
-
-      <div className="pick-bar no-print" role="region" aria-label="고른 재료">
-        <div className="pick-sum">
-          <b>{names.length}개 선택</b>
-          <span className="pick-names">{names.length ? names.join(', ') : '사진을 눌러 재료를 골라 주세요'}</span>
-        </div>
-        {names.length > 0 && <button className="btn small ghost" onClick={() => set((x) => ({ ...x, picked: [] }))}>모두 해제</button>}
-        <button className="btn primary" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피 추천 보기</button>
-      </div>
     </>
   );
 }
