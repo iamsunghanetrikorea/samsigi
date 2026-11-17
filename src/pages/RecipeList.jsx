@@ -76,7 +76,7 @@ export default function RecipeList() {
   return (
     <div className="stack">
       <h1>레시피 모음</h1>
-      <p className="recipe-hint">아래 메뉴를 선택하면 레시피 추천</p>
+      <p className="recipe-hint">아래 메뉴사진을 선택하면 관련 레시피 추천</p>
       <section className="card update-card find-card">
         <div className="chips find-chips" role="group" aria-label="분류">
           {FILTERS.filter(([c]) => !hiddenPics.includes(c)).map(([c]) => (
@@ -102,7 +102,7 @@ export default function RecipeList() {
             setCat(id); setMeal('all');
             notify(`‘${name}’ 메뉴를 추가했어요`);
           }} />
-        <div className="chips">
+        <div className="chips hide-m">
           <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}>♥ 즐겨찾기 메뉴리스트 <span className="fav-n">{state.profile.favorites.length}</span></button>
         </div>
         <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
