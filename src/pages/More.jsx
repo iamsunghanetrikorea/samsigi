@@ -5,8 +5,8 @@ export default function More({ route }) {
     <div className="stack">
       <h1>더보기</h1>
       <div className="quick">
+        <button className="tile" onClick={() => go('/plan')}><span aria-hidden>📅</span>식단 계획</button>
         <button className="tile" onClick={() => go('/stats')}><span aria-hidden>📊</span>영양 통계</button>
-        <button className="tile" onClick={() => go('/shopping')}><span aria-hidden>🛒</span>장보기</button>
         <button className="tile" onClick={() => go('/settings')}><span aria-hidden>⚙️</span>설정·백업</button>
         <button className="tile" onClick={() => go('/help')}><span aria-hidden>❓</span>사용 안내</button>
       </div>
@@ -30,7 +30,7 @@ function Help({ short }) {
     <section className="card help">
       <h2>사용 안내</h2>
       <h3>1. 식단 만들기</h3>
-      <p>‘식단’ 화면에서 <b>이 주 식단 만들기</b>를 누르면 7일 21끼가, 월간 보기에서는 그 달 날짜 수만큼 식단이 만들어집니다.</p>
+      <p>‘식단 계획’ 화면(휴대폰은 ‘더보기’ 안)에서 <b>이 주 식단 만들기</b>를 누르면 7일 21끼가, 월간 보기에서는 그 달 날짜 수만큼 식단이 만들어집니다.</p>
       <h3>2. 메뉴 바꾸기·고정</h3>
       <p>각 끼니의 <b>바꾸기</b>로 다른 추천 메뉴를 고를 수 있어요. 마음에 드는 끼니는 <b>고정</b>하면 다시 만들어도 바뀌지 않아요. ‘더보기’에서 매주 같은 요일에 고정할 수도 있어요.</p>
       <h3>3. 레시피</h3>

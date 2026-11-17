@@ -27,13 +27,12 @@ const SIDE_NAV = [
 ];
 const TAB_NAV = [
   { path: '/', label: '홈', icon: '🏠' },
-  { path: '/plan', label: '식단', icon: '📅' },
   { path: '/recipes', label: '레시피', icon: '🍴' },
   { path: '/shopping', label: '장보기', icon: '🛒' },
   { path: '/eat-out', label: '식당', icon: '📍' },
   { path: '/more', label: '더보기', icon: '☰' },
 ];
-const MORE_PATHS = ['/more', '/stats', '/settings', '/help'];
+const MORE_PATHS = ['/more', '/plan', '/stats', '/settings', '/help'];
 const FONT_STEPS = [18, 20, 22, 24, 26];
 
 export default function App() {
