@@ -203,7 +203,7 @@ function AddIngredient({ onAdd, custom = [], onRemove }) {
   const google = `https://www.google.com/search?udm=2&q=${encodeURIComponent(name.trim())}`;
   return (
     <div className="card ing-add no-print">
-      <button type="button" className="btn soft ing-add-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>신규재료 입력 <span aria-hidden>{open ? '▲' : '▼'}</span></button>
+      <button type="button" className="btn soft ing-add-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>장보기 재료 추가 입력 <span aria-hidden>{open ? '▲' : '▼'}</span></button>
       {open && (
         <form className="ing-add-form" onSubmit={submit}>
           <div className="row wrap">

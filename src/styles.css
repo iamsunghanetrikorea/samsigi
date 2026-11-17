@@ -678,7 +678,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .hide-m { display: none; }
 }
 
-/* 신규재료 입력: 사진 올리기 */
+/* 장보기 재료 추가 입력: 사진 올리기 */
 .ing-add-form { display: flex; flex-direction: column; gap: .6rem; width: 100%; }
 .ing-add-photo { display: flex; align-items: flex-start; gap: .7rem; }
 .ing-add-btns { display: flex; flex-direction: column; gap: .4rem; align-items: stretch; }
@@ -726,7 +726,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .maker-draft .row > .btn { flex: none; white-space: nowrap; }
 }
 
-/* 즐겨찾기 메뉴리스트·신규재료 입력 버튼: 가로 폭 가득 */
+/* 즐겨찾기 메뉴리스트·장보기 재료 추가 입력 버튼: 가로 폭 가득 */
 .chip.fav-chip { width: 100%; justify-content: center; }
 .ing-add .ing-add-toggle { width: 100%; justify-content: center; }
 .repick-btn { flex: 1 1 100%; width: 100%; justify-content: center; }
