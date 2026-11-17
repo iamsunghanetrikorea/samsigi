@@ -15,7 +15,8 @@ export default function Settings() {
 
   const exportJSON = () => {
     const data = { app: 'samsigi', version: 1, exportedAt: new Date().toISOString(), ...state };
-    download(`건강한세끼_백업_${today()}.json`, JSON.stringify(data, null, 2), 'application/json');
+    download(`삼식이家_레시피백업_${today()}.json`, JSON.stringify(data, null, 2), 'application/json');
+    notify('지금 저장된 레시피·식단을 백업 파일로 저장했어요');
   };
   const importJSON = async (e) => {
     const f = e.target.files?.[0];
@@ -24,7 +25,7 @@ export default function Settings() {
       const data = JSON.parse(await f.text());
       if (data.app !== 'samsigi' || !data.profile) throw new Error('형식 오류');
       replaceAll(data);
-      notify('백업을 불러왔어요');
+      notify('백업레시피를 불러왔어요');
     } catch { notify('백업 파일을 읽을 수 없어요. 이 앱에서 내보낸 파일인지 확인해 주세요.'); }
     e.target.value = '';
   };
@@ -59,8 +60,8 @@ export default function Settings() {
         <h2>데이터 백업·삭제</h2>
         <p className="muted small">모든 정보는 이 기기(브라우저)에만 저장됩니다. 기기를 바꾸거나 브라우저 데이터를 지우기 전에 백업해 두세요.</p>
         <div className="row wrap">
-          <button className="btn" onClick={exportJSON}>백업 파일 내보내기</button>
-          <button className="btn ghost" onClick={() => fileRef.current?.click()}>백업 불러오기</button>
+          <button className="btn" onClick={exportJSON}>레시피백업파일 저장하기</button>
+          <button className="btn ghost" onClick={() => fileRef.current?.click()}>백업레시피 불러오기</button>
           <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={importJSON} />
         </div>
         {state.consent.location && <button className="btn ghost" onClick={() => update('consent', (c) => ({ ...c, location: false }))}>위치 정보 전송 동의 철회</button>}
