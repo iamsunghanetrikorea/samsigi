@@ -235,7 +235,7 @@ export default function RecipePage({ id, query }) {
       </section>
 
       <div className="row wrap no-print">
-        {linked && <button className="btn" onClick={() => go(`/plan?view=week&d=${date}`)}>식단으로 돌아가기</button>}
+        {linked && <button className="btn back-plan" onClick={() => go(`/plan?view=week&d=${date}`)}>식단으로 돌아가기</button>}
       </div>
     </article>
   );

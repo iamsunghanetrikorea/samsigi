@@ -747,3 +747,11 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .find-pic, .ing-tile { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 .find-pic img, .ing-tile img { -webkit-user-drag: none; pointer-events: none; }
 .long-help { margin: 0; }
+
+/* 이번 달 식단 한눈에 보기 제목(연·월 포함), 식단으로 돌아가기, 안내 문구: 모바일에서 한 줄·가로 꽉 차게 */
+.mm-h .mm-ym { font-size: .75em; font-weight: 600; }
+@media (max-width: 640px) {
+  .panel h2.mm-h { white-space: nowrap; gap: .25rem; font-size: min(1.05rem, 4.4vw); letter-spacing: -.03em; }
+  .back-plan { flex: 1 1 100%; width: 100%; justify-content: center; }
+  .recipe-hint { white-space: nowrap; font-size: min(.75rem, 3.3vw); letter-spacing: -.04em; }
+}

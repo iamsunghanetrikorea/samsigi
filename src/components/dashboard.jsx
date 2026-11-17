@@ -236,7 +236,7 @@ export function MonthMini() {
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
   return (
     <section className="panel">
-      <h2><span aria-hidden>📅</span> 이번 달 식단 한눈에 보기 <span className="muted small">({fmtMonth(ym).split(' ')[1]})</span></h2>
+      <h2 className="mm-h"><span aria-hidden>📅</span> 이번 달 식단 한눈에 보기 <span className="muted mm-ym">({fmtMonth(ym)})</span></h2>
       <table className="mm">
         <thead><tr>{['월', '화', '수', '목', '금', '토', '일'].map((w, i) => <th key={w} className={i === 5 ? 'sat' : i === 6 ? 'sun' : ''}>{w}</th>)}</tr></thead>
         <tbody>
