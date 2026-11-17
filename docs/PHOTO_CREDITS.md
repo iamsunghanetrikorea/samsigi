@@ -104,7 +104,7 @@
 | 감자 | [20251223 102610 04 potatoes for sale.jpg](https://commons.wikimedia.org/wiki/File:20251223_102610_04_potatoes_for_sale.jpg) | Isaackahoto | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 오징어 | [Todarodes pacificus (white background).jpg](https://commons.wikimedia.org/wiki/File:Todarodes_pacificus_(white_background).jpg) | Chiswick Chap | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 우유 | [Glas melk.jpg](https://commons.wikimedia.org/wiki/File:Glas_melk.jpg) | Amarant | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 플레인 요거트 | [Joghurt.jpg](https://commons.wikimedia.org/wiki/File:Joghurt.jpg) | Rainer Zenz (추정) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
+| 플레인 요거트 | [Turkish strained yogurt.jpg](https://commons.wikimedia.org/wiki/File:Turkish_strained_yogurt.jpg) | Takeaway | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 슬라이스 치즈 | [White cheddar cheese sliced CNE.jpg](https://commons.wikimedia.org/wiki/File:White_cheddar_cheese_sliced_CNE.jpg) | CNEcija12345 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 배추김치 | [Korean cuisine-Kimchi-08.jpg](https://commons.wikimedia.org/wiki/File:Korean_cuisine-Kimchi-08.jpg) | Jeremy Keith | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 단무지 | [Takuan by mdid.jpg](https://commons.wikimedia.org/wiki/File:Takuan_by_mdid.jpg) | mdid | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |

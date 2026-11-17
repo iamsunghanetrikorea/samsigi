@@ -62,7 +62,7 @@ function Picker() {
                       <label>
                         <input type="checkbox" className="ing-check" checked={on} onChange={() => toggle(i.id)} />
                         <span className="ing-ph">
-                          {ING_PHOTOS[i.id] ? <img src={`./photos/ing/${i.id}.webp`} alt="" loading="lazy" decoding="async" /> : i.photo ? <img src={i.photo} alt="" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}
+                          {ING_PHOTOS[i.id] ? <img src={`./photos/ing/${i.id}.webp${ING_PHOTOS[i.id].v ? `?v=${ING_PHOTOS[i.id].v}` : ''}`} alt="" loading="lazy" decoding="async" /> : i.photo ? <img src={i.photo} alt="" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}
                         </span>
                         <span className="ing-name">{name}</span>
                       </label>
