@@ -99,6 +99,7 @@
 | 마른 미역 | [Gedroogde Wakame.jpg](https://commons.wikimedia.org/wiki/File:Gedroogde_Wakame.jpg) | Denkhenk | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 김 | [Nori.jpg](https://commons.wikimedia.org/wiki/File:Nori.jpg) | Alice Wiegand, (Lyzzy) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
 | 달걀 | [Eggs Chicken.jpg](https://commons.wikimedia.org/wiki/File:Eggs_Chicken.jpg) | safaritravelplus | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 우유 | [Glas melk.jpg](https://commons.wikimedia.org/wiki/File:Glas_melk.jpg) | Amarant | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 플레인 요거트 | [Joghurt.jpg](https://commons.wikimedia.org/wiki/File:Joghurt.jpg) | Rainer Zenz (추정) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
 | 슬라이스 치즈 | [White cheddar cheese sliced CNE.jpg](https://commons.wikimedia.org/wiki/File:White_cheddar_cheese_sliced_CNE.jpg) | CNEcija12345 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 배추김치 | [Korean cuisine-Kimchi-08.jpg](https://commons.wikimedia.org/wiki/File:Korean_cuisine-Kimchi-08.jpg) | Jeremy Keith | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
