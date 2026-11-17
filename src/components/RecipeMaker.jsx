@@ -112,7 +112,7 @@ export function RecipeEditor({ initial, onSave, onCancel, saveLabel = '저장', 
           <input value={draft.title} onChange={(e) => set({ title: e.target.value })} />
         </label>
       </div>
-      <div className="row wrap">
+      <div className="row wrap maker-fields">
         <label className="field" style={{ flex: '1 1 8rem' }}><span>분류</span>
           <select value={draft.category} onChange={(e) => set({ category: e.target.value })}>
             {CATEGORIES.map((c) => <option key={c}>{c}</option>)}

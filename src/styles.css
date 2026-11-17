@@ -707,3 +707,21 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .row > .pair-btns { flex: 1 1 100%; }
   .pair-btns .btn { flex: 1 1 0; min-width: 0; padding-left: .3rem; padding-right: .3rem; white-space: nowrap; font-size: .9rem; }
 }
+
+/* 레시피 편집 칸(메뉴수정·나의 메뉴 추가): 화면 폭을 넘지 않게 */
+.choice-row > .edit-box { min-width: 0; }
+.maker-draft { min-width: 0; }
+.maker-draft input, .maker-draft select, .maker-draft textarea { max-width: 100%; min-width: 0; }
+.maker-draft .row > select { flex: 1 1 auto; }
+@media (max-width: 640px) {
+  /* 메뉴수정 칸은 휴대폰 가로 폭을 꽉 채움 */
+  .choice-row > .edit-box { margin: 0 -16px; padding: .4rem; border-radius: 0; border-left: 0; border-right: 0; }
+  .edit-box .maker-draft { padding: .6rem; border: 0; }
+  /* 분류·준비·조리 한 줄, 끼니 네 칸 한 줄 */
+  .maker-fields { flex-wrap: nowrap; gap: .4rem; }
+  .maker-fields > .field { flex: 1 1 0 !important; min-width: 0; }
+  .maker-meals { flex-wrap: nowrap; gap: 0 .6rem; }
+  .maker-meals .check { gap: .3rem; white-space: nowrap; }
+  .maker-items li > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+  .maker-draft .row > .btn { flex: none; white-space: nowrap; }
+}
