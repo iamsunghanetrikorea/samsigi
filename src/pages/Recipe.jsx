@@ -127,8 +127,11 @@ export default function RecipePage({ id, query }) {
       {warnAllergy.length > 0 && <p className="warn">⚠️ 알레르기 성분이 들어 있어요: {warnAllergy.join(', ')}</p>}
 
       <div className="row wrap no-print">
-        <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}>{fav ? '♥ 즐겨찾기됨' : '♡ 즐겨찾기'}</button>
-        <MyTableButton id={id} />
+        {/* 즐겨찾기·후보요리는 휴대폰에서도 한 줄에 나란히 */}
+        <div className="pair-btns">
+          <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}>{fav ? '♥ 즐겨찾기됨' : '♡ 즐겨찾기'}</button>
+          <MyTableButton id={id} />
+        </div>
         {canSpeak && <button className="btn ghost" onClick={readAll}>🔊 조리법 읽어 주기</button>}
         <button className="btn ghost" onClick={() => window.print()}>인쇄</button>
         <button className="btn soft full-narrow" onClick={() => setSending(true)}>📤 GPT로 보내기</button>

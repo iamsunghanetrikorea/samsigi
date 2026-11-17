@@ -700,3 +700,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .web-pick:hover, .web-pick:focus-visible { border-color: var(--primary); }
 .web-pick img { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (max-width: 640px) { .web-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* 레시피 화면: 즐겨찾기·후보요리 버튼 한 줄 */
+.pair-btns { display: flex; gap: .5rem; }
+@media (max-width: 640px) {
+  .row > .pair-btns { flex: 1 1 100%; }
+  .pair-btns .btn { flex: 1 1 0; min-width: 0; padding-left: .3rem; padding-right: .3rem; white-space: nowrap; font-size: .9rem; }
+}
