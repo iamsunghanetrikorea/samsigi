@@ -725,3 +725,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .maker-items li > span:first-child { min-width: 0; overflow-wrap: anywhere; }
   .maker-draft .row > .btn { flex: none; white-space: nowrap; }
 }
+
+/* 즐겨찾기 메뉴리스트·신규재료 입력 버튼: 가로 폭 가득 */
+.chip.fav-chip { width: 100%; justify-content: center; }
+.ing-add .ing-add-toggle { width: 100%; justify-content: center; }
