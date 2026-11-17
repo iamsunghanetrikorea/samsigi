@@ -64,4 +64,5 @@ export const ING_PHOTOS = {
   "squid": {"title": "File:Todarodes pacificus (white background).jpg", "page": "https://commons.wikimedia.org/wiki/File:Todarodes_pacificus_(white_background).jpg", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "artist": "Chiswick Chap"},
   "potato": {"title": "File:20251223 102610 04 potatoes for sale.jpg", "page": "https://commons.wikimedia.org/wiki/File:20251223_102610_04_potatoes_for_sale.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Isaackahoto"},
   "chives": {"title": "File:Chinese chives (1).jpg", "page": "https://commons.wikimedia.org/wiki/File:Chinese_chives_(1).jpg", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en", "artist": "Fumikas Sagisavas"},
+  "soft_tofu": {"title": "File:Sun-dubu 8.jpg", "page": "https://commons.wikimedia.org/wiki/File:Sun-dubu_8.jpg", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "Scudsvlad"},
 };
