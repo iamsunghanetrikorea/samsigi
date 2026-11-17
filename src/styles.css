@@ -660,7 +660,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .hide-m { display: none; }
 }
 
-/* 신규재료추가: 사진 올리기 */
+/* 신규재료 입력: 사진 올리기 */
 .ing-add-form { display: flex; flex-direction: column; gap: .6rem; width: 100%; }
 .ing-add-photo { align-items: center; }
 .ing-add-prev { width: 5rem; flex: none; }

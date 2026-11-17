@@ -98,7 +98,7 @@ export default function Home() {
           <button className="btn" type="submit">기록</button>
         </form>
         <div className="chips">
-          {[['우유 1잔', 130], ['사과 반 개', 70], ['바나나 1개', 105], ['플레인 요거트', 90], ['삶은 달걀', 70], ['믹스커피', 50]].map(([n, k]) => (
+          {[['우유 1잔', 130], ['사과 반 개', 70], ['바나나 1개', 105], ['요거트', 90], ['삶은 계란', 70], ['믹스커피', 50]].map(([n, k]) => (
             <button key={n} className="chip" onClick={() => update('snacks', (x) => ({ ...x, [d]: [...(x[d] || []), { name: n, kcal: k }] }))}>+ {n}</button>
           ))}
         </div>

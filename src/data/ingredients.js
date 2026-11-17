@@ -20,7 +20,7 @@ export const ALLERGENS = [
   '복숭아', '토마토', '호두', '닭고기', '쇠고기', '오징어', '조개류', '잣', '생선',
 ];
 
-export const CATEGORY_ORDER = ['곡류', '채소', '버섯', '과일', '두부·콩', '육류', '수산물', '달걀·유제품', '김치·가공', '양념'];
+export const CATEGORY_ORDER = ['곡류', '채소', '버섯', '과일', '두부·콩', '육류', '수산물', '계란·유제품', '김치·가공', '양념'];
 
 const I = (id, name, cat, [kcal, carb, protein, fat, sodium], opt = {}) => ({
   id, name, cat, kcal, carb, protein, fat, sodium,
@@ -107,11 +107,11 @@ export const INGREDIENTS = [
   I('laver', '김(구운 것)', '수산물', [165, 40, 35, 1, 120], { price: 8000, storage: 60, piece: { label: '장', g: 2 } }),
 
   // 달걀·유제품
-  I('egg', '달걀', '달걀·유제품', [140, 0.7, 12.4, 9.5, 140], { price: 600, storage: 21, allergens: ['난류'], piece: { label: '개', g: 50 } }),
-  I('milk', '우유', '달걀·유제품', [65, 4.8, 3.2, 3.5, 40], { price: 300, storage: 7, unit: 'mL', allergens: ['우유'] }),
-  I('yogurt', '플레인 요거트', '달걀·유제품', [60, 5, 4, 3, 45], { price: 600, storage: 10, allergens: ['우유'] }),
+  I('egg', '계란', '계란·유제품', [140, 0.7, 12.4, 9.5, 140], { price: 600, storage: 21, allergens: ['난류'], piece: { label: '개', g: 50 } }),
+  I('milk', '우유', '계란·유제품', [65, 4.8, 3.2, 3.5, 40], { price: 300, storage: 7, unit: 'mL', allergens: ['우유'] }),
+  I('yogurt', '요거트', '계란·유제품', [60, 5, 4, 3, 45], { price: 600, storage: 10, allergens: ['우유'] }),
 
-  I('cheese', '슬라이스 치즈', '달걀·유제품', [320, 3, 20, 25, 1200], { price: 1800, storage: 30, allergens: ['우유'], piece: { label: '장', g: 20 } }),
+  I('cheese', '치즈', '계란·유제품', [320, 3, 20, 25, 1200], { price: 1800, storage: 30, allergens: ['우유'], piece: { label: '장', g: 20 } }),
 
   // 김치·가공
   I('kimchi', '배추김치', '김치·가공', [25, 4, 2, 0.5, 650], { price: 1000, storage: 30 }),

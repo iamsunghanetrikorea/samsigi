@@ -11,7 +11,7 @@ const MINOR = new Set(['onion', 'green_onion', 'garlic']);
 
 export const PICK_CATS = CATEGORY_ORDER.filter((c) => c !== '양념');
 export const CAT_LABEL = { 곡류: '곡류·면' };
-export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '달걀·유제품': '🥚', '김치·가공': '🥫' };
+export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫' };
 
 // 화면에 보일 짧은 이름: '국수(삶은 것)' → '국수', '버섯(느타리·표고)' → '버섯'
 export const shortName = (name) => name.replace(/\s*\(.*?\)\s*/g, '').trim();
@@ -20,7 +20,7 @@ export const PICK_ITEMS = INGREDIENTS.filter((i) => !isBasic(i.id) && PICK_CATS.
 
 // 사용자가 추가한 재료 이름을 식재료 DB와 맞춰 봄 (같은 이름이면 그 재료로 처리)
 export function matchIngredient(name) {
-  const n = name.replace(/\s+/g, '').replace(/계란/g, '달걀');
+  const n = name.replace(/\s+/g, '').replace(/달걀/g, '계란');
   const same = PICK_ITEMS.find((i) => shortName(i.name).replace(/\s+/g, '') === n || i.name.replace(/\s+/g, '') === n);
   return same?.id || null;
 }

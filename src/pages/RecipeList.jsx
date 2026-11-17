@@ -52,7 +52,7 @@ export default function RecipeList() {
   const leftovers = leftoverRecipes(state.pantry);
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
     && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : FILTER_BY[cat](r)))
-    && (!q || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q.replace(/계란/g, '달걀'))))
+    && (!q || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q.replace(/달걀/g, '계란'))))
     && (!onlyOk || !excludeReason(r, state.profile)));
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
 

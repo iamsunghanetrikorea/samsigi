@@ -13,7 +13,8 @@ export function excludeReason(r, p) {
   const hit = allergens.find((a) => (p.allergies || []).includes(a));
   if (hit) return `알레르기(${hit})`;
   const ex = (p.exclusions || []).map((s) => s.trim()).filter(Boolean);
-  const exHit = ex.find((e) => r.title.includes(e) || r.items.some(([id]) => ING[id]?.name.includes(e)));
+  const norm = (e) => e.replace(/달걀/g, '계란'); // 재료 이름이 '계란'으로 바뀌어도 예전 '달걀' 제외 설정이 그대로 통하게
+  const exHit = ex.find((e) => r.title.includes(e) || r.title.includes(norm(e)) || r.items.some(([id]) => ING[id]?.name.includes(norm(e))));
   if (exHit) return `제외 재료(${exHit})`;
   if (r.difficulty > (p.difficulty || 3)) return '조리 난이도';
   if (r.prep + r.cook > (p.cookTime || 999)) return '조리 시간';

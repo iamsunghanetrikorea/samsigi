@@ -87,7 +87,7 @@ function Picker() {
           </div>
           {names.length > 0 && <button className="btn small ghost" onClick={() => set((x) => ({ ...x, picked: [] }))}>모두 해제</button>}
         </div>
-        <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피 추천 보기</button>
+        <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피추천하세요</button>
       </div>
 
       <AddIngredient onAdd={(name, cat, photo) => {
@@ -145,7 +145,7 @@ function AddIngredient({ onAdd }) {
   };
   return (
     <div className="card ing-add no-print">
-      <button type="button" className="btn soft" aria-expanded={open} onClick={() => setOpen((o) => !o)}>＋ 신규재료추가</button>
+      <button type="button" className="btn soft" aria-expanded={open} onClick={() => setOpen((o) => !o)}>＋ 신규재료 입력</button>
       {open && (
         <form className="ing-add-form" onSubmit={submit}>
           <div className="row wrap">
