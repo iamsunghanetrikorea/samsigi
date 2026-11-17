@@ -642,3 +642,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .rec-list { grid-template-columns: 1fr; }
   .rec-card .plate.lg { width: 72px; height: 72px; }
 }
+
+/* 모바일 전용·모바일에서 숨김 */
+.only-m { display: none; }
+@media (max-width: 640px) {
+  .only-m { display: inline; }
+  .hide-m { display: none; }
+}

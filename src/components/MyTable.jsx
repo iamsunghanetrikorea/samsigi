@@ -31,7 +31,7 @@ export function MyTablePanel() {
     <section className="panel my-table-panel" aria-labelledby="my-table-h">
       <div className="row between wrap">
         <h2 id="my-table-h"><span aria-hidden>🍚</span> 후보요리</h2>
-        {list.length > 0 && <button className="btn small ghost" onClick={() => update('myTable', [])}>모두 치우기</button>}
+        {list.length > 0 && <button className="btn small ghost" onClick={() => update('myTable', [])}><span className="hide-m">모두 치우기</span><span className="only-m">메뉴비우기</span></button>}
       </div>
       {list.length === 0 ? (
         <div className="my-table empty">
@@ -51,7 +51,7 @@ export function MyTablePanel() {
               </li>
             ))}
           </ul>
-          <p className="muted small">{list.length}가지 · 모두 1인분씩 드시면 약 {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · 나트륨 {round(n.sodium)}mg (추정치). 메뉴를 누르면 레시피가 열려요.</p>
+          <p className="muted small hide-m">{list.length}가지 · 모두 1인분씩 드시면 약 {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · 나트륨 {round(n.sodium)}mg (추정치). 메뉴를 누르면 레시피가 열려요.</p>
         </>
       )}
     </section>
