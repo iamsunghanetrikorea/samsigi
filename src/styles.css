@@ -670,3 +670,12 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 메뉴 번호 */
 .menu-no { display: inline-block; min-width: 2.1em; margin-right: .35rem; padding: 0 .4em; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: .8em; font-weight: 800; text-align: center; line-height: 1.6; vertical-align: .1em; }
 .menu-no.big { font-size: .6em; vertical-align: .25em; }
+
+/* 신규재료 입력: 인터넷 찾기 결과 */
+.web-photos { display: flex; flex-direction: column; gap: .5rem; padding: .6rem; border: 1px dashed var(--line); border-radius: 12px; background: var(--surface-2); }
+.web-photos p { margin: 0; }
+.web-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr)); gap: .4rem; }
+.web-pick { appearance: none; display: block; width: 100%; aspect-ratio: 1; padding: 0; border: 3px solid transparent; border-radius: 10px; overflow: hidden; background: var(--surface); cursor: pointer; }
+.web-pick:hover, .web-pick:focus-visible { border-color: var(--primary); }
+.web-pick img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 640px) { .web-grid { grid-template-columns: repeat(3, 1fr); } }

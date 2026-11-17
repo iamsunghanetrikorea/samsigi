@@ -90,7 +90,7 @@ function Picker() {
         <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피추천하세요</button>
       </div>
 
-      <AddIngredient onAdd={(name, cat, photo) => {
+      <AddIngredient onAdd={(name, cat, photo, credit) => {
         const same = matchIngredient(name);
         if (same) {
           set((x) => ({ ...x, picked: x.picked.includes(same) ? x.picked : [...x.picked, same] }));
@@ -99,7 +99,7 @@ function Picker() {
         }
         if (m.custom.some((c) => c.name === name)) { notify(`‘${name}’은(는) 이미 추가했어요`); return; }
         const id = `c_${Date.now().toString(36)}`;
-        set((x) => ({ ...x, custom: [...x.custom, { id, name, cat, ...(photo ? { photo } : {}) }], picked: [...x.picked, id] }));
+        set((x) => ({ ...x, custom: [...x.custom, { id, name, cat, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }], picked: [...x.picked, id] }));
         notify(`‘${name}’ 재료를 추가하고 골라 두었어요`);
       }} />
     </>
@@ -107,21 +107,49 @@ function Picker() {
 }
 
 // 올린 사진을 가운데 정사각으로 잘라 240px JPEG로 줄임 (기기 안에만 저장)
-function shrinkPhoto(file) {
+function shrinkPhoto(src) {
   return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
+    const isFile = typeof src !== 'string';
+    const url = isFile ? URL.createObjectURL(src) : src;
     const img = new Image();
+    if (!isFile) img.crossOrigin = 'anonymous'; // 인터넷 사진도 잘라 저장할 수 있게
+    const done = () => { if (isFile) URL.revokeObjectURL(url); };
     img.onload = () => {
-      const s = Math.min(img.naturalWidth, img.naturalHeight);
-      const c = document.createElement('canvas');
-      c.width = c.height = 240;
-      c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 240, 240);
-      URL.revokeObjectURL(url);
-      resolve(c.toDataURL('image/jpeg', 0.82));
+      try {
+        const s = Math.min(img.naturalWidth, img.naturalHeight);
+        const c = document.createElement('canvas');
+        c.width = c.height = 240;
+        c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, 240, 240);
+        resolve(c.toDataURL('image/jpeg', 0.82));
+      } catch (e) { reject(new Error('이 사진은 가져올 수 없어요')); }
+      done();
     };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('사진을 읽지 못했어요')); };
+    img.onerror = () => { done(); reject(new Error('사진을 읽지 못했어요')); };
     img.src = url;
   });
+}
+
+// 인터넷 찾기: 위키미디어 공용(Wikimedia Commons)에서 자유 이용 사진만 찾음
+const FREE = /^(CC0|Public domain|CC BY(-SA)? [\d.]+)/i;
+const strip = (h) => (h || '').replace(/<[^>]+>/g, '').trim();
+async function searchPhotos(q) {
+  const u = 'https://commons.wikimedia.org/w/api.php?' + new URLSearchParams({
+    origin: '*', action: 'query', format: 'json', generator: 'search', gsrsearch: `${q} filetype:bitmap`,
+    gsrnamespace: '6', gsrlimit: '20', prop: 'imageinfo', iiprop: 'url|extmetadata', iiurlwidth: '320',
+  });
+  const res = await fetch(u);
+  if (!res.ok) throw new Error('인터넷 찾기에 실패했어요');
+  const d = await res.json();
+  return Object.values(d.query?.pages || {})
+    .sort((a, b) => (a.index || 0) - (b.index || 0))
+    .map((p) => {
+      const ii = p.imageinfo?.[0];
+      const m = ii?.extmetadata || {};
+      const license = strip(m.LicenseShortName?.value);
+      return ii && FREE.test(license) ? { thumb: ii.thumburl, page: ii.descriptionurl, license, artist: strip(m.Artist?.value) || '작성자 미상', title: p.title } : null;
+    })
+    .filter(Boolean)
+    .slice(0, 12);
 }
 
 function AddIngredient({ onAdd }) {
@@ -130,19 +158,36 @@ function AddIngredient({ onAdd }) {
   const [name, setName] = useState('');
   const [cat, setCat] = useState('채소');
   const [photo, setPhoto] = useState('');
+  const [credit, setCredit] = useState(null);
+  const [found, setFound] = useState(null); // null: 안 찾음, []: 결과 없음
+  const [busy, setBusy] = useState(false);
   const pick = async (e) => {
     const f = e.target.files?.[0];
     e.target.value = '';
     if (!f) return;
-    try { setPhoto(await shrinkPhoto(f)); } catch (err) { notify(err.message); }
+    try { setPhoto(await shrinkPhoto(f)); setCredit(null); setFound(null); } catch (err) { notify(err.message); }
   };
+  const find = async () => {
+    const n = name.trim();
+    if (!n) { notify('먼저 새 재료 이름을 적어 주세요'); return; }
+    setBusy(true);
+    try { setFound(await searchPhotos(n)); } catch (err) { notify(err.message); setFound([]); }
+    setBusy(false);
+  };
+  const choose = async (r) => {
+    setBusy(true);
+    try { setPhoto(await shrinkPhoto(r.thumb)); setCredit({ page: r.page, license: r.license, artist: r.artist }); setFound(null); } catch (err) { notify(err.message); }
+    setBusy(false);
+  };
+  const clear = () => { setPhoto(''); setCredit(null); };
   const submit = (e) => {
     e.preventDefault();
     const n = name.trim();
     if (!n) { notify('새 재료 이름을 적어 주세요'); return; }
-    onAdd(n, cat, photo);
-    setName(''); setPhoto('');
+    onAdd(n, cat, photo, credit);
+    setName(''); clear(); setFound(null);
   };
+  const google = `https://www.google.com/search?udm=2&q=${encodeURIComponent(name.trim())}`;
   return (
     <div className="card ing-add no-print">
       <button type="button" className="btn soft" aria-expanded={open} onClick={() => setOpen((o) => !o)}>＋ 신규재료 입력</button>
@@ -155,13 +200,33 @@ function AddIngredient({ onAdd }) {
             </select>
           </div>
           <div className="row wrap ing-add-photo">
-            <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt="올린 재료 사진 미리보기" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}</span>
+            <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt="재료 사진 미리보기" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}</span>
             <label className="btn ghost small">
               📷 {photo ? '사진 바꾸기' : '사진 올리기'}
               <input type="file" accept="image/*" className="sr-file" onChange={pick} />
             </label>
-            {photo && <button type="button" className="btn ghost small" onClick={() => setPhoto('')}>사진 빼기</button>}
+            <button type="button" className="btn ghost small" onClick={find} disabled={busy}>🔎 {busy ? '찾는 중…' : '인터넷 찾기'}</button>
+            {photo && <button type="button" className="btn ghost small" onClick={clear}>사진 빼기</button>}
           </div>
+          {credit && <p className="muted small">사진: <a href={credit.page} target="_blank" rel="noopener noreferrer">{credit.artist}</a>, {credit.license} (Wikimedia Commons)</p>}
+          {found && (
+            <div className="web-photos">
+              {found.length ? (
+                <>
+                  <p className="muted small">‘{name.trim()}’ 자유 이용 사진이에요. 마음에 드는 사진을 누르세요.</p>
+                  <ul className="web-grid">
+                    {found.map((r) => (
+                      <li key={r.page}><button type="button" className="web-pick" onClick={() => choose(r)} disabled={busy} aria-label={`${r.title} 고르기`}><img src={r.thumb} alt="" loading="lazy" /></button></li>
+                    ))}
+                  </ul>
+                </>
+              ) : <p className="muted small">자유 이용 사진을 찾지 못했어요. 다른 이름(예: 영어 이름)으로 찾아보시거나, 아래 구글 이미지에서 사진을 저장한 뒤 ‘사진 올리기’로 넣어 주세요.</p>}
+              <div className="row wrap">
+                <a className="btn ghost small" href={google} target="_blank" rel="noopener noreferrer">구글 이미지에서 보기 ↗</a>
+                <button type="button" className="btn ghost small" onClick={() => setFound(null)}>닫기</button>
+              </div>
+            </div>
+          )}
           <button className="btn primary" type="submit">추가</button>
         </form>
       )}
