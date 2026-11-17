@@ -165,7 +165,6 @@ function AiBreakfast({ names }) {
       <h2 id="ai-h">🤖 인공지능 레시피추천</h2>
       <p className="muted small">{names.length ? `고른 재료(${names.join(', ')})로` : '재료를 고르지 않아도'} 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.</p>
       <button type="button" className="btn ai-btn" onClick={ask}>🤖 인공지능 레시피추천</button>
-      <p className="muted small">같은 창에서 구글(google.com, 외부 서비스)로 넘어가요. 다 보신 뒤 ‘뒤로 가기’를 누르면 이 화면으로 돌아와요. 고른 재료 이름만 보내고 프로필·건강정보는 보내지 않아요. 답변은 구글 AI가 만든 것으로 의료적 조언이 아니에요.</p>
     </section>
   );
 }
