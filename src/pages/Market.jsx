@@ -55,7 +55,6 @@ function Picker() {
               <ul className="ing-grid">
                 {items.map((i) => {
                   const on = picked.has(i.id);
-                  const custom = !ING[i.id] && !EXTRA_BY[i.id];
                   const name = ING[i.id] ? shortName(i.name) : i.name;
                   return (
                     <li key={i.id} className={`ing-tile ${on ? 'on' : ''}`}>
@@ -66,10 +65,6 @@ function Picker() {
                         </span>
                         <span className="ing-name">{name}</span>
                       </label>
-                      {custom && (
-                        <button type="button" className="ing-del" aria-label={`${name} 재료 지우기`}
-                          onClick={() => set((x) => ({ ...x, custom: x.custom.filter((c) => c.id !== i.id), picked: x.picked.filter((y) => y !== i.id) }))}>✕</button>
-                      )}
                     </li>
                   );
                 })}
@@ -90,7 +85,9 @@ function Picker() {
         <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피추천하세요</button>
       </div>
 
-      <AddIngredient onAdd={(name, cat, photo, credit) => {
+      <AddIngredient custom={m.custom}
+        onRemove={(id) => set((x) => ({ ...x, custom: x.custom.filter((c) => c.id !== id), picked: x.picked.filter((y) => y !== id) }))}
+        onAdd={(name, cat, photo, credit) => {
         const same = matchIngredient(name);
         if (same) {
           set((x) => ({ ...x, picked: x.picked.includes(same) ? x.picked : [...x.picked, same] }));
@@ -152,7 +149,7 @@ async function searchPhotos(q) {
     .slice(0, 12);
 }
 
-function AddIngredient({ onAdd }) {
+function AddIngredient({ onAdd, custom = [], onRemove }) {
   const { notify } = useStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -199,14 +196,17 @@ function AddIngredient({ onAdd }) {
               {PICK_CATS.map((c) => <option key={c} value={c}>{CAT_LABEL[c] || c}</option>)}
             </select>
           </div>
-          <div className="row wrap ing-add-photo">
+          {/* 왼쪽 사진 미리보기, 오른쪽에 위아래로 '사진 올리기'·'인터넷 찾기' */}
+          <div className="ing-add-photo">
             <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt="재료 사진 미리보기" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}</span>
-            <label className="btn ghost small">
-              📷 {photo ? '사진 바꾸기' : '사진 올리기'}
-              <input type="file" accept="image/*" className="sr-file" onChange={pick} />
-            </label>
-            <button type="button" className="btn ghost small" onClick={find} disabled={busy}>🔎 {busy ? '찾는 중…' : '인터넷 찾기'}</button>
-            {photo && <button type="button" className="btn ghost small" onClick={clear}>사진 빼기</button>}
+            <div className="ing-add-btns">
+              <label className="btn ghost small">
+                📷 {photo ? '사진 바꾸기' : '사진 올리기'}
+                <input type="file" accept="image/*" className="sr-file" onChange={pick} />
+              </label>
+              <button type="button" className="btn ghost small" onClick={find} disabled={busy}>🔎 {busy ? '찾는 중…' : '인터넷 찾기'}</button>
+              {photo && <button type="button" className="btn ghost small" onClick={clear}>사진 빼기</button>}
+            </div>
           </div>
           {credit && <p className="muted small">사진: <a href={credit.page} target="_blank" rel="noopener noreferrer">{credit.artist}</a>, {credit.license} (Wikimedia Commons)</p>}
           {found && (
@@ -228,6 +228,17 @@ function AddIngredient({ onAdd }) {
             </div>
           )}
           <button className="btn primary" type="submit">추가</button>
+          {custom.length > 0 && (
+            <details className="ing-mine">
+              <summary>내가 추가한 재료 {custom.length}가지 관리</summary>
+              <ul className="plain">
+                {custom.map((c) => (
+                  <li key={c.id} className="row between"><span>{c.name} <span className="muted small">({CAT_LABEL[c.cat] || c.cat})</span></span>
+                    <button type="button" className="btn small ghost" onClick={() => onRemove(c.id)}>지우기</button></li>
+                ))}
+              </ul>
+            </details>
+          )}
         </form>
       )}
     </div>

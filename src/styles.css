@@ -673,7 +673,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 
 /* 신규재료 입력: 사진 올리기 */
 .ing-add-form { display: flex; flex-direction: column; gap: .6rem; width: 100%; }
-.ing-add-photo { align-items: center; }
+.ing-add-photo { display: flex; align-items: flex-start; gap: .7rem; }
+.ing-add-btns { display: flex; flex-direction: column; gap: .4rem; align-items: stretch; }
+.ing-add-btns .btn { justify-content: center; }
+.ing-mine summary { cursor: pointer; color: var(--muted); font-size: .9rem; }
 .ing-add-prev { width: 5rem; flex: none; }
 .ing-add-photo label.btn { position: relative; overflow: hidden; cursor: pointer; }
 .sr-file { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0; }
