@@ -6,7 +6,7 @@ import { ING } from '../data/ingredients';
 import { mealItems, sumItems, round } from '../lib/nutrition';
 import { excludeReason } from '../lib/planner';
 import { leftoverRecipes } from '../lib/shopping';
-import { Seg } from '../components/ui';
+import { Seg, longPress } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
 import RecipeMaker, { RecipeEditor } from '../components/RecipeMaker';
@@ -57,6 +57,15 @@ export default function RecipeList() {
   const [onlyOk, setOnlyOk] = useState(true);
   const leftovers = leftoverRecipes(state.pantry);
   const myMenus = state.recipeMenus || [];
+  const hiddenPics = state.recipeHidden || [];
+  // 사진을 길게 누르면 삭제: 내가 추가한 메뉴는 지우고, 기본 사진은 숨김(아래 '다시 보이기'로 되살림)
+  const removePic = (id, name, mine) => {
+    if (!window.confirm(`‘${name}’ 사진을 지울까요?`)) return;
+    if (mine) update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id));
+    else update('recipeHidden', (l) => [...(l || []), id]);
+    if (cat === id) setCat('');
+    notify(`‘${name}’ 사진을 지웠어요`);
+  };
   const byName = (name) => (r) => r.title.includes(name) || r.items.some(([id]) => ING[id]?.name.includes(name.replace(/달걀/g, '계란')));
   const filterOf = (c) => FILTER_BY[c] || byName(myMenus.find((x) => x.id === c)?.name || c);
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
@@ -70,19 +79,20 @@ export default function RecipeList() {
       <p className="recipe-hint">아래 메뉴를 선택하면 레시피 추천</p>
       <section className="card update-card find-card">
         <div className="chips find-chips" role="group" aria-label="분류">
-          {FILTERS.map(([c]) => (
-            <button key={c} className={`find-pic ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>
+          {FILTERS.filter(([c]) => !hiddenPics.includes(c)).map(([c]) => (
+            <button key={c} className={`find-pic ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)} {...longPress(() => removePic(c, c, false))}>
               <img src={`./photos/${FILTER_PHOTO[c]}.webp`} alt="" loading="lazy" decoding="async" />
               <span>{c}</span>
             </button>
           ))}
           {myMenus.map((x) => (
-            <button key={x.id} className={`find-pic ${cat === x.id ? 'on' : ''}`} aria-pressed={cat === x.id} onClick={() => setCat(cat === x.id ? '' : x.id)}>
+            <button key={x.id} className={`find-pic ${cat === x.id ? 'on' : ''}`} aria-pressed={cat === x.id} onClick={() => setCat(cat === x.id ? '' : x.id)} {...longPress(() => removePic(x.id, x.name, true))}>
               {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden>🍽️</span>}
               <span>{x.name}</span>
             </button>
           ))}
         </div>
+        <p className="muted small long-help">사진을 길게 누르면 지울 수 있어요.{hiddenPics.length > 0 && <> <button type="button" className="linklike" onClick={() => update('recipeHidden', [])}>지운 기본 사진 {hiddenPics.length}개 다시 보이기</button></>}</p>
         <AddIngredient label="메뉴 추가 입력" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus}
           onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
           onAdd={(name, _c, photo, credit) => {

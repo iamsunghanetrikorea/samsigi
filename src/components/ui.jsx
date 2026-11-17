@@ -81,3 +81,27 @@ export function Seg({ value, options, onChange, label }) {
 export function Estimate() {
   return <span className="est" title="식품성분표 기반 계산 추정치">추정치</span>;
 }
+
+// 사진을 길게 누르면(0.6초) onLong 실행. 길게 누른 뒤 손을 떼며 생기는 클릭은 무시.
+// 키보드: Delete·Backspace 키로도 같은 동작.
+let lastLong = 0; // 화면이 다시 그려져도 '길게 누른 직후 클릭'을 막도록 바깥에 둠
+export function longPress(onLong, ms = 600) {
+  let timer = null;
+  let start = null;
+  const cancel = () => { clearTimeout(timer); timer = null; };
+  return {
+    onPointerDown: (e) => {
+      if (e.button > 0) return;
+      start = [e.clientX, e.clientY];
+      cancel();
+      timer = setTimeout(() => { timer = null; lastLong = Date.now(); navigator.vibrate?.(30); onLong(); lastLong = Date.now(); }, ms);
+    },
+    onPointerMove: (e) => { if (start && Math.hypot(e.clientX - start[0], e.clientY - start[1]) > 10) cancel(); },
+    onPointerUp: cancel,
+    onPointerLeave: cancel,
+    onPointerCancel: cancel,
+    onContextMenu: (e) => e.preventDefault(),
+    onClickCapture: (e) => { if (Date.now() - lastLong < 1500) { e.preventDefault(); e.stopPropagation(); lastLong = 0; } },
+    onKeyDown: (e) => { if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); onLong(); } },
+  };
+}

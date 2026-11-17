@@ -4,7 +4,7 @@ import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
 import { DIFFICULTY_LABEL } from '../data/recipes';
 import { PICK_CATS, PICK_ITEMS, PICK_EXTRA, EXTRA_BY, CAT_LABEL, CAT_EMOJI, shortName, matchIngredient, recommend, dishesWithoutRecipe } from '../lib/market';
-import { Seg } from '../components/ui';
+import { Seg, longPress } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
 import { MyTableButton } from '../components/MyTable';
@@ -43,12 +43,24 @@ function Picker() {
   const picked = new Set(m.picked);
   const toggle = (id) => set((x) => ({ ...x, picked: x.picked.includes(id) ? x.picked.filter((y) => y !== id) : [...x.picked, id] }));
   const names = m.picked.map((id) => label(id, m.custom)).filter(Boolean);
+  const hidden = new Set(m.hidden || []);
+  // 사진을 길게 누르면 삭제: 내가 추가한 재료는 지우고, 기본 재료는 목록에서 숨김(아래 '다시 보이기'로 되살림)
+  const remove = (i, name) => {
+    if (!window.confirm(`‘${name}’ 사진을 지울까요?`)) return;
+    const mine = m.custom.some((c) => c.id === i.id);
+    set((x) => ({
+      ...x,
+      picked: x.picked.filter((y) => y !== i.id),
+      ...(mine ? { custom: x.custom.filter((c) => c.id !== i.id) } : { hidden: [...(x.hidden || []), i.id] }),
+    }));
+    notify(`‘${name}’ 사진을 지웠어요`);
+  };
 
   return (
     <>
       <div className="ing-board">
         {PICK_CATS.map((cat) => {
-          const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...PICK_EXTRA.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)];
+          const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...PICK_EXTRA.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)].filter((i) => !hidden.has(i.id));
           if (!items.length) return null;
           return (
             <section key={cat} className="ing-cat" aria-label={CAT_LABEL[cat] || cat}>
@@ -58,7 +70,7 @@ function Picker() {
                   const on = picked.has(i.id);
                   const name = ING[i.id] ? shortName(i.name) : i.name;
                   return (
-                    <li key={i.id} className={`ing-tile ${on ? 'on' : ''}`}>
+                    <li key={i.id} className={`ing-tile ${on ? 'on' : ''}`} {...longPress(() => remove(i, name))}>
                       <label>
                         <input type="checkbox" className="ing-check" checked={on} onChange={() => toggle(i.id)} />
                         <span className="ing-ph">
@@ -74,6 +86,8 @@ function Picker() {
           );
         })}
       </div>
+
+      <p className="muted small long-help no-print">사진을 길게 누르면 지울 수 있어요.{hidden.size > 0 && <> <button type="button" className="linklike" onClick={() => set((x) => ({ ...x, hidden: [] }))}>지운 기본 재료 {hidden.size}가지 다시 보이기</button></>}</p>
 
       <div className="pick-bar no-print" role="region" aria-label="고른 재료">
         <div className="pick-box">
@@ -270,6 +284,18 @@ function Result() {
   const ready = list.filter((x) => !x.need.length);
   const more = list.filter((x) => x.need.length);
   const names = m.picked.map((id) => label(id, m.custom)).filter(Boolean);
+  const hidden = new Set(m.hidden || []);
+  // 사진을 길게 누르면 삭제: 내가 추가한 재료는 지우고, 기본 재료는 목록에서 숨김(아래 '다시 보이기'로 되살림)
+  const remove = (i, name) => {
+    if (!window.confirm(`‘${name}’ 사진을 지울까요?`)) return;
+    const mine = m.custom.some((c) => c.id === i.id);
+    set((x) => ({
+      ...x,
+      picked: x.picked.filter((y) => y !== i.id),
+      ...(mine ? { custom: x.custom.filter((c) => c.id !== i.id) } : { hidden: [...(x.hidden || []), i.id] }),
+    }));
+    notify(`‘${name}’ 사진을 지웠어요`);
+  };
   const noRecipe = dishesWithoutRecipe(m.picked, m.custom);
 
   const addNeed = (x) => {
