@@ -11,6 +11,7 @@ import { go } from '../router';
 import Plate from '../components/Plate';
 import RecipeMaker, { RecipeEditor } from '../components/RecipeMaker';
 import { MyTableButton } from '../components/MyTable';
+import AiBreakfast from '../components/AiRecipe';
 
 const FAV = '즐겨찾기';
 
@@ -84,6 +85,7 @@ export default function RecipeList() {
         </div>
         <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
       </section>
+      <AiBreakfast />
       <section className="card update-card">
         <div className="row between wrap">
           <div>
