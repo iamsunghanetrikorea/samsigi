@@ -93,7 +93,7 @@ export default function RecipeList() {
           ))}
         </div>
         {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('recipeHidden', [])}>지운 기본 사진 {hiddenPics.length}개 다시 보이기</button></p>}
-        <AddIngredient label="메뉴 추가 입력" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus}
+        <AddIngredient label="나의 메뉴 입력" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus}
           onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
           onAdd={(name, _c, photo, credit) => {
             if (FILTER_BY[name] || myMenus.some((x) => x.name === name)) { notify(`‘${name}’은(는) 이미 있어요`); return; }
