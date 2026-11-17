@@ -568,7 +568,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .find-chips .chip { padding: .1rem 0; font-size: .8rem; line-height: 1.15; letter-spacing: -.05em; white-space: nowrap; }
 }
 
-/* 주변 식당 '메뉴 및 검색': 모바일에서 분류 버튼 두 줄(4칸씩), 검색추가는 한 줄 */
+/* 주변 식당 '요리추천': 모바일에서 분류 버튼 두 줄(4칸씩), 검색추가는 한 줄 */
 .eat-add { margin-top: .5rem; }
 .eat-add input { max-width: none; }
 .card > .map-links { margin-top: .6rem; }

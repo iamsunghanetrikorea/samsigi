@@ -19,6 +19,8 @@ export const DEFAULT_STATE = {
   recipeEdits: {},      // 기본 메뉴를 '메뉴수정'으로 고친 내용 { recipeId: {title, items, steps, …} }
   market: { picked: [], custom: [], hidden: [] }, // 장보기 '재료 고르기': 고른 재료 id, 사용자가 추가한 재료, 길게 눌러 지운 기본 재료
   recipeHidden: [],     // 레시피 모음에서 길게 눌러 지운 기본 사진 버튼(계란·두부 …)
+  restMenus: null,      // 주변 식당 '나의 메뉴 입력'으로 더한 사진 버튼 [{id, name, photo?}] (null이면 예전 settings.customMenus에서 가져옴)
+  restHidden: [],       // 주변 식당에서 길게 눌러 지운 기본 사진 버튼
   recipeMenus: [],      // 레시피 모음 '나의 메뉴 입력'으로 더한 사진 버튼 [{id, name, photo?, credit?}]
 };
 const KEYS = Object.keys(DEFAULT_STATE);

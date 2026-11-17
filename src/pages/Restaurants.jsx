@@ -1,12 +1,19 @@
 import { useRef, useState } from 'react';
 import { useStore } from '../store';
 import { today } from '../lib/date';
-import { Modal, Seg } from '../components/ui';
+import { Modal, Seg, longPress } from '../components/ui';
 import { EatOutModal, EATOUT_PRESETS } from '../components/meal';
+import { AddIngredient } from './Market';
 
 // 비밀 API 키 없이 동작: OpenStreetMap(Overpass·Nominatim) 공개 API + 네이버/카카오 지도 검색 링크
 const OVERPASS = 'https://overpass-api.de/api/interpreter';
 const NOMINATIM = 'https://nominatim.openstreetmap.org/search';
+
+// 요리추천 사진 버튼: 짧은 이름과 사진(레시피 사진)
+const CAT_PIC = {
+  '백반·한식': ['백반·한식', 'doenjang_stew'], 생선구이: ['생선구이', 'mackerel_set'], 두부요리: ['두부요리', 'braised_tofu'],
+  '채소 중심 한식': ['채소한식', 'veg_bibimbap'], 죽: ['죽', 'pumpkin_porridge'], '국밥·탕': ['국밥·탕', 'beef_radish_soup'], '면 요리': ['면 요리', 'clam_kalguksu'],
+};
 
 const CATS = [
   { key: '백반·한식', words: ['백반', '정식', '한식', '밥상', '기사식당', '집밥', '가정식'] },
@@ -69,20 +76,16 @@ export default function Restaurants() {
   const [results, setResults] = useState(last.results || null);
   const [radius, setRadius] = useState(last.radius || 1000);
   const [cat, setCat] = useState('');
-  const [menuText, setMenuText] = useState('');
   const [customMenu, setCustomMenu] = useState('');
-  const myMenus = state.settings.customMenus || [];
-  const addMenu = (e) => {
-    e.preventDefault();
-    const m = menuText.trim().slice(0, 20);
-    if (!m) return;
-    if (!myMenus.includes(m)) update('settings', (st) => ({ ...st, customMenus: [...(st.customMenus || []), m] }));
-    setCustomMenu(m); setMenuText('');
-    notify(`'${m}'을(를) 검색에 추가했어요`);
-  };
-  const removeMenu = (m) => {
-    update('settings', (st) => ({ ...st, customMenus: (st.customMenus || []).filter((x) => x !== m) }));
-    if (customMenu === m) setCustomMenu('');
+  // 나의 메뉴(사진 버튼). 예전에 '검색추가'로 넣은 글자 메뉴도 그대로 가져옴
+  const myMenus = state.restMenus || (state.settings.customMenus || []).map((m) => ({ id: `m_${m}`, name: m }));
+  const hiddenPics = state.restHidden || [];
+  const setMyMenus = (fn) => update('restMenus', (l) => fn(l || myMenus));
+  const removePic = (id, name, mine) => {
+    if (!window.confirm(`‘${name}’ 사진을 지울까요?`)) return;
+    if (mine) { setMyMenus((l) => l.filter((x) => x.id !== id)); if (customMenu === name) setCustomMenu(''); }
+    else { update('restHidden', (l) => [...(l || []), id]); if (cat === id) setCat(''); }
+    notify(`‘${name}’ 사진을 지웠어요`);
   };
   const [askConsent, setAskConsent] = useState(null);
   const [eatOut, setEatOut] = useState(null);
@@ -167,21 +170,37 @@ export default function Restaurants() {
             {status && <p className="muted" role="status">{status}</p>}
           </section>
 
-          <section className="card">
-            <h2>메뉴 및 검색</h2>
-            <div className="chips eat-chips">
-              {CATS.map((c) => c.key).map((c) => <button key={c} className={`chip ${!customMenu && cat === c ? 'on' : ''}`} aria-pressed={!customMenu && cat === c} onClick={() => { setCat(!customMenu && cat === c ? '' : c); setCustomMenu(''); }}>{c}</button>)}
-              {myMenus.map((m) => (
-                <span key={m} className={`chip my-chip ${customMenu === m ? 'on' : ''}`}>
-                  <button className="chip-main" aria-pressed={customMenu === m} onClick={() => setCustomMenu(m)}>{m}</button>
-                  <button className="chip-x" aria-label={`${m} 메뉴 지우기`} onClick={() => removeMenu(m)}>✕</button>
-                </span>
-              ))}
+          <section className="card find-card">
+            <h2>요리추천</h2>
+            <div className="chips find-chips" role="group" aria-label="요리 종류">
+              {CATS.map((c) => c.key).filter((c) => !hiddenPics.includes(c)).map((c) => {
+                const on = !customMenu && cat === c;
+                return (
+                  <button key={c} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} aria-label={c} onClick={() => { setCat(on ? '' : c); setCustomMenu(''); }} {...longPress(() => removePic(c, c, false))}>
+                    <img src={`./photos/${CAT_PIC[c][1]}.webp`} alt="" loading="lazy" decoding="async" />
+                    <span>{CAT_PIC[c][0]}</span>
+                  </button>
+                );
+              })}
+              {myMenus.map((x) => {
+                const on = customMenu === x.name;
+                return (
+                  <button key={x.id} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} onClick={() => { setCustomMenu(on ? '' : x.name); setCat(''); }} {...longPress(() => removePic(x.id, x.name, true))}>
+                    {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden>🍽️</span>}
+                    <span>{x.name}</span>
+                  </button>
+                );
+              })}
             </div>
-            <form className="search-row eat-add" onSubmit={addMenu}>
-              <input aria-label="검색추가할 메뉴" placeholder="검색추가 (예: 냉면, 삼계탕)" value={menuText} onChange={(e) => setMenuText(e.target.value)} />
-              <button className="btn" type="submit" disabled={!menuText.trim()}>검색추가</button>
-            </form>
+            {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('restHidden', [])}>지운 기본 사진 {hiddenPics.length}개 다시 보이기</button></p>}
+            <AddIngredient label="나의 메뉴 입력" unit="메뉴" placeholder="예: 냉면, 삼계탕" noCat custom={myMenus}
+              onRemove={(id) => { const x = myMenus.find((m) => m.id === id); setMyMenus((l) => l.filter((m) => m.id !== id)); if (x && customMenu === x.name) setCustomMenu(''); }}
+              onAdd={(name, _c, photo, credit) => {
+                if (myMenus.some((x) => x.name === name)) { setCustomMenu(name); setCat(''); notify(`‘${name}’은(는) 이미 있어요`); return; }
+                setMyMenus((l) => [...l, { id: `m_${Date.now().toString(36)}`, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
+                setCustomMenu(name); setCat('');
+                notify(`‘${name}’ 메뉴를 추가했어요`);
+              }} />
             <MapLinks query={shownQuery} pos={pos} />
           </section>
 
