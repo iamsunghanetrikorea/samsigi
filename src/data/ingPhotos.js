@@ -61,4 +61,5 @@ export const ING_PHOTOS = {
   "fishcake": {"title": "File:2016-02-06 Agekamaboko-揚げかまぼこ 大黒天物産 12個 100円 DSCF8724.JPG", "page": "https://commons.wikimedia.org/wiki/File:2016-02-06_Agekamaboko-%E6%8F%9A%E3%81%92%E3%81%8B%E3%81%BE%E3%81%BC%E3%81%93_%E5%A4%A7%E9%BB%92%E5%A4%A9%E7%89%A9%E7%94%A3_12%E5%80%8B_100%E5%86%86_DSCF8724.JPG", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "artist": "松岡明芳"},
   "mandu": {"title": "File:Jjin-mandu 1.jpg", "page": "https://commons.wikimedia.org/wiki/File:Jjin-mandu_1.jpg", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "artist": "chomjong"},
   "milk": {"title": "File:Glas melk.jpg", "page": "https://commons.wikimedia.org/wiki/File:Glas_melk.jpg", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "artist": "Amarant"},
+  "squid": {"title": "File:Todarodes pacificus (white background).jpg", "page": "https://commons.wikimedia.org/wiki/File:Todarodes_pacificus_(white_background).jpg", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "artist": "Chiswick Chap"},
 };
