@@ -666,3 +666,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .ing-add-prev { width: 5rem; flex: none; }
 .ing-add-photo label.btn { position: relative; overflow: hidden; cursor: pointer; }
 .sr-file { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0; }
+
+/* 메뉴 번호 */
+.menu-no { display: inline-block; min-width: 2.1em; margin-right: .35rem; padding: 0 .4em; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: .8em; font-weight: 800; text-align: center; line-height: 1.6; vertical-align: .1em; }
+.menu-no.big { font-size: .6em; vertical-align: .25em; }

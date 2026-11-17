@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from '../store';
-import { RECIPE_BY_ID, MEAL_LABEL, DIFFICULTY_LABEL, recipeAllergens, RECIPE_SOURCE_NOTE } from '../data/recipes';
+import { RECIPE_BY_ID, MEAL_LABEL, DIFFICULTY_LABEL, recipeAllergens, RECIPE_SOURCE_NOTE, menuNo } from '../data/recipes';
 import { ING, formatAmount } from '../data/ingredients';
 import { mealItems, sumItems, round, won } from '../lib/nutrition';
 import { fmtDate, today } from '../lib/date';
@@ -116,7 +116,7 @@ export default function RecipePage({ id, query }) {
       ) : <div className="recipe-hero" aria-hidden>{recipe.emoji}</div>}
       <div>
         {linked && <p className="muted">{fmtDate(date)} {MEAL_LABEL[meal]}</p>}
-        <h1>{recipe.title}</h1>
+        <h1><span className="menu-no big" aria-label={`메뉴 ${menuNo(recipe)}번`}>{menuNo(recipe)}</span>{recipe.title}</h1>
         <div className="badges">
           <span className="badge">난이도 {DIFFICULTY_LABEL[recipe.difficulty]}</span>
           <span className="badge">준비 {recipe.prep}분 · 조리 {recipe.cook}분</span>

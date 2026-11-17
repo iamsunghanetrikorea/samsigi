@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
-import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
+import { RECIPES, MEAL_LABEL, RECIPE_BY_ID, menuNo } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
 import { ING } from '../data/ingredients';
 import { mealItems, sumItems, round } from '../lib/nutrition';
@@ -52,7 +52,7 @@ export default function RecipeList() {
   const leftovers = leftoverRecipes(state.pantry);
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
     && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : FILTER_BY[cat](r)))
-    && (!q || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q.replace(/달걀/g, '계란'))))
+    && (!q || (/^\d+$/.test(q.trim()) && menuNo(r) === Number(q.trim())) || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q.replace(/달걀/g, '계란'))))
     && (!onlyOk || !excludeReason(r, state.profile)));
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
 
@@ -62,7 +62,7 @@ export default function RecipeList() {
       <section className="card update-card find-card">
         <form className="search-row" role="search" onSubmit={(e) => { e.preventDefault(); setCat(''); setMeal('all'); setOnlyOk(false); }}>
           <label htmlFor="recipe-q" className="search-label">🔍 메뉴찾기</label>
-          <input id="recipe-q" type="search" placeholder="메뉴명 입력" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input id="recipe-q" type="search" placeholder="메뉴명 또는 번호 입력" value={q} onChange={(e) => setQ(e.target.value)} />
           <button type="submit" className="btn">검색</button>
         </form>
         <div className="chips find-chips" role="group" aria-label="분류">
@@ -113,7 +113,7 @@ export default function RecipeList() {
               <button className="choice" onClick={() => go(`/recipe/${r.id}`)}>
                 <Plate recipe={r} />
                 <span className="choice-body">
-                  <b>{r.isNew && <span className="new-badge">NEW</span>}{r.isCustom && <span className="my-badge">내 메뉴</span>} {r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
+                  <b><span className="menu-no" aria-label={`메뉴 ${menuNo(r)}번`}>{menuNo(r)}</span>{r.isNew && <span className="new-badge">NEW</span>}{r.isCustom && <span className="my-badge">내 메뉴</span>} {r.title}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
                   <span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')} · {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · {r.prep + r.cook}분{why ? ` · 제외됨(${why})` : ''}</span>
                 </span>
               </button>

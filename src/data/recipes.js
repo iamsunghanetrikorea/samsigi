@@ -283,6 +283,9 @@ RECIPES.forEach((r) => { r.category = r.category || BASE_CATEGORY[r.id] || '한�
 
 export const RECIPE_BY_ID = Object.fromEntries(RECIPES.map((r) => [r.id, r]));
 
+// 메뉴 번호: 레시피 모음 순서(기본 메뉴 → 분식 → 업데이트로 추가한 메뉴 → 내 메뉴)대로 1번부터
+export const menuNo = (r) => RECIPES.indexOf(r) + 1;
+
 export const DIFFICULTY_LABEL = { 1: '쉬움', 2: '보통', 3: '어려움' };
 export const MEAL_LABEL = { breakfast: '아침', lunch: '점심', dinner: '저녁', snack: '간식' };
 export const PREFERENCE_TAGS = ['국물', '생선', '고기', '채소', '면', '죽', '빵', '간편'];
