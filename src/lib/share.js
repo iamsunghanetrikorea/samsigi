@@ -74,3 +74,19 @@ export function sendToChatGptNow(text, notify) {
     ? 'ChatGPT 새 대화에 레시피를 담아 열었어요.'
     : (ok ? '내용이 길어 복사해 두었어요. ChatGPT 입력창에 붙여넣기 해 주세요.' : 'ChatGPT를 열었어요. 레시피 화면에서 내용을 복사해 붙여넣어 주세요.')));
 }
+
+// 구글 AI 모드(검색 기반 AI 답변)로 질문 열기 — 서버·API 키 불필요
+export function googleAiUrl(q) {
+  return `https://www.google.com/search?udm=50&q=${encodeURIComponent(q)}`;
+}
+
+// 장보기 '인공지능 레시피추천': 고른 재료로 아침에 가볍게 먹을 재료·메뉴를 물어봄 (재료 이름만 보냄)
+export function breakfastAiPrompt(names = []) {
+  const have = names.length ? `집에 있거나 사려는 재료: ${names.join(', ')}. 이 재료를 되도록 활용해 주세요.` : '';
+  return [
+    '60세 이상 어르신이 아침에 가볍게 먹을 수 있는 식사를 추천해 주세요.',
+    have,
+    '1) 아침에 좋은 재료 3~4가지와 고른 이유, 2) 그 재료로 10~15분 안에 쉽게 만드는 메뉴 3~4가지(재료·1인분 양·만드는 순서)를 알려 주세요.',
+    '싱겁게(나트륨 적게), 소화가 잘되고 씹기 편한 메뉴로 해 주시고, 참고한 인터넷 자료의 출처 링크도 붙여 주세요.',
+  ].filter(Boolean).join(' ');
+}

@@ -9,6 +9,7 @@ import { go } from '../router';
 import Plate from '../components/Plate';
 import { MyTableButton } from '../components/MyTable';
 import Shopping from './Shopping';
+import { googleAiUrl, breakfastAiPrompt, copyText } from '../lib/share';
 
 // 장보기 탭: 재료 고르기(사진) → 추천 레시피, 그리고 기존 장보기 목록
 export default function Market({ route }) {
@@ -85,6 +86,8 @@ function Picker() {
         <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피추천하세요</button>
       </div>
 
+      <AiBreakfast names={names} />
+
       <AddIngredient custom={m.custom}
         onRemove={(id) => set((x) => ({ ...x, custom: x.custom.filter((c) => c.id !== id), picked: x.picked.filter((y) => y !== id) }))}
         onAdd={(name, cat, photo, credit) => {
@@ -147,6 +150,25 @@ async function searchPhotos(q) {
     })
     .filter(Boolean)
     .slice(0, 12);
+}
+
+// 인공지능 레시피추천: 구글 AI 모드가 인터넷을 찾아 아침 재료·메뉴를 추천 (새 창)
+function AiBreakfast({ names }) {
+  const { notify } = useStore();
+  const ask = async () => {
+    const q = breakfastAiPrompt(names);
+    await copyText(q);
+    window.open(googleAiUrl(q), '_blank', 'noopener,noreferrer');
+    notify('구글 AI에 질문을 담아 새 창으로 열었어요. (질문은 복사도 해 두었어요)');
+  };
+  return (
+    <section className="card ai-box no-print" aria-labelledby="ai-h">
+      <h2 id="ai-h">🤖 인공지능 레시피추천</h2>
+      <p className="muted small">{names.length ? `고른 재료(${names.join(', ')})로` : '재료를 고르지 않아도'} 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.</p>
+      <button type="button" className="btn ai-btn" onClick={ask}>🤖 인공지능 레시피추천</button>
+      <p className="muted small">구글(google.com, 외부 서비스) 새 창으로 열려요. 고른 재료 이름만 보내고 프로필·건강정보는 보내지 않아요. 답변은 구글 AI가 만든 것으로 의료적 조언이 아니에요.</p>
+    </section>
+  );
 }
 
 function AddIngredient({ onAdd, custom = [], onRemove }) {
