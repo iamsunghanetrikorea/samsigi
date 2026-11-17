@@ -75,20 +75,13 @@ export function sendToChatGptNow(text, notify) {
     : (ok ? '내용이 길어 복사해 두었어요. ChatGPT 입력창에 붙여넣기 해 주세요.' : 'ChatGPT를 열었어요. 레시피 화면에서 내용을 복사해 붙여넣어 주세요.')));
 }
 
-// 구글 AI 모드(검색 기반 AI 답변)로 질문 열기 — 서버·API 키 불필요
+// 구글 검색으로 열기 — 맨 위 'AI 개요'가 답하고 아래에 동영상·이미지가 함께 나옴
+// (AI 모드 주소 udm=50으로 다른 사이트에서 들어가면 구글이 '이 검색을 계속하시겠습니까?' 확인 창을 띄워서 일반 검색을 씀)
 export function googleAiUrl(q) {
-  return `https://www.google.com/search?udm=50&q=${encodeURIComponent(q)}`;
+  return `https://www.google.com/search?q=${encodeURIComponent(q)}`;
 }
 
-// 장보기 '인공지능 레시피추천': 고른 재료로 아침에 가볍게 먹을 재료·메뉴를 물어봄 (재료 이름만 보냄)
+// 장보기 '인공지능 레시피추천': 고른 재료로 아침에 가볍게 먹을 메뉴를 찾는 짧은 검색어 (재료 이름만 보냄)
 export function breakfastAiPrompt(names = []) {
-  const have = names.length ? `집에 있거나 사려는 재료: ${names.join(', ')}. 이 재료를 되도록 활용해 주세요.` : '';
-  return [
-    '60세 이상 어르신이 아침에 가볍게 먹을 수 있는 식사를 추천해 주세요.',
-    have,
-    '1) 아침에 좋은 재료 3~4가지와 고른 이유, 2) 그 재료로 10~15분 안에 쉽게 만드는 메뉴 3~4가지(재료·1인분 양·만드는 순서)를 알려 주세요.',
-    '싱겁게(나트륨 적게), 소화가 잘되고 씹기 편한 메뉴로 해 주세요.',
-    '메뉴마다 완성된 요리와 만드는 과정을 보여 주는 사진(그림)을 함께 보여 주시고, 따라 하기 쉬운 유튜브 요리 영상 링크도 1~2개씩 붙여 주세요.',
-    '참고한 인터넷 자료의 출처 링크도 붙여 주세요.',
-  ].filter(Boolean).join(' ');
+  return ['어르신 아침에 가볍게 먹기 좋은 메뉴 추천', ...names.slice(0, 6), '쉬운 레시피'].join(' ');
 }
