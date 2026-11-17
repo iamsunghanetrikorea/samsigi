@@ -34,6 +34,11 @@ const FILTERS = [
   ['생선', (r) => has(r, FISH)],
 ];
 const FILTER_BY = Object.fromEntries(FILTERS);
+// 분류 사진 버튼에 쓰는 사진 (재료 사진, 국은 레시피 사진)
+const FILTER_PHOTO = {
+  계란: 'ing/egg', 두부: 'ing/tofu', 감자: 'ing/potato', 고구마: 'ing/sweet_potato', 떡: 'ing/rice_cake', 토마토: 'ing/tomato',
+  밥: 'ing/rice', 면: 'ing/noodle', 빵: 'ing/bread', 국: 'miyeok_soup', 고기: 'ing/beef', 생선: 'ing/mackerel',
+};
 
 export default function RecipeList() {
   const { state, targets, update, addRecipeUpdate, notify } = useStore();
@@ -66,7 +71,12 @@ export default function RecipeList() {
           <button type="submit" className="btn">검색</button>
         </form>
         <div className="chips find-chips" role="group" aria-label="분류">
-          {FILTERS.map(([c]) => <button key={c} className={`chip ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>{c}</button>)}
+          {FILTERS.map(([c]) => (
+            <button key={c} className={`find-pic ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>
+              <img src={`./photos/${FILTER_PHOTO[c]}.webp`} alt="" loading="lazy" decoding="async" />
+              <span>{c}</span>
+            </button>
+          ))}
         </div>
         <div className="chips">
           <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}>♥ 즐겨찾기 <span className="fav-n">{state.profile.favorites.length}</span></button>
