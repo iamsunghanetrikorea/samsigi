@@ -98,7 +98,7 @@ function Picker() {
           </div>
           {names.length > 0 && <button className="btn small ghost" onClick={() => set((x) => ({ ...x, picked: [] }))}>모두 해제</button>}
         </div>
-        <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피추천하세요</button>
+        <button className="btn primary pick-go" disabled={!names.length} onClick={() => go('/shopping?step=result')}>레시피 추천</button>
       </div>
 
       <AiBreakfast names={names} />
