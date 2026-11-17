@@ -9,7 +9,7 @@ import { go } from '../router';
 import Plate from '../components/Plate';
 import { MyTableButton } from '../components/MyTable';
 import Shopping from './Shopping';
-import { googleAiUrl, breakfastAiPrompt, copyText } from '../lib/share';
+import { googleAiUrl, breakfastAiPrompt } from '../lib/share';
 
 // 장보기 탭: 재료 고르기(사진) → 추천 레시피, 그리고 기존 장보기 목록
 export default function Market({ route }) {
@@ -154,12 +154,8 @@ async function searchPhotos(q) {
 
 // 인공지능 레시피추천: 구글 AI 모드가 인터넷을 찾아 아침 재료·메뉴를 추천 (같은 창, 뒤로 가기로 돌아옴)
 function AiBreakfast({ names }) {
-  const { notify } = useStore();
-  const ask = async () => {
-    const q = breakfastAiPrompt(names);
-    await copyText(q);
-    window.location.assign(googleAiUrl(q));
-  };
+  // 질문은 주소에 담겨 가므로 복사(클립보드 권한 창이 뜰 수 있음) 없이 바로 이동
+  const ask = () => window.location.assign(googleAiUrl(breakfastAiPrompt(names)));
   return (
     <section className="card ai-box no-print" aria-labelledby="ai-h">
       <h2 id="ai-h">🤖 인공지능 레시피추천</h2>
