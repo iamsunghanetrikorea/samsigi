@@ -11,6 +11,7 @@ import { go } from '../router';
 import Plate from '../components/Plate';
 import RecipeMaker, { RecipeEditor } from '../components/RecipeMaker';
 import { MyTableButton } from '../components/MyTable';
+import { AddIngredient } from './Market';
 
 const FAV = '즐겨찾기';
 
@@ -50,27 +51,24 @@ export default function RecipeList() {
   const doUpdate = () => {
     const ids = addRecipeUpdate();
     setJustAdded(ids);
-    setCat(''); setMeal('all'); setQ('');
+    setCat(''); setMeal('all');
     notify(ids.length ? `새 메뉴 ${ids.length}가지를 레시피 모음에 추가했어요` : '추가할 새 메뉴가 없어요');
   };
-  const [q, setQ] = useState('');
   const [onlyOk, setOnlyOk] = useState(true);
   const leftovers = leftoverRecipes(state.pantry);
+  const myMenus = state.recipeMenus || [];
+  const byName = (name) => (r) => r.title.includes(name) || r.items.some(([id]) => ING[id]?.name.includes(name.replace(/달걀/g, '계란')));
+  const filterOf = (c) => FILTER_BY[c] || byName(myMenus.find((x) => x.id === c)?.name || c);
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
-    && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : FILTER_BY[cat](r)))
-    && (!q || (/^\d+$/.test(q.trim()) && menuNo(r) === Number(q.trim())) || r.title.includes(q) || r.items.some(([id]) => ING[id].name.includes(q.replace(/달걀/g, '계란'))))
+    && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : filterOf(cat)(r)))
     && (!onlyOk || !excludeReason(r, state.profile)));
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
 
   return (
     <div className="stack">
       <h1>레시피 모음</h1>
+      <p className="recipe-hint">아래 메뉴를 선택하면 레시피 추천</p>
       <section className="card update-card find-card">
-        <form className="search-row" role="search" onSubmit={(e) => { e.preventDefault(); setCat(''); setMeal('all'); setOnlyOk(false); }}>
-          <label htmlFor="recipe-q" className="search-label">🔍 메뉴찾기</label>
-          <input id="recipe-q" type="search" placeholder="메뉴명 또는 번호 입력" value={q} onChange={(e) => setQ(e.target.value)} />
-          <button type="submit" className="btn">검색</button>
-        </form>
         <div className="chips find-chips" role="group" aria-label="분류">
           {FILTERS.map(([c]) => (
             <button key={c} className={`find-pic ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)}>
@@ -78,7 +76,22 @@ export default function RecipeList() {
               <span>{c}</span>
             </button>
           ))}
+          {myMenus.map((x) => (
+            <button key={x.id} className={`find-pic ${cat === x.id ? 'on' : ''}`} aria-pressed={cat === x.id} onClick={() => setCat(cat === x.id ? '' : x.id)}>
+              {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden>🍽️</span>}
+              <span>{x.name}</span>
+            </button>
+          ))}
         </div>
+        <AddIngredient label="메뉴 추가 입력" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus}
+          onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
+          onAdd={(name, _c, photo, credit) => {
+            if (FILTER_BY[name] || myMenus.some((x) => x.name === name)) { notify(`‘${name}’은(는) 이미 있어요`); return; }
+            const id = `m_${Date.now().toString(36)}`;
+            update('recipeMenus', (l) => [...(l || []), { id, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
+            setCat(id); setMeal('all');
+            notify(`‘${name}’ 메뉴를 추가했어요`);
+          }} />
         <div className="chips">
           <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}>♥ 즐겨찾기 메뉴리스트 <span className="fav-n">{state.profile.favorites.length}</span></button>
         </div>
@@ -99,7 +112,7 @@ export default function RecipeList() {
             ))}
           </ul>
         )}
-        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat(''); setMeal('all'); setQ(''); }} />
+        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat(''); setMeal('all'); }} />
       </section>
       {leftovers.length > 0 && (
         <section className="card">

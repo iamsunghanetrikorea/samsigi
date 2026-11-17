@@ -18,6 +18,7 @@ export const DEFAULT_STATE = {
   myTable: [],          // 나의 밥상에 올린 레시피 id
   recipeEdits: {},      // 기본 메뉴를 '메뉴수정'으로 고친 내용 { recipeId: {title, items, steps, …} }
   market: { picked: [], custom: [] }, // 장보기 '재료 고르기': 고른 재료 id, 사용자가 추가한 재료
+  recipeMenus: [],      // 레시피 모음 '메뉴 추가 입력'으로 더한 사진 버튼 [{id, name, photo?, credit?}]
 };
 const KEYS = Object.keys(DEFAULT_STATE);
 

@@ -165,7 +165,7 @@ function AiBreakfast({ names }) {
   );
 }
 
-function AddIngredient({ onAdd, custom = [], onRemove }) {
+export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기 재료 추가 입력', unit = '재료', placeholder = '예: 삼겹살, 연근', noCat = false }) {
   const { notify } = useStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -182,7 +182,7 @@ function AddIngredient({ onAdd, custom = [], onRemove }) {
   };
   const find = async () => {
     const n = name.trim();
-    if (!n) { notify('먼저 새 재료 이름을 적어 주세요'); return; }
+    if (!n) { notify(`먼저 새 ${unit} 이름을 적어 주세요`); return; }
     setBusy(true);
     try { setFound(await searchPhotos(n)); } catch (err) { notify(err.message); setFound([]); }
     setBusy(false);
@@ -196,25 +196,27 @@ function AddIngredient({ onAdd, custom = [], onRemove }) {
   const submit = (e) => {
     e.preventDefault();
     const n = name.trim();
-    if (!n) { notify('새 재료 이름을 적어 주세요'); return; }
+    if (!n) { notify(`새 ${unit} 이름을 적어 주세요`); return; }
     onAdd(n, cat, photo, credit);
     setName(''); clear(); setFound(null);
   };
   const google = `https://www.google.com/search?udm=2&q=${encodeURIComponent(name.trim())}`;
   return (
     <div className="card ing-add no-print">
-      <button type="button" className="btn soft ing-add-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>장보기 재료 추가 입력 <span aria-hidden>{open ? '▲' : '▼'}</span></button>
+      <button type="button" className="btn soft ing-add-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>{label} <span aria-hidden>{open ? '▲' : '▼'}</span></button>
       {open && (
         <form className="ing-add-form" onSubmit={submit}>
           <div className="row wrap">
-            <input aria-label="새 재료 이름" placeholder="예: 삼겹살, 연근" value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus />
-            <select aria-label="분류" value={cat} onChange={(e) => setCat(e.target.value)}>
-              {PICK_CATS.map((c) => <option key={c} value={c}>{CAT_LABEL[c] || c}</option>)}
-            </select>
+            <input aria-label={`새 ${unit} 이름`} placeholder={placeholder} value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus />
+            {!noCat && (
+              <select aria-label="분류" value={cat} onChange={(e) => setCat(e.target.value)}>
+                {PICK_CATS.map((c) => <option key={c} value={c}>{CAT_LABEL[c] || c}</option>)}
+              </select>
+            )}
           </div>
           {/* 왼쪽 사진 미리보기, 오른쪽에 위아래로 '사진 올리기'·'인터넷 찾기' */}
           <div className="ing-add-photo">
-            <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt="재료 사진 미리보기" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}</span>
+            <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt={`${unit} 사진 미리보기`} /> : <span className="ing-emoji" aria-hidden>{noCat ? '🍽️' : CAT_EMOJI[cat]}</span>}</span>
             <div className="ing-add-btns">
               <label className="btn ghost small">
                 📷 {photo ? '사진 바꾸기' : '사진 올리기'}
@@ -246,10 +248,10 @@ function AddIngredient({ onAdd, custom = [], onRemove }) {
           <button className="btn primary" type="submit">추가</button>
           {custom.length > 0 && (
             <details className="ing-mine">
-              <summary>내가 추가한 재료 {custom.length}가지 관리</summary>
+              <summary>내가 추가한 {unit} {custom.length}가지 관리</summary>
               <ul className="plain">
                 {custom.map((c) => (
-                  <li key={c.id} className="row between"><span>{c.name} <span className="muted small">({CAT_LABEL[c.cat] || c.cat})</span></span>
+                  <li key={c.id} className="row between"><span>{c.name} {!noCat && <span className="muted small">({CAT_LABEL[c.cat] || c.cat})</span>}</span>
                     <button type="button" className="btn small ghost" onClick={() => onRemove(c.id)}>지우기</button></li>
                 ))}
               </ul>
