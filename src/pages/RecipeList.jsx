@@ -97,23 +97,6 @@ export default function RecipeList() {
         </div>
         <Seg label="끼니" value={meal} onChange={setMeal} options={[{ value: 'all', label: '전체' }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label }))]} />
       </section>
-      <section className="card update-card">
-        <div className="row between wrap">
-          <div>
-            <h2>🆕 새 메뉴 업데이트</h2>
-            <p className="muted small hide-m">한식·중식·양식·간식·찌개·국에서 어르신께 맞게 싱겁게 다듬은 새 메뉴를 분류마다 하나씩 추가해요. ({state.addedRecipes.length}/{PACK.length}개 추가됨)</p>
-          </div>
-          <button className="btn primary full-narrow" onClick={doUpdate} disabled={!remaining}>{remaining ? `메뉴 자동 추가 (+${remaining}가지)` : '모든 추천 메뉴 추가 완료'}</button>
-        </div>
-        {justAdded.length > 0 && (
-          <ul className="choice-list">
-            {justAdded.map((id) => RECIPE_BY_ID[id]).filter(Boolean).map((r) => (
-              <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><Plate recipe={r} /><span className="choice-body"><b>{r.isCustom ? <span className="my-badge">내 메뉴</span> : <span className="new-badge">NEW</span>} {r.title}</b><span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')}</span></span></button></li>
-            ))}
-          </ul>
-        )}
-        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat(''); setMeal('all'); }} />
-      </section>
       {leftovers.length > 0 && (
         <section className="card">
           <h2>냉장고 재료로 만들 수 있어요</h2>
@@ -163,6 +146,23 @@ export default function RecipeList() {
           );
         })}
       </ul>
+      <section className="card update-card">
+        <div className="row between wrap">
+          <div>
+            <h2>🆕 새 메뉴 업데이트</h2>
+            <p className="muted small hide-m">한식·중식·양식·간식·찌개·국에서 어르신께 맞게 싱겁게 다듬은 새 메뉴를 분류마다 하나씩 추가해요. ({state.addedRecipes.length}/{PACK.length}개 추가됨)</p>
+          </div>
+          <button className="btn primary full-narrow" onClick={doUpdate} disabled={!remaining}>{remaining ? `메뉴 자동 추가 (+${remaining}가지)` : '모든 추천 메뉴 추가 완료'}</button>
+        </div>
+        {justAdded.length > 0 && (
+          <ul className="choice-list">
+            {justAdded.map((id) => RECIPE_BY_ID[id]).filter(Boolean).map((r) => (
+              <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><Plate recipe={r} /><span className="choice-body"><b>{r.isCustom ? <span className="my-badge">내 메뉴</span> : <span className="new-badge">NEW</span>} {r.title}</b><span className="meal-sub">{r.category} · {r.meals.map((m) => MEAL_LABEL[m]).join('·')}</span></span></button></li>
+            ))}
+          </ul>
+        )}
+        <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat(''); setMeal('all'); }} />
+      </section>
       {disliked.length > 0 && (
         <section className="card">
           <h2>추천하지 않기로 한 메뉴</h2>
