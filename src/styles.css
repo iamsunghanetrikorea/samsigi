@@ -825,3 +825,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 헤더: 국기와 −/+ 버튼 사이 간격 */
 .lang-btn { margin-right: .5rem; }
 @media (max-width: 380px) { .lang-btn { margin-right: .35rem; } }
+/* 헤더: 글자 없이 집 로고만 크게 */
+.topbar .brand img { width: 100px; height: 80px; }
+@media (max-width: 639px) { .topbar .brand img { width: 85px; height: 68px; } }
+@media (max-width: 380px) { .topbar .brand img { width: 75px; height: 60px; } }
