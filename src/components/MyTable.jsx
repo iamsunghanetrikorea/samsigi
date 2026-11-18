@@ -65,7 +65,7 @@ function VerseCalendar() {
         <span className="bs-cal-rings" aria-hidden><i /><i /></span>
         <button key={date} className={`bs-cal-page ${dir < 0 ? 'back' : ''}`} onClick={() => setBig(true)} aria-label={t('{date} 성경 구절 크게 보기', { date: fmtDate(date) })}>
           <span className="bs-cal-head">{fmtMD(date)} ({WD[d.getDay()]})</span>
-          {v && <span className="bs-cal-verse"><Reading text={v[0]} reading={v[2]} /></span>}
+          {v && <span className={`bs-cal-verse rd-${getLang()}`} translate="no"><Reading text={v[0]} reading={v[2]} /></span>}
           {v && <span className="bs-cal-ref">{v[1]}</span>}
         </button>
         <button className="bs-cal-nav prev" onClick={() => flip(-1)} aria-label={t('이전 날')}>‹</button>
@@ -73,7 +73,7 @@ function VerseCalendar() {
       </div>
       {big && (
         <Modal title={`📖 ${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => setBig(false)}>
-          {v && <blockquote className="verse-big">“<Reading text={v[0]} reading={v[2]} />”<cite>{v[1]}</cite></blockquote>}
+          {v && <blockquote className={`verse-big rd-${getLang()}`} translate="no">“<Reading text={v[0]} reading={v[2]} />”<cite>{v[1]}</cite></blockquote>}
           <div className="verse-nav">
             <button className="btn" onClick={() => flip(-1)}>‹ {t('이전 날')}</button>
             {!isToday && <button className="btn ghost" onClick={() => setDate(today())}>{t('오늘')}</button>}

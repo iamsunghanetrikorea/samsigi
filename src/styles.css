@@ -900,3 +900,9 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .bs-cal-verse:has(ruby) { line-height: 1.9; }
 .verse-big rt { font-size: .5em; color: #8a4b1f; font-weight: 600; }
 .verse-big:has(ruby) { line-height: 2.3; }
+/* 병음(중국어)은 조금 더 크게 (브라우저 자동번역이 html lang을 바꿔도 적용되도록 앱이 붙인 rd-zh 클래스 사용) */
+.bs-cal-verse.rd-zh rt { font-size: .8em; }
+.bs-cal-verse.rd-zh:has(ruby) { line-height: 2.1; }
+.verse-big.rd-zh rt { font-size: .62em; }
+.verse-big.rd-zh:has(ruby) { line-height: 2.5; }
+.rd-zh ruby { margin: 0 .12em; }
