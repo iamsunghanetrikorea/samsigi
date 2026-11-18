@@ -755,3 +755,33 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .back-plan { flex: 1 1 100%; width: 100%; justify-content: center; }
   .recipe-hint { white-space: nowrap; font-size: min(.75rem, 3.3vw); letter-spacing: -.04em; }
 }
+
+/* 헤더 언어 버튼: 국기 + 언어 이름, 누를 때마다 한국어 → 中文 → 日本語 → English */
+.lang-btn { appearance: none; border: 0; background: none; font: inherit; cursor: pointer; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 2px 4px; min-width: 44px; min-height: 44px; border-radius: 8px; color: var(--muted); flex: none; }
+.lang-btn:hover { background: var(--primary-soft); }
+.lang-btn:active { transform: translateY(1px); }
+.lang-btn .flag { display: block; width: 30px; height: 20px; border-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,.28); outline: 1px solid rgba(0,0,0,.14); outline-offset: -1px; }
+.lang-btn .nm { font-size: 11px; line-height: 1; font-weight: 700; white-space: nowrap; letter-spacing: .03em; }
+@media (max-width: 380px) { .lang-btn { min-width: 38px; padding: 2px; } .lang-btn .flag { width: 26px; height: 17px; } .lang-btn .nm { font-size: 10px; } }
+.onb-lang { position: absolute; top: 8px; right: 12px; z-index: 5; }
+
+/* 한국어가 아닌 언어: 한국어 길이에 맞춰 한 줄로 고정한 글은 줄바꿈 허용, 사진 버튼 이름은 작게 */
+:root:not(:lang(ko)) .recipe-hint, :root:not(:lang(ko)) .long-help { white-space: normal !important; }
+:root:not(:lang(ko)) .find-pic span { font-size: .78rem; line-height: 1.15; white-space: normal; letter-spacing: -.02em; }
+:root:not(:lang(ko)) .ing-name { font-size: 11px; letter-spacing: -.02em; white-space: normal; line-height: 1.1; }
+:root:not(:lang(ko)) .row-btns .btn, :root:not(:lang(ko)) .choice-row > .table-btn, :root:not(:lang(ko)) .pair-btns .btn { white-space: normal; min-width: 0; }
+:root:not(:lang(ko)) .brand { flex: 0 1 auto; min-width: 0; }
+:root:not(:lang(ko)) .brand > span { min-width: 0; }
+:root:not(:lang(ko)) .brand small { white-space: normal; line-height: 1.15; }
+@media (max-width: 640px) { :root:not(:lang(ko)) .find-pic span { font-size: .66rem; line-height: 1.1; } }
+/* 휴대폰: 언어 버튼이 들어가도 헤더가 한 화면 폭에 맞도록 버튼 폭을 줄임 */
+@media (max-width: 480px) {
+  .top-tools { gap: .15rem; }
+  .lang-btn { min-width: 34px; padding: 2px 1px; }
+  .fontsize button { min-width: 34px; }
+  .me { min-width: 34px; }
+}
+:root:not(:lang(ko)) .seg button { white-space: normal; line-height: 1.15; }
+:root:not(:lang(ko)) .grid2 > *, :root:not(:lang(ko)) .grid3 > *, :root:not(:lang(ko)) fieldset { min-width: 0; }
+:root:not(:lang(ko)) .row select { flex: 1 1 10em; min-width: 0; max-width: 100%; }
+:root:not(:lang(ko)) main select { max-width: 100%; min-width: 0; }

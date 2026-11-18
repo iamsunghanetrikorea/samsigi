@@ -3,6 +3,7 @@ import { ING, CATEGORY_ORDER, buyForm } from '../data/ingredients';
 import { RECIPES, RECIPE_BY_ID } from '../data/recipes';
 import { MEAL_KEYS, entryNutrition } from './nutrition';
 import { addDays, diffDays, fmtDate } from './date';
+import { t } from '../i18n';
 
 // 보관기간에 따른 장보기 회차: 오래 두는 재료는 첫 장보기, 빨리 상하는 재료는 주/반주 단위로 나눔
 function tripOf(ing, dayIndex) {
@@ -61,7 +62,7 @@ export function buildShopping(state, targets, dates, { split = true } = {}) {
     if (!tripMap.has(r.trip)) {
       const offset = Math.floor(r.trip / 2) * 7 + (r.trip % 2 ? 4 : 0);
       const date = addDays(start, offset);
-      tripMap.set(r.trip, { trip: r.trip, date, label: r.trip === 0 ? `첫 장보기 · ${fmtDate(date)}` : `${fmtDate(date)} 장보기`, rows: [] });
+      tripMap.set(r.trip, { trip: r.trip, date, label: r.trip === 0 ? t('첫 장보기 · {date}', { date: fmtDate(date) }) : t('{date} 장보기', { date: fmtDate(date) }), rows: [] });
     }
     tripMap.get(r.trip).rows.push(r);
   }

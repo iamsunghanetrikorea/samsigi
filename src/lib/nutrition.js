@@ -1,6 +1,7 @@
 // 영양 목표 계산 및 끼니 영양 산출
 import { ING, buyForm } from '../data/ingredients';
 import { RECIPE_BY_ID, recipeItems } from '../data/recipes';
+import { getLang } from '../i18n';
 
 export const MEAL_KEYS = ['breakfast', 'lunch', 'dinner'];
 export const NUTRIENTS = [
@@ -117,4 +118,11 @@ export function dayTotals(day, targets) {
 }
 
 export function round(n, d = 0) { const p = 10 ** d; return Math.round(n * p) / p; }
-export const won = (n) => `${Math.round(n / 10) * 10 >= 0 ? (Math.round(n / 10) * 10).toLocaleString('ko-KR') : 0}원`;
+export const won = (n) => {
+  const v = Math.round(n / 10) * 10 >= 0 ? (Math.round(n / 10) * 10).toLocaleString('ko-KR') : 0;
+  const l = getLang();
+  if (l === 'zh') return `${v}韩元`;
+  if (l === 'ja') return `${v}ウォン`;
+  if (l === 'en') return `₩${v}`;
+  return `${v}원`;
+};

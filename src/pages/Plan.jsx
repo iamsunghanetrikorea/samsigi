@@ -8,6 +8,7 @@ import { WeekTable } from '../components/dashboard';
 import { NutrientBars, Seg, Modal } from '../components/ui';
 import { download, toCSV } from '../lib/exporter';
 import { go } from '../router';
+import { t } from '../i18n';
 
 export default function Plan({ route }) {
   const view = route.query.view || 'week';
@@ -15,8 +16,8 @@ export default function Plan({ route }) {
   return (
     <div className="stack">
       <div className="row between wrap">
-        <h1>식단</h1>
-        <div className="hide-narrow"><Seg label="보기" value={view} onChange={(v) => go(`/plan?view=${v}&d=${d}`)} options={[{ value: 'week', label: '주간' }, { value: 'month', label: '월간' }]} /></div>
+        <h1>{t('식단')}</h1>
+        <div className="hide-narrow"><Seg label={t('보기')} value={view} onChange={(v) => go(`/plan?view=${v}&d=${d}`)} options={[{ value: 'week', label: t('주간') }, { value: 'month', label: t('월간') }]} /></div>
       </div>
       <div className="only-wide stack">{view === 'month' ? <Month d={d} /> : <Week d={d} />}</div>
       <div className="only-narrow stack"><MonthList d={d} /></div>
@@ -32,16 +33,16 @@ function MonthList({ d }) {
   const filled = dates.filter((x) => Object.keys(state.plans[x] || {}).length).length;
   const fill = () => {
     const r = generate(dates, { overwrite: false });
-    notify(r.warnings[0] || `${fmtMonth(ym)} 빈 날짜의 식단을 채웠어요`);
+    notify(r.warnings[0] || t('{month} 빈 날짜의 식단을 채웠어요', { month: fmtMonth(ym) }));
   };
   return (
     <>
       <div className="pager">
-        <button className="btn ghost" onClick={() => go(`/plan?d=${addMonths(ym, -1)}-01`)} aria-label="이전 달">◀</button>
-        <b>{fmtMonth(ym)} 식단</b>
-        <button className="btn ghost" onClick={() => go(`/plan?d=${addMonths(ym, 1)}-01`)} aria-label="다음 달">▶</button>
+        <button className="btn ghost" onClick={() => go(`/plan?d=${addMonths(ym, -1)}-01`)} aria-label={t('이전 달')}>◀</button>
+        <b>{t('{month} 식단', { month: fmtMonth(ym) })}</b>
+        <button className="btn ghost" onClick={() => go(`/plan?d=${addMonths(ym, 1)}-01`)} aria-label={t('다음 달')}>▶</button>
       </div>
-      {filled < dates.length && <button className="btn primary" onClick={fill}>{filled ? '빈 날짜 채우기' : `이 달 식단 만들기 (${dates.length * 3}끼)`}</button>}
+      {filled < dates.length && <button className="btn primary" onClick={fill}>{filled ? t('빈 날짜 채우기') : t('이 달 식단 만들기 ({n}끼)', { n: dates.length * 3 })}</button>}
       <div className="week">
         {dates.map((x) => <DayPanel key={x} date={x} compact />)}
       </div>
@@ -50,13 +51,13 @@ function MonthList({ d }) {
 }
 
 function planCSV(state, targets, dates) {
-  const rows = [['날짜', '끼니', '메뉴', '인분', '열량(kcal)', '탄수화물(g)', '단백질(g)', '지방(g)', '나트륨(mg)', '고정', '먹음', '비고']];
+  const rows = [['날짜', '끼니', '메뉴', '인분', '열량(kcal)', '탄수화물(g)', '단백질(g)', '지방(g)', '나트륨(mg)', '고정', '먹음', '비고'].map((h) => t(h))];
   for (const d of dates) for (const k of MEAL_KEYS) {
     const e = state.plans[d]?.[k];
     if (!e) continue;
     const n = entryNutrition(e, k, targets) || {};
-    const title = e.eatOut ? `외식: ${e.eatOut.name}` : RECIPE_BY_ID[e.recipeId]?.title;
-    rows.push([d, MEAL_LABEL[k], title, e.servings, round(n.kcal || 0), round(n.carb || 0), round(n.protein || 0), round(n.fat || 0), round(n.sodium || 0), e.locked ? 'Y' : '', e.eaten ? 'Y' : '', e.eatOut ? '열량 추정치' : '1인분 기준 추정치']);
+    const title = e.eatOut ? t('외식: {name}', { name: t(e.eatOut.name) }) : t(RECIPE_BY_ID[e.recipeId]?.title);
+    rows.push([d, t(MEAL_LABEL[k]), title, e.servings, round(n.kcal || 0), round(n.carb || 0), round(n.protein || 0), round(n.fat || 0), round(n.sodium || 0), e.locked ? 'Y' : '', e.eaten ? 'Y' : '', e.eatOut ? t('열량 추정치') : t('1인분 기준 추정치')]);
   }
   return toCSV(rows);
 }
@@ -72,7 +73,7 @@ function Week({ d }) {
 
   const regen = () => {
     const r = generate(dates, { overwrite: true });
-    notify(r.warnings[0] || '이번 주 식단을 새로 만들었어요 (고정·외식 끼니는 그대로)');
+    notify(r.warnings[0] || t('이번 주 식단을 새로 만들었어요 (고정·외식 끼니는 그대로)'));
     setConfirm(null);
   };
   const copyPrev = () => {
@@ -84,7 +85,7 @@ function Week({ d }) {
       });
       return next;
     });
-    notify('지난주 식단을 복사했어요');
+    notify(t('지난주 식단을 복사했어요'));
     setConfirm(null);
   };
   const hasPrev = dates.some((x) => Object.keys(state.plans[addDays(x, -7)] || {}).length);
@@ -92,42 +93,42 @@ function Week({ d }) {
   return (
     <>
       <div className="pager hide-narrow">
-        <button className="btn ghost" onClick={() => go(`/plan?view=week&d=${addDays(dates[0], -7)}`)} aria-label="지난 주">◀ 지난 주</button>
-        <div className="center"><b>{fmtDate(dates[0])} ~ {fmtDate(dates[6]).replace(/^\d+월 /, '')}</b>{weekStart(today()) === dates[0] && <div className="muted small">이번 주</div>}</div>
-        <button className="btn ghost" onClick={() => go(`/plan?view=week&d=${addDays(dates[0], 7)}`)} aria-label="다음 주">다음 주 ▶</button>
+        <button className="btn ghost" onClick={() => go(`/plan?view=week&d=${addDays(dates[0], -7)}`)} aria-label={t('지난 주')}>◀ {t('지난 주')}</button>
+        <div className="center"><b>{fmtDate(dates[0])} ~ {fmtDate(dates[6]).replace(/^\d+월 /, '')}</b>{weekStart(today()) === dates[0] && <div className="muted small">{t('이번 주')}</div>}</div>
+        <button className="btn ghost" onClick={() => go(`/plan?view=week&d=${addDays(dates[0], 7)}`)} aria-label={t('다음 주')}>{t('다음 주')} ▶</button>
       </div>
 
       <div className={`row wrap no-print ${filled ? 'hide-narrow' : ''}`}>
-        <button className="btn primary" onClick={() => (filled ? setConfirm('regen') : regen())}>{filled ? '주 전체 다시 만들기' : '이 주 식단 만들기 (21끼)'}</button>
-        {filled > 0 && filled < 7 && <button className="btn" onClick={() => { const r = generate(dates, { overwrite: false }); notify(r.warnings[0] || '빈 끼니를 채웠어요'); }}>빈 끼니만 채우기</button>}
-        {hasPrev && <button className="btn ghost" onClick={() => setConfirm('copy')}>지난주 식단 복사</button>}
-        <button className="btn ghost" onClick={() => window.print()}>인쇄·PDF</button>
-        <button className="btn ghost" onClick={() => download(`식단_${dates[0]}.csv`, planCSV(state, targets, dates), 'text/csv')}>CSV</button>
+        <button className="btn primary" onClick={() => (filled ? setConfirm('regen') : regen())}>{filled ? t('주 전체 다시 만들기') : t('이 주 식단 만들기 (21끼)')}</button>
+        {filled > 0 && filled < 7 && <button className="btn" onClick={() => { const r = generate(dates, { overwrite: false }); notify(r.warnings[0] || t('빈 끼니를 채웠어요')); }}>{t('빈 끼니만 채우기')}</button>}
+        {hasPrev && <button className="btn ghost" onClick={() => setConfirm('copy')}>{t('지난주 식단 복사')}</button>}
+        <button className="btn ghost" onClick={() => window.print()}>{t('인쇄·PDF')}</button>
+        <button className="btn ghost" onClick={() => download(`${t('식단')}_${dates[0]}.csv`, planCSV(state, targets, dates), 'text/csv')}>CSV</button>
       </div>
 
       {avg && (
         <section className="card hide-narrow">
-          <h2>이번 주 하루 평균 <span className="est">추정치</span></h2>
+          <h2>{t('이번 주 하루 평균')} <span className="est">{t('추정치')}</span></h2>
           <NutrientBars totals={avg} targets={targets} />
-          <p className="muted small">가정식 예상 재료비(1인분 기준): 주 {won(weekCost)}</p>
+          <p className="muted small">{t('가정식 예상 재료비(1인분 기준): 주 {cost}', { cost: won(weekCost) })}</p>
         </section>
       )}
 
-      {filled > 0 && <section className="panel only-wide"><WeekTable dates={dates} /><p className="muted small">칸을 누르면 메뉴 정보를 볼 수 있고, 메뉴 이름을 누르면 레시피로 이동해요.</p></section>}
+      {filled > 0 && <section className="panel only-wide"><WeekTable dates={dates} /><p className="muted small">{t('칸을 누르면 메뉴 정보를 볼 수 있고, 메뉴 이름을 누르면 레시피로 이동해요.')}</p></section>}
       <div className={`week ${filled > 0 ? 'only-narrow' : ''}`}>
         {dates.map((x) => <DayPanel key={x} date={x} compact />)}
       </div>
 
       {confirm === 'regen' && (
-        <Modal title="주 전체 다시 만들기" onClose={() => setConfirm(null)}>
-          <p>고정(🔒)하거나 외식으로 표시한 끼니를 빼고 이번 주 메뉴를 모두 새로 고릅니다.</p>
-          <div className="row"><button className="btn primary" onClick={regen}>다시 만들기</button><button className="btn ghost" onClick={() => setConfirm(null)}>취소</button></div>
+        <Modal title={t('주 전체 다시 만들기')} onClose={() => setConfirm(null)}>
+          <p>{t('고정(🔒)하거나 외식으로 표시한 끼니를 빼고 이번 주 메뉴를 모두 새로 고릅니다.')}</p>
+          <div className="row"><button className="btn primary" onClick={regen}>{t('다시 만들기')}</button><button className="btn ghost" onClick={() => setConfirm(null)}>{t('취소')}</button></div>
         </Modal>
       )}
       {confirm === 'copy' && (
-        <Modal title="지난주 식단 복사" onClose={() => setConfirm(null)}>
-          <p>지난주 같은 요일의 메뉴를 이번 주에 그대로 복사합니다. 이번 주에 있던 메뉴는 덮어씁니다.</p>
-          <div className="row"><button className="btn primary" onClick={copyPrev}>복사하기</button><button className="btn ghost" onClick={() => setConfirm(null)}>취소</button></div>
+        <Modal title={t('지난주 식단 복사')} onClose={() => setConfirm(null)}>
+          <p>{t('지난주 같은 요일의 메뉴를 이번 주에 그대로 복사합니다. 이번 주에 있던 메뉴는 덮어씁니다.')}</p>
+          <div className="row"><button className="btn primary" onClick={copyPrev}>{t('복사하기')}</button><button className="btn ghost" onClick={() => setConfirm(null)}>{t('취소')}</button></div>
         </Modal>
       )}
     </>
@@ -146,54 +147,54 @@ function Month({ d }) {
 
   const make = (overwrite) => {
     const r = generate(dates, { overwrite });
-    notify(r.warnings[0] || `${fmtMonth(ym)} ${dates.length}일 식단을 만들었어요`);
+    notify(r.warnings[0] || t('{month} {n}일 식단을 만들었어요', { month: fmtMonth(ym), n: dates.length }));
     setConfirm(false);
   };
 
   return (
     <>
       <div className="pager">
-        <button className="btn ghost" onClick={() => go(`/plan?view=month&d=${addMonths(ym, -1)}-01`)}>◀ 이전 달</button>
-        <b>{fmtMonth(ym)} ({dates.length}일)</b>
-        <button className="btn ghost" onClick={() => go(`/plan?view=month&d=${addMonths(ym, 1)}-01`)}>다음 달 ▶</button>
+        <button className="btn ghost" onClick={() => go(`/plan?view=month&d=${addMonths(ym, -1)}-01`)}>◀ {t('이전 달')}</button>
+        <b>{t('{month} ({n}일)', { month: fmtMonth(ym), n: dates.length })}</b>
+        <button className="btn ghost" onClick={() => go(`/plan?view=month&d=${addMonths(ym, 1)}-01`)}>{t('다음 달')} ▶</button>
       </div>
       <div className="row wrap no-print">
-        {filled < dates.length && <button className="btn primary" onClick={() => make(false)}>{filled ? '빈 날짜 채우기' : `이 달 식단 만들기 (${dates.length * 3}끼)`}</button>}
-        {filled > 0 && <button className="btn" onClick={() => setConfirm(true)}>한 달 전체 다시 만들기</button>}
-        <button className="btn ghost" onClick={() => window.print()}>인쇄·PDF</button>
-        <button className="btn ghost" onClick={() => download(`식단_${ym}.csv`, planCSV(state, targets, dates), 'text/csv')}>CSV</button>
+        {filled < dates.length && <button className="btn primary" onClick={() => make(false)}>{filled ? t('빈 날짜 채우기') : t('이 달 식단 만들기 ({n}끼)', { n: dates.length * 3 })}</button>}
+        {filled > 0 && <button className="btn" onClick={() => setConfirm(true)}>{t('한 달 전체 다시 만들기')}</button>}
+        <button className="btn ghost" onClick={() => window.print()}>{t('인쇄·PDF')}</button>
+        <button className="btn ghost" onClick={() => download(`${t('식단')}_${ym}.csv`, planCSV(state, targets, dates), 'text/csv')}>CSV</button>
       </div>
 
-      <div className="cal" role="grid" aria-label={`${fmtMonth(ym)} 달력`}>
-        {['월', '화', '수', '목', '금', '토', '일'].map((w) => <div key={w} className="cal-h" role="columnheader">{w}</div>)}
+      <div className="cal" role="grid" aria-label={t('{month} 달력', { month: fmtMonth(ym) })}>
+        {['월', '화', '수', '목', '금', '토', '일'].map((w) => <div key={w} className="cal-h" role="columnheader">{t(w)}</div>)}
         {Array.from({ length: lead }, (_, i) => <div key={`e${i}`} className="cal-e" />)}
         {dates.map((x) => {
           const day = state.plans[x] || {};
-          const t = dayTotals(day, targets);
+          const tt = dayTotals(day, targets);
           const wd = parse(x).getDay();
           return (
-            <button key={x} role="gridcell" className={`cal-d ${x === selected ? 'sel' : ''} ${x === today() ? 'today' : ''} ${wd === 0 ? 'sun' : wd === 6 ? 'sat' : ''}`} onClick={() => setSel(x)} aria-label={`${fmtDate(x)} ${t.count ? `${round(t.kcal)}kcal` : '식단 없음'}`} aria-pressed={x === selected}>
+            <button key={x} role="gridcell" className={`cal-d ${x === selected ? 'sel' : ''} ${x === today() ? 'today' : ''} ${wd === 0 ? 'sun' : wd === 6 ? 'sat' : ''}`} onClick={() => setSel(x)} aria-label={`${fmtDate(x)} ${tt.count ? `${round(tt.kcal)}kcal` : t('식단 없음')}`} aria-pressed={x === selected}>
               <span className="cal-n">{Number(x.slice(8))}</span>
               <span className="cal-m">
                 {MEAL_KEYS.map((k) => {
                   const e = day[k];
                   const r = e && RECIPE_BY_ID[e.recipeId];
-                  return <span key={k} className="cal-item">{e ? (e.eatOut ? '🍽️' : r?.emoji) : '·'}<span className="cal-name">{e ? (e.eatOut ? e.eatOut.name : r?.title.split(/[,과와]/)[0]) : ''}</span></span>;
+                  return <span key={k} className="cal-item">{e ? (e.eatOut ? '🍽️' : r?.emoji) : '·'}<span className="cal-name">{e ? (e.eatOut ? t(e.eatOut.name) : r && t(r.title).split(/[,，、과와]/)[0]) : ''}</span></span>;
                 })}
               </span>
-              {t.count > 0 && <span className="cal-k">{round(t.kcal)}</span>}
+              {tt.count > 0 && <span className="cal-k">{round(tt.kcal)}</span>}
             </button>
           );
         })}
       </div>
 
       <DayPanel date={selected} />
-      <button className="btn ghost no-print" onClick={() => go(`/plan?view=week&d=${selected}`)}>이 주를 주간 화면에서 편집하기 →</button>
+      <button className="btn ghost no-print" onClick={() => go(`/plan?view=week&d=${selected}`)}>{t('이 주를 주간 화면에서 편집하기 →')}</button>
 
       {confirm && (
-        <Modal title="한 달 전체 다시 만들기" onClose={() => setConfirm(false)}>
-          <p>고정·외식 끼니를 제외한 {fmtMonth(ym)}의 모든 메뉴를 새로 고릅니다.</p>
-          <div className="row"><button className="btn primary" onClick={() => make(true)}>다시 만들기</button><button className="btn ghost" onClick={() => setConfirm(false)}>취소</button></div>
+        <Modal title={t('한 달 전체 다시 만들기')} onClose={() => setConfirm(false)}>
+          <p>{t('고정·외식 끼니를 제외한 {month}의 모든 메뉴를 새로 고릅니다.', { month: fmtMonth(ym) })}</p>
+          <div className="row"><button className="btn primary" onClick={() => make(true)}>{t('다시 만들기')}</button><button className="btn ghost" onClick={() => setConfirm(false)}>{t('취소')}</button></div>
         </Modal>
       )}
     </>

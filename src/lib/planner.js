@@ -4,6 +4,7 @@ import { ING } from '../data/ingredients';
 import { RECIPES, RECIPE_BY_ID, recipeAllergens, MEAL_LABEL } from '../data/recipes';
 import { MEAL_KEYS, mealItems, sumItems, dayTotals } from './nutrition';
 import { addDays, parse, weekday, WD } from './date';
+import { t } from '../i18n';
 
 const SEASONING = new Set(['양념']);
 
@@ -11,15 +12,15 @@ const SEASONING = new Set(['양념']);
 export function excludeReason(r, p) {
   const allergens = recipeAllergens(r);
   const hit = allergens.find((a) => (p.allergies || []).includes(a));
-  if (hit) return `알레르기(${hit})`;
+  if (hit) return t('알레르기({x})', { x: t(hit) });
   const ex = (p.exclusions || []).map((s) => s.trim()).filter(Boolean);
   const norm = (e) => e.replace(/달걀/g, '계란'); // 재료 이름이 '계란'으로 바뀌어도 예전 '달걀' 제외 설정이 그대로 통하게
   const exHit = ex.find((e) => r.title.includes(e) || r.title.includes(norm(e)) || r.items.some(([id]) => ING[id]?.name.includes(norm(e))));
-  if (exHit) return `제외 재료(${exHit})`;
-  if (r.difficulty > (p.difficulty || 3)) return '조리 난이도';
-  if (r.prep + r.cook > (p.cookTime || 999)) return '조리 시간';
-  if (p.chewing === 'hard' && !r.soft) return '씹기 어려움';
-  if ((p.dislikes || []).includes(r.id)) return '추천 제외한 메뉴';
+  if (exHit) return t('제외 재료({x})', { x: exHit });
+  if (r.difficulty > (p.difficulty || 3)) return t('조리 난이도');
+  if (r.prep + r.cook > (p.cookTime || 999)) return t('조리 시간');
+  if (p.chewing === 'hard' && !r.soft) return t('씹기 어려움');
+  if ((p.dislikes || []).includes(r.id)) return t('추천 제외한 메뉴');
   return null;
 }
 
@@ -119,11 +120,11 @@ function planDay(date, plans, state, targets, warnings, jitter) {
   for (const k of open) {
     const pool = allowedRecipes(profile, k).filter((r) => !r.noAuto); // 분식 등은 자동 생성에서 빼고 '바꾸기'로만
     if (!pool.length) {
-      warnings.add(`${MEAL_LABEL[k]}: 조건(알레르기·제외 재료·조리시간·난이도 등)에 맞는 메뉴가 없습니다. 설정을 완화해 주세요.`);
+      warnings.add(t('{meal}: 조건(알레르기·제외 재료·조리시간·난이도 등)에 맞는 메뉴가 없습니다. 설정을 완화해 주세요.', { meal: t(MEAL_LABEL[k]) }));
       delete day[k];
       continue;
     }
-    if (pool.length < 3) warnings.add(`${MEAL_LABEL[k]}: 조건에 맞는 메뉴가 ${pool.length}개뿐이라 같은 메뉴가 자주 나올 수 있습니다.`);
+    if (pool.length < 3) warnings.add(t('{meal}: 조건에 맞는 메뉴가 {n}개뿐이라 같은 메뉴가 자주 나올 수 있습니다.', { meal: t(MEAL_LABEL[k]), n: pool.length }));
     const ctx = { mealKey: k, date, plans: { ...tmpPlans, [date]: { ...day, [k]: undefined } }, targets, profile, pantry };
     cands[k] = pool
       .map((r) => ({ r, s: scoreRecipe(r, ctx).score + Math.random() * jitter }))
@@ -179,10 +180,10 @@ export function analyzeRange(plans, dates, targets) {
   if (!days.length) return out;
   const avg = (k) => days.reduce((s, t) => s + t[k], 0) / days.length;
   const m = targets.meals;
-  if (avg('protein') < m.protein * 0.85) out.push(`단백질이 목표보다 평균 ${Math.round(m.protein - avg('protein'))}g 부족합니다. 달걀·두부·우유 간식을 더하거나 단백질 목표를 조정해 보세요.`);
-  if (avg('sodium') > targets.sodium) out.push(`나트륨이 하루 기준(${targets.sodium}mg)을 평균 ${Math.round(avg('sodium') - targets.sodium)}mg 넘습니다. 국물은 절반만 드시는 것을 권합니다.`);
+  if (avg('protein') < m.protein * 0.85) out.push(t('단백질이 목표보다 평균 {n}g 부족합니다. 달걀·두부·우유 간식을 더하거나 단백질 목표를 조정해 보세요.', { n: Math.round(m.protein - avg('protein')) }));
+  if (avg('sodium') > targets.sodium) out.push(t('나트륨이 하루 기준({limit}mg)을 평균 {n}mg 넘습니다. 국물은 절반만 드시는 것을 권합니다.', { limit: targets.sodium, n: Math.round(avg('sodium') - targets.sodium) }));
   const kd = avg('kcal') - m.kcal;
-  if (Math.abs(kd) > m.kcal * 0.15) out.push(`세 끼 열량이 목표보다 평균 ${Math.abs(Math.round(kd))}kcal ${kd > 0 ? '많습니다' : '적습니다'}. 밥 양을 조절하거나 목표를 확인해 주세요.`);
+  if (Math.abs(kd) > m.kcal * 0.15) out.push(t(kd > 0 ? '세 끼 열량이 목표보다 평균 {n}kcal 많습니다. 밥 양을 조절하거나 목표를 확인해 주세요.' : '세 끼 열량이 목표보다 평균 {n}kcal 적습니다. 밥 양을 조절하거나 목표를 확인해 주세요.', { n: Math.abs(Math.round(kd)) }));
   return out;
 }
 
@@ -197,4 +198,4 @@ export function suggestions(state, targets, date, mealKey, limit = 8) {
     .slice(0, limit);
 }
 
-export const weekdayLabel = (n) => `${WD[n]}요일`;
+export const weekdayLabel = (n) => t(`${WD[n]}요일`);

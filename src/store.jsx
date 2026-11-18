@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { getItem, setItem, clearAll } from './lib/storage';
+import { t } from './i18n';
 import { computeTargets, DEFAULT_PROFILE } from './lib/nutrition';
 import { generatePlans } from './lib/planner';
 import { syncPack, syncCustom, applyEdits, nextUpdate } from './data/recipePack';
@@ -75,8 +76,8 @@ export function StoreProvider({ children }) {
   }, []);
   useEffect(() => {
     if (!toast) return;
-    const t = setTimeout(() => setToast(null), 3500);
-    return () => clearTimeout(t);
+    const tm = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(tm);
   }, [toast]);
 
   const setEntry = useCallback((date, meal, fn) => {
@@ -172,7 +173,7 @@ export function StoreProvider({ children }) {
   const value = useMemo(() => state && ({ state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, saveRecipeEdit, removeCustomRecipe, notify, toast, resetAll, replaceAll }),
     [state, update, targets, setEntry, generate, saveProfileAndGenerate, addRecipeUpdate, saveCustomRecipe, saveRecipeEdit, removeCustomRecipe, notify, toast, resetAll, replaceAll]);
 
-  if (!state) return <div className="loading" role="status">불러오는 중…</div>;
+  if (!state) return <div className="loading" role="status">{t('불러오는 중…')}</div>;
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

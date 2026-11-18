@@ -10,6 +10,8 @@ import Stats from './pages/Stats';
 import Settings from './pages/Settings';
 import More from './pages/More';
 import Onboarding from './pages/Onboarding';
+import { setLang, t } from './i18n';
+import LangButton from './i18n/LangButton';
 
 const TOP_NAV = [
   { path: '/', label: '홈', icon: '🏠' },
@@ -38,8 +40,11 @@ const FONT_STEPS = [18, 20, 22, 24, 26];
 export default function App() {
   const { state, toast, update } = useStore();
   const route = useRoute();
+  const lang = state.settings.lang || 'ko';
+  setLang(lang); // 화면을 그리기 전에 언어를 맞춤 (아래 key={lang}로 언어가 바뀌면 화면 전체를 새로 그림)
+  const changeLang = (l) => update('settings', (s) => ({ ...s, lang: l }));
 
-  if (!state.profile?.completed) return <><Onboarding /><Toast toast={toast} /></>;
+  if (!state.profile?.completed) return <div key={lang}><div className="onb-lang no-print"><LangButton lang={lang} onChange={changeLang} /></div><Onboarding /><Toast toast={toast} /></div>;
 
   const p = route.path;
   let page;
@@ -65,44 +70,45 @@ export default function App() {
   const name = state.profile.name?.trim();
 
   return (
-    <div className="app">
-      <a className="skip" href="#main">본문으로 건너뛰기</a>
+    <div className="app" key={lang}>
+      <a className="skip" href="#main">{t('본문으로 건너뛰기')}</a>
       <header className="topbar no-print">
         <a href="#/" className="brand">
           <img src="./cover-cross.png" alt="" width="44" height="44" />
-          <span><b>삼식이家</b><small>시니어를 위한 맞춤 식단</small></span>
+          <span><b>삼식이家</b><small>{t('시니어를 위한 맞춤 식단')}</small></span>
         </a>
-        <nav className="topnav" aria-label="주 메뉴">
+        <nav className="topnav" aria-label={t('주 메뉴')}>
           {TOP_NAV.map((n) => (
-            <a key={n.path} href={`#${n.path}`} className={isOn(n.path) ? 'on' : ''} aria-current={isOn(n.path) ? 'page' : undefined}><span aria-hidden>{n.icon}</span>{n.label}</a>
+            <a key={n.path} href={`#${n.path}`} className={isOn(n.path) ? 'on' : ''} aria-current={isOn(n.path) ? 'page' : undefined}><span aria-hidden>{n.icon}</span>{t(n.label)}</a>
           ))}
         </nav>
         <div className="top-tools">
-          <div className="fontsize" role="group" aria-label="글자 크기">
-            <span className="fs-label">글자크기</span>
-            <button onClick={() => setFont(-1)} disabled={fs === FONT_STEPS[0]} aria-label="글자 작게">가</button>
-            <button onClick={() => setFont(1)} disabled={fs === FONT_STEPS[FONT_STEPS.length - 1]} aria-label="글자 크게"><b>가+</b></button>
+          <LangButton lang={lang} onChange={changeLang} />
+          <div className="fontsize" role="group" aria-label={t('글자 크기')}>
+            <span className="fs-label">{t('글자크기')}</span>
+            <button onClick={() => setFont(-1)} disabled={fs === FONT_STEPS[0]} aria-label={t('글자 작게')}>{t('가')}</button>
+            <button onClick={() => setFont(1)} disabled={fs === FONT_STEPS[FONT_STEPS.length - 1]} aria-label={t('글자 크게')}><b>{t('가+')}</b></button>
           </div>
-          <a href="#/settings" className="me"><span aria-hidden>👤</span><span className="me-name">{name ? `${name}님` : '내 정보'}</span></a>
+          <a href="#/settings" className="me"><span aria-hidden>👤</span><span className="me-name">{name ? t('{name}님', { name }) : t('내 정보')}</span></a>
         </div>
       </header>
 
       <div className="shell">
-        <aside className="sidebar no-print" aria-label="보조 메뉴">
+        <aside className="sidebar no-print" aria-label={t('보조 메뉴')}>
           <div className="intro">
             <div className="intro-art" aria-hidden><span>👵</span><span>👴</span></div>
-            <h2>시니어 맞춤 식단 관리</h2>
+            <h2>{t('시니어 맞춤 식단 관리')}</h2>
             <ul>
-              {['개인별 영양 목표 반영', '칼로리·단백질 균형 관리', '주간·월간 식단 자동 생성', '쉬운 레시피와 장보기', '주변 식당 추천'].map((t) => <li key={t}>{t}</li>)}
+              {['개인별 영양 목표 반영', '칼로리·단백질 균형 관리', '주간·월간 식단 자동 생성', '쉬운 레시피와 장보기', '주변 식당 추천'].map((x) => <li key={x}>{t(x)}</li>)}
             </ul>
           </div>
           <nav className="sidenav">
             {SIDE_NAV.map((n) => (
               <div key={n.path}>
-                <a href={`#${n.path}`} className={isOn(n.path) ? 'on' : ''}><span aria-hidden>{n.icon}</span>{n.label}</a>
+                <a href={`#${n.path}`} className={isOn(n.path) ? 'on' : ''}><span aria-hidden>{n.icon}</span>{t(n.label)}</a>
                 {n.sub && (
                   <div className="sub">
-                    {n.sub.map((s) => <a key={s.href} href={`#${s.href}`} className={p === '/plan' && (route.query.view || 'week') === s.href.split('=')[1] ? 'on' : ''}>· {s.label}</a>)}
+                    {n.sub.map((s) => <a key={s.href} href={`#${s.href}`} className={p === '/plan' && (route.query.view || 'week') === s.href.split('=')[1] ? 'on' : ''}>· {t(s.label)}</a>)}
                   </div>
                 )}
               </div>
@@ -112,10 +118,10 @@ export default function App() {
         <main id="main" className="content" tabIndex={-1}>{page}</main>
       </div>
 
-      <nav className="tabbar no-print" aria-label="주 메뉴">
+      <nav className="tabbar no-print" aria-label={t('주 메뉴')}>
         {TAB_NAV.map((n) => (
           <a key={n.path} href={`#${n.path}`} className={tabOn(n) ? 'on' : ''} aria-current={tabOn(n) ? 'page' : undefined}>
-            <span aria-hidden className="ti">{n.icon}</span><span>{n.label}</span>
+            <span aria-hidden className="ti">{n.icon}</span><span>{t(n.label)}</span>
           </a>
         ))}
       </nav>
@@ -125,5 +131,5 @@ export default function App() {
 }
 
 function Toast({ toast }) {
-  return <div className="toast-wrap" aria-live="polite">{toast && <div key={toast.id} className="toast">{toast.msg}</div>}</div>;
+  return <div className="toast-wrap" aria-live="polite">{toast && <div key={toast.id} className="toast">{t(toast.msg)}</div>}</div>;
 }

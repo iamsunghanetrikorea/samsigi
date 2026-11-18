@@ -1,4 +1,5 @@
 // 식재료 및 100g당 영양 데이터
+import { t, getLang } from '../i18n';
 // 수치는 농촌진흥청 「국가표준식품성분표」(제10개정)·식품의약품안전처 식품영양성분 DB의
 // 대표값을 참고해 반올림한 '추정치'입니다. 실제 서비스 전 원자료와 대조 검증이 필요합니다. (docs/DATA_SOURCES.md)
 //
@@ -149,7 +150,7 @@ function friendlyCount(n) {
     return best[1];
   }
   const r = Math.round(n * 2) / 2;
-  return Number.isInteger(r) ? String(r) : `${Math.floor(r)}과 1/2`;
+  return Number.isInteger(r) ? String(r) : getLang() === 'ko' ? `${Math.floor(r)}과 1/2` : `${Math.floor(r)} 1/2`;
 }
 
 export function formatAmount(id, grams) {
@@ -159,13 +160,13 @@ export function formatAmount(id, grams) {
   const base = `${g}${ing.unit}`;
   if (ing.spoon) {
     const tsp = grams / ing.spoon;
-    if (tsp < 0.3) return `${base} (조금)`;
-    if (tsp < 3) return `${base} (약 ${friendlyCount(tsp) || '1/4'}작은술)`;
-    return `${base} (약 ${friendlyCount(tsp / 3)}큰술)`;
+    if (tsp < 0.3) return `${base} (${t('조금')})`;
+    if (tsp < 3) return `${base} (${t('약 {n}작은술', { n: friendlyCount(tsp) || '1/4' })})`;
+    return `${base} (${t('약 {n}큰술', { n: friendlyCount(tsp / 3) })})`;
   }
   if (ing.piece) {
     const c = friendlyCount(grams / ing.piece.g);
-    if (c) return `${base} (약 ${c}${ing.piece.label})`;
+    if (c) return `${base} (${t('약 {n}{unit}', { n: c, unit: t(ing.piece.label) })})`;
   }
   return base;
 }

@@ -3,6 +3,7 @@ import { ING, INGREDIENTS, CATEGORY_ORDER } from '../data/ingredients';
 import { RECIPES } from '../data/recipes';
 import { excludeReason } from './planner';
 import { ingredientIdsFromName } from './recipeMaker';
+import { t } from '../i18n';
 
 // 집에 늘 있다고 보는 기본 재료(양념·육수·밥): 고르지 않아도 '더 필요'로 치지 않고, 고르면 쓰는 재료로 조금 더 쳐 줌
 export const isBasic = (id) => ING[id]?.cat === '양념' || ['broth', 'rice', 'multigrain'].includes(id);
@@ -14,7 +15,9 @@ export const CAT_LABEL = { 곡류: '곡류·면' };
 export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫', 기타: '🍽️', 양념: '🧂' };
 
 // 화면에 보일 짧은 이름: '국수(삶은 것)' → '국수', '버섯(느타리·표고)' → '버섯'
-export const shortName = (name) => name.replace(/\s*\(.*?\)\s*/g, '').trim();
+export const shortName = (name) => name.replace(/\s*[(（].*?[)）]\s*/g, '').trim();
+// 화면에 보일 재료 이름 (지금 언어)
+export const ingLabel = (id) => shortName(t(ING[id].name));
 
 // 쌀밥·잡곡밥(곡류 맨 앞)과 양념도 고를 수 있음. 멸치육수·빵가루·밀가루는 뺌
 export const PICK_ITEMS = INGREDIENTS.filter((i) => PICK_CATS.includes(i.cat) && !['broth', 'panko', 'flour'].includes(i.id));
@@ -69,15 +72,15 @@ export function recommend(picked, custom, profile, limit = 12) {
     let basicCount = 0;
     for (const [id, g] of r.items) {
       if (!ING[id]) continue;
-      if (isBasic(id)) { if (have.has(id)) { used.push({ id, name: shortName(ING[id].name) }); basicCount++; } continue; }
-      if (have.has(id)) { used.push({ id, name: shortName(ING[id].name) }); continue; }
+      if (isBasic(id)) { if (have.has(id)) { used.push({ id, name: ingLabel(id) }); basicCount++; } continue; }
+      if (have.has(id)) { used.push({ id, name: ingLabel(id) }); continue; }
       // 대체 재료: 레시피에 이미 들어간 재료나 이미 대신 쓴 재료는 다시 쓰지 않음
       const alt = (r.subs?.[id] || []).find((x) => have.has(x) && !inRecipe.has(x) && !used.some((u) => u.id === x));
-      if (alt) { used.push({ id: alt, name: `${shortName(ING[alt].name)}(${shortName(ING[id].name)} 대신)` }); subCount++; }
-      else need.push({ id, g, name: shortName(ING[id].name) });
+      if (alt) { used.push({ id: alt, name: t('{a}({b} 대신)', { a: ingLabel(alt), b: ingLabel(id) }) }); subCount++; }
+      else need.push({ id, g, name: ingLabel(id) });
     }
     // DB에 없는 사용자 재료는 메뉴 이름에 들어 있으면 쓰는 것으로 봄
-    for (const w of words) if (!w.ids.length && w.keys.some((k) => r.title.includes(k))) used.push({ id: null, name: w.name });
+    for (const w of words) if (!w.ids.length && w.keys.some((k) => r.title.includes(k))) used.push({ id: null, name: t(w.name) });
     if (!used.length) continue;
     // 양념·밥 말고 다른 재료도 골랐다면, 양념·밥만 겹치는 메뉴는 빼서 추천이 흐려지지 않게
     if (basicCount === used.length && hasMain) continue;

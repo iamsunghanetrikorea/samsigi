@@ -4,19 +4,23 @@ import { sumItems, round } from '../lib/nutrition';
 import { go } from '../router';
 import Plate from './Plate';
 import { todayRecipe } from './dashboard';
+import { t } from '../i18n';
+
+// 번역된 제목으로 짧은 이름 만들기 (한국어일 땐 그대로)
+const st = (r) => (r ? shortTitle({ ...r, title: t(r.title) }) : '');
 
 // 레시피 모음·레시피 화면의 '후보요리 추가' 버튼
 export function MyTableButton({ id, small }) {
   const { state, update, notify } = useStore();
   const on = state.myTable.includes(id);
-  const title = RECIPE_BY_ID[id]?.title || '';
+  const title = t(RECIPE_BY_ID[id]?.title || '');
   const toggle = () => {
-    update('myTable', (t) => (on ? t.filter((x) => x !== id) : [...t, id]));
-    notify(on ? `‘${title}’을(를) 후보요리에서 뺐어요` : `‘${title}’을(를) 후보요리에 올렸어요 (홈 아래쪽)`);
+    update('myTable', (l) => (on ? l.filter((x) => x !== id) : [...l, id]));
+    notify(on ? t('‘{title}’을(를) 후보요리에서 뺐어요', { title }) : t('‘{title}’을(를) 후보요리에 올렸어요 (홈 아래쪽)', { title }));
   };
   return (
     <button type="button" className={`btn ${small ? 'small' : ''} ${on ? 'on' : 'ghost'} table-btn`} aria-pressed={on} onClick={toggle}>
-      {on ? '✓ 후보요리' : '＋ 후보요리 추가'}
+      {on ? `✓ ${t('후보요리')}` : `＋ ${t('후보요리 추가')}`}
     </button>
   );
 }
@@ -30,28 +34,28 @@ export function MyTablePanel() {
   return (
     <section className="panel my-table-panel" aria-labelledby="my-table-h">
       <div className="row between wrap">
-        <h2 id="my-table-h"><span aria-hidden>🍚</span> 후보요리</h2>
-        {list.length > 0 && <button className="btn small ghost" onClick={() => update('myTable', [])}><span className="hide-m">모두 치우기</span><span className="only-m">메뉴비우기</span></button>}
+        <h2 id="my-table-h"><span aria-hidden>🍚</span> {t('후보요리')}</h2>
+        {list.length > 0 && <button className="btn small ghost" onClick={() => update('myTable', [])}><span className="hide-m">{t('모두 치우기')}</span><span className="only-m">{t('메뉴비우기')}</span></button>}
       </div>
       {list.length === 0 ? (
         <div className="my-table empty">
-          <p>레시피 모음에서 <b>＋ 후보요리 추가</b>를 눌러 올려 보세요.</p>
-          <button className="btn primary small" onClick={() => go('/recipes')}>레시피 모음 열기</button>
+          <p>{t('레시피 모음에서 {btn}를 눌러 올려 보세요.').split('{btn}').map((part, i) => (i ? [<b key={i}>＋ {t('후보요리 추가')}</b>, part] : part))}</p>
+          <button className="btn primary small" onClick={() => go('/recipes')}>{t('레시피 모음 열기')}</button>
         </div>
       ) : (
         <>
-          <ul className="my-table" aria-label="후보요리 메뉴">
+          <ul className="my-table" aria-label={t('후보요리 메뉴')}>
             {list.map((r) => (
               <li key={r.id} className="my-dish">
-                <button className="my-dish-open" onClick={() => go(`/recipe/${r.id}`)} aria-label={`${r.title} 레시피 보기`}>
+                <button className="my-dish-open" onClick={() => go(`/recipe/${r.id}`)} aria-label={t('{title} 레시피 보기', { title: t(r.title) })}>
                   <Plate recipe={r} size="lg" />
-                  <span className="my-dish-name">{shortTitle(r)}</span>
+                  <span className="my-dish-name">{st(r)}</span>
                 </button>
-                <button className="my-dish-x" aria-label={`${r.title} 후보요리에서 빼기`} onClick={() => update('myTable', (t) => t.filter((x) => x !== r.id))}>✕</button>
+                <button className="my-dish-x" aria-label={t('{title} 후보요리에서 빼기', { title: t(r.title) })} onClick={() => update('myTable', (l) => l.filter((x) => x !== r.id))}>✕</button>
               </li>
             ))}
           </ul>
-          <p className="muted small hide-m">{list.length}가지 · 모두 1인분씩 드시면 약 {round(n.kcal)}kcal · 단백질 {round(n.protein)}g · 나트륨 {round(n.sodium)}mg (추정치). 메뉴를 누르면 레시피가 열려요.</p>
+          <p className="muted small hide-m">{t('{n}가지 · 모두 1인분씩 드시면 약 {kcal}kcal · 단백질 {protein}g · 나트륨 {sodium}mg (추정치). 메뉴를 누르면 레시피가 열려요.', { n: list.length, kcal: round(n.kcal), protein: round(n.protein), sodium: round(n.sodium) })}</p>
         </>
       )}
     </section>
@@ -65,13 +69,13 @@ export function BabSangPanel() {
   const open = () => r && go(`/recipe/${r.id}?date=${d}&meal=${k}`);
   return (
     <section className="panel bab-sang-panel" aria-labelledby="bab-sang-h">
-      <h2 id="bab-sang-h"><span aria-hidden>🥢</span> 오늘의 밥상</h2>
+      <h2 id="bab-sang-h"><span aria-hidden>🥢</span> {t('오늘의 밥상')}</h2>
       <div className="bab-sang"><div className="bab-sang-in">
-        <img src="./bab-sang.webp?v=3" alt={`밥, 반찬과 ${r ? r.title : '오늘의 요리'}가 차려진 밥상`} loading="lazy" decoding="async" />
+        <img src="./bab-sang.webp?v=3" alt={t('밥, 반찬과 {dish}가 차려진 밥상', { dish: r ? t(r.title) : t('오늘의 요리') })} loading="lazy" decoding="async" />
         {r && (
-          <button className="bs-today" onClick={open} aria-label={`오늘의 레시피 ${r.title} 보기`}>
+          <button className="bs-today" onClick={open} aria-label={t('오늘의 레시피 {title} 보기', { title: t(r.title) })}>
             <span className="bs-bowl"><Plate recipe={r} size="lg" /></span>
-            <span className="bs-label">{shortTitle(r)}</span>
+            <span className="bs-label">{st(r)}</span>
           </button>
         )}
       </div></div>

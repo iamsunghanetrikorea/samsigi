@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { NUTRIENTS, round } from '../lib/nutrition';
+import { t } from '../i18n';
 
 // 모달이 겹쳐 열릴 때 Esc는 맨 위 모달만 닫음
 const modalStack = [];
@@ -28,7 +29,7 @@ export function Modal({ title, onClose, children, wide }) {
       <div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={ref}>
         <div className="modal-head">
           <h2>{title}</h2>
-          <button className="btn ghost icon" onClick={onClose} aria-label="닫기">✕</button>
+          <button className="btn ghost icon" onClick={onClose} aria-label={t('닫기')}>✕</button>
         </div>
         <div className="modal-body">{children}</div>
       </div>
@@ -43,7 +44,7 @@ export function NutrientBar({ label, value, target, unit, max }) {
   if (max) tone = pct > 100 ? 'bad' : 'ok';
   else if (pct < 85) tone = 'low';
   else if (pct > 115) tone = 'high';
-  const status = max ? (pct > 100 ? '초과' : '적정') : pct < 85 ? '부족' : pct > 115 ? '많음' : '적정';
+  const status = t(max ? (pct > 100 ? '초과' : '적정') : pct < 85 ? '부족' : pct > 115 ? '많음' : '적정');
   return (
     <div className="nbar">
       <div className="nbar-label">
@@ -62,7 +63,7 @@ export function NutrientBars({ totals, targets, keys }) {
   return (
     <div className="nbars">
       {NUTRIENTS.filter((n) => !keys || keys.includes(n.key)).map((n) => (
-        <NutrientBar key={n.key} label={n.label} unit={n.unit} max={n.max} value={totals[n.key]} target={n.key === 'sodium' ? targets.sodium : targets.meals[n.key]} />
+        <NutrientBar key={n.key} label={t(n.label)} unit={n.unit} max={n.max} value={totals[n.key]} target={n.key === 'sodium' ? targets.sodium : targets.meals[n.key]} />
       ))}
     </div>
   );
@@ -79,7 +80,7 @@ export function Seg({ value, options, onChange, label }) {
 }
 
 export function Estimate() {
-  return <span className="est" title="식품성분표 기반 계산 추정치">추정치</span>;
+  return <span className="est" title={t('식품성분표 기반 계산 추정치')}>{t('추정치')}</span>;
 }
 
 // 사진을 길게 누르면(0.6초) onLong 실행. 길게 누른 뒤 손을 떼며 생기는 클릭은 무시.
