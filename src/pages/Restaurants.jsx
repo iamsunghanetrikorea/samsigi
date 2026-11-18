@@ -153,7 +153,7 @@ export default function Restaurants() {
 
   return (
     <div className="stack">
-      <h1>{t('주변식당 추천')}</h1>
+      <h1>{t('주변식당 검색')}</h1>
       <div className="hide-narrow"><Seg label={t('보기')} value={tab} onChange={setTab} options={[{ value: 'search', label: t('찾기') }, { value: 'saved', label: t('저장한 식당 {n}', { n: state.restaurants.length }) }]} /></div>
 
       {tab === 'search' && (

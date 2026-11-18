@@ -19,7 +19,7 @@ export default function Market({ route }) {
   const result = view === 'pick' && route.query.step === 'result';
   return (
     <div className="stack">
-      <h1>{view === 'list' ? t('장보기 목록') : t('식재료로 요리 추천')}</h1>
+      <h1>{view === 'list' ? t('장보기 목록') : t('식재료로 요리 검색')}</h1>
       {view === 'pick' && !result && <p className="recipe-hint">{t('아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요')}</p>}
       {/* 휴대폰에서는 장보기 목록을 '더보기'에서 열기 때문에 전환 단추를 숨김 */}
       <div className="no-print hide-m">

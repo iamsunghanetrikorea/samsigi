@@ -66,6 +66,7 @@ export default {
   '‘{name}’ 사진을 지울까요?': { zh: '要删除“{name}”的照片吗？', ja: '「{name}」の写真を削除しますか？', en: 'Delete the “{name}” photo?' },
   '‘{name}’ 사진을 지웠어요': { zh: '已删除“{name}”的照片', ja: '「{name}」の写真を削除しました', en: 'Deleted the “{name}” photo' },
   '레시피 추천': { zh: '食谱推荐', ja: 'レシピのおすすめ', en: 'Recipe ideas' },
+  '레시피 검색': { zh: '食谱搜索', ja: 'レシピ検索', en: 'Recipe search' },
   '아래 메뉴사진을 선택하면 관련 레시피 추천': { zh: '选择下方的菜品照片，就会推荐相关食谱', ja: '下のメニュー写真を選ぶと、関連するレシピをおすすめします', en: 'Pick a photo below to see related recipes' },
   '분류': { zh: '分类', ja: '分類', en: 'Category' },
   '지운 기본 사진 {n}개 다시 보이기': { zh: '重新显示已删除的{n}张默认照片', ja: '削除した基本の写真{n}枚を再表示', en: 'Show {n} deleted default photos again' },
@@ -205,7 +206,7 @@ export default {
 
   // ── 식재료로 요리 추천(장보기) ──
   '장보기 목록': { zh: '购物清单', ja: '買い物リスト', en: 'Shopping list' },
-  '식재료로 요리 추천': { zh: '按食材推荐菜品', ja: '食材から料理をおすすめ', en: 'Dishes from your ingredients' },
+  '식재료로 요리 검색': { zh: '按食材搜索菜品', ja: '食材から料理を検索', en: 'Search dishes by ingredient' },
   '아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요': { zh: '请选择下方的食材照片，然后点“食谱推荐”按钮', ja: '下の材料の写真を選んで、「レシピのおすすめ」ボタンを押してください', en: 'Pick ingredient photos below, then tap “Recipe ideas”' },
   '장보기 화면': { zh: '购物页面', ja: '買い物画面', en: 'Shopping view' },
   '재료 고르기': { zh: '选择食材', ja: '材料を選ぶ', en: 'Pick ingredients' },
@@ -280,7 +281,7 @@ export default {
   '주소를 찾지 못했어요. 지도 앱 검색 버튼을 이용해 보세요.': { zh: '找不到这个地址。请试试地图应用搜索按钮。', ja: '住所が見つかりませんでした。地図アプリ検索ボタンをお試しください。', en: 'Address not found. Try the map app buttons.' },
   '주소 검색에 실패했어요. 지도 앱 검색 버튼을 이용해 주세요.': { zh: '地址搜索失败。请使用地图应用搜索按钮。', ja: '住所の検索に失敗しました。地図アプリ検索ボタンをご利用ください。', en: 'Address search failed. Please use the map app buttons.' },
   "'{name}'을(를) 저장했어요": { zh: '已保存“{name}”', ja: '「{name}」を保存しました', en: 'Saved “{name}”' },
-  '주변식당 추천': { zh: '附近餐厅推荐', ja: '近くの食堂のおすすめ', en: 'Nearby restaurants' },
+  '주변식당 검색': { zh: '搜索附近餐厅', ja: '近くの食堂を検索', en: 'Search nearby restaurants' },
   '보기': { zh: '查看', ja: '表示', en: 'View' },
   '찾기': { zh: '查找', ja: '探す', en: 'Search' },
   '저장한 식당 {n}': { zh: '已保存的餐厅 {n}', ja: '保存した食堂 {n}', en: 'Saved restaurants {n}' },
