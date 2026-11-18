@@ -152,7 +152,7 @@ export default function Restaurants() {
 
   return (
     <div className="stack">
-      <h1>주변 식당</h1>
+      <h1>주변식당 추천</h1>
       <div className="hide-narrow"><Seg label="보기" value={tab} onChange={setTab} options={[{ value: 'search', label: '찾기' }, { value: 'saved', label: `저장한 식당 ${state.restaurants.length}` }]} /></div>
 
       {tab === 'search' && (
@@ -171,7 +171,6 @@ export default function Restaurants() {
           </section>
 
           <section className="card find-card">
-            <h2>요리추천</h2>
             <div className="chips find-chips" role="group" aria-label="요리 종류">
               {CATS.map((c) => c.key).filter((c) => !hiddenPics.includes(c)).map((c) => {
                 const on = !customMenu && cat === c;
@@ -192,7 +191,6 @@ export default function Restaurants() {
                 );
               })}
             </div>
-            {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('restHidden', [])}>지운 기본 사진 {hiddenPics.length}개 다시 보이기</button></p>}
             <AddIngredient label="검색요리 입력" unit="요리" placeholder="예: 냉면, 삼계탕" noCat custom={myMenus}
               onRemove={(id) => { const x = myMenus.find((m) => m.id === id); setMyMenus((l) => l.filter((m) => m.id !== id)); if (x && customMenu === x.name) setCustomMenu(''); }}
               onAdd={(name, _c, photo, credit) => {

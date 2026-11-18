@@ -75,7 +75,7 @@ export default function RecipeList() {
 
   return (
     <div className="stack">
-      <h1>레시피 모음</h1>
+      <h1>레시피 추천</h1>
       <p className="recipe-hint">아래 메뉴사진을 선택하면 관련 레시피 추천</p>
       <section className="card update-card find-card">
         <div className="chips find-chips" role="group" aria-label="분류">
