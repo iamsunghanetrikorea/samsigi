@@ -86,8 +86,8 @@ export default function App() {
           <LangButton lang={lang} onChange={changeLang} />
           <div className="fontsize" role="group" aria-label={t('글자 크기')}>
             <span className="fs-label">{t('글자크기')}</span>
-            <button onClick={() => setFont(-1)} disabled={fs === FONT_STEPS[0]} aria-label={t('글자 작게')}>{t('가')}</button>
-            <button onClick={() => setFont(1)} disabled={fs === FONT_STEPS[FONT_STEPS.length - 1]} aria-label={t('글자 크게')}><b>{t('가+')}</b></button>
+            <button onClick={() => setFont(-1)} disabled={fs === FONT_STEPS[0]} aria-label={t('글자 작게')}><span className="fs-long">{t('가')}</span><span className="fs-short" aria-hidden>−</span></button>
+            <button onClick={() => setFont(1)} disabled={fs === FONT_STEPS[FONT_STEPS.length - 1]} aria-label={t('글자 크게')}><b className="fs-long">{t('가+')}</b><span className="fs-short" aria-hidden>+</span></button>
           </div>
           <a href="#/settings" className="me"><span aria-hidden>👤</span><span className="me-name">{name ? t('{name}님', { name }) : t('내 정보')}</span></a>
         </div>

@@ -8,6 +8,7 @@ import { Seg, longPress } from '../components/ui';
 import { go } from '../router';
 import Plate from '../components/Plate';
 import { MyTableButton } from '../components/MyTable';
+import { tShort } from '../i18n/short';
 import Shopping from './Shopping';
 import { googleAiUrl, breakfastAiPrompt } from '../lib/share';
 import { t } from '../i18n';
@@ -40,6 +41,8 @@ const useMarket = () => {
 // 화면에 보일 이름 (지금 언어)
 const label = (id, custom) => (ING[id] ? ingLabel(id) : EXTRA_BY[id] ? t(EXTRA_BY[id].name) : custom.find((c) => c.id === id)?.name || '');
 const catName = (c) => t(CAT_LABEL[c] || c);
+// 사진 이름: 짧은 이름이 있으면 휴대폰에서는 짧은 이름만 한 줄로 (일본어·영어)
+const Nm = ({ full, short }) => (short && short !== full ? <><span className="nm-full">{full}</span><span className="nm-short">{short}</span></> : full);
 
 function Picker() {
   const { notify } = useStore();
@@ -68,7 +71,7 @@ function Picker() {
           if (!items.length) return null;
           return (
             <section key={cat} className="ing-cat" aria-label={catName(cat)}>
-              <h2 className="ing-cat-h"><span aria-hidden>{CAT_EMOJI[cat]}</span> {catName(cat)}</h2>
+              <h2 className="ing-cat-h"><span aria-hidden>{CAT_EMOJI[cat]}</span> <Nm full={catName(cat)} short={tShort(CAT_LABEL[cat] || cat)} /></h2>
               <ul className="ing-grid">
                 {items.map((i) => {
                   const on = picked.has(i.id);
@@ -80,7 +83,7 @@ function Picker() {
                         <span className="ing-ph">
                           {ING_PHOTOS[i.id] ? <img src={`./photos/ing/${i.id}.webp${ING_PHOTOS[i.id].v ? `?v=${ING_PHOTOS[i.id].v}` : ''}`} alt="" loading="lazy" decoding="async" /> : i.photo ? <img src={i.photo} alt="" /> : <span className="ing-emoji" aria-hidden>{CAT_EMOJI[cat]}</span>}
                         </span>
-                        <span className="ing-name">{name}</span>
+                        <span className="ing-name"><Nm full={name} short={ING[i.id] ? tShort(ING[i.id].name) : EXTRA_BY[i.id] ? tShort(i.name) : null} /></span>
                       </label>
                     </li>
                   );
