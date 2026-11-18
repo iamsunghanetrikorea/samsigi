@@ -774,19 +774,20 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .find-tools { display: grid; grid-template-columns: 2fr 1fr; gap: .6rem; align-items: stretch; }
 .find-tools > .map-links { display: flex; flex-direction: column; align-items: stretch; gap: .5rem; margin: 0; min-width: 0; }
 .find-tools > .map-links .btn { width: 100%; flex: none; }
-.menu-input { margin: 0; min-width: 0; display: flex; } /* 네이버~구글 버튼 세 줄 높이만큼 길게 */
-.menu-input-box { position: relative; display: block; flex: 1; }
-.menu-input-box input { width: 100%; height: 100%; min-width: 0; padding-right: 2.6rem; box-sizing: border-box; }
-.mic-btn { position: absolute; right: .25rem; top: 50%; transform: translateY(-50%); width: 2.2rem; height: 2.2rem; display: grid; place-items: center; padding: 0; border: 0; border-radius: 99px; background: none; color: var(--primary); cursor: pointer; }
-.mic-btn:hover { background: var(--surface-2, #eef2f8); }
+.menu-input { margin: 0; min-width: 0; position: relative; } /* 네이버~구글 버튼 세 줄 높이에 꼭 맞게 (입력칸 자체는 높이를 늘리지 않음) */
+.menu-input-box { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: .2rem; min-width: 0; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); padding: .3rem; box-sizing: border-box; }
+.menu-input-box:focus-within { border-color: var(--primary); }
+.menu-input-box textarea { flex: none; width: 100%; min-height: 0; height: auto; border: 0; padding: .1rem .2rem; resize: none; overflow: hidden; text-align: center; line-height: 1.25; background: none; outline: none; }
+.menu-input-box textarea::placeholder { font-size: .78em; line-height: 1.25; }
+/* 마이크: 입력 글자 아래 한 줄을 따로 차지하고 크게 (예전 20px의 5배) */
+.mic-btn { flex: 1 1 0; width: 100%; min-height: 0; display: grid; place-items: center; padding: 0; border: 0; border-radius: 14px; background: none; color: var(--primary); cursor: pointer; }
+.mic-btn svg { width: 100px; height: 100%; max-width: 100%; max-height: 100px; }
+.mic-btn:hover { background: var(--primary-soft, #eef2f8); }
 .mic-btn.on { color: #fff; background: #d23b2f; animation: mic-pulse 1s ease-in-out infinite; }
 @keyframes mic-pulse { 50% { box-shadow: 0 0 0 .35rem rgba(210, 59, 47, .25); } }
 @media (prefers-reduced-motion: reduce) { .mic-btn.on { animation: none; } }
 @media (max-width: 560px) {
   .find-tools { gap: .4rem; }
-  .menu-input-box input { padding-left: .45rem; padding-right: 1.9rem; font-size: .88em; }
-  .mic-btn { right: .1rem; width: 1.8rem; height: 1.8rem; }
-  .mic-btn svg { width: 18px; height: 18px; }
 }
 
 /* 사진 길게 눌러 지우기: 길게 누를 때 휴대폰 기본 메뉴(사진 저장 등)·글자 선택이 뜨지 않게 */
@@ -906,3 +907,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .verse-big.rd-zh rt { font-size: .62em; }
 .verse-big.rd-zh:has(ruby) { line-height: 2.5; }
 .rd-zh ruby { margin: 0 .12em; }
+/* 찾을 메뉴 안내 문구: 넓은 화면은 두 줄, 휴대폰은 세 줄(작은 글씨) */
+@media (min-width: 561px) { .menu-input-box textarea { height: 2.6em; } }
+@media (max-width: 560px) { .menu-input-box textarea { font-size: .85em; line-height: 1.15; } .menu-input-box textarea::placeholder { font-size: .76em; line-height: 1.15; } }

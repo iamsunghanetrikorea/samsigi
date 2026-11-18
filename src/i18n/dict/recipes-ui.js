@@ -273,6 +273,7 @@ export default {
   '카카오로 식당 찾기': { zh: '用Kakao找餐厅', ja: 'Kakaoで食堂を探す', en: 'Find restaurants on Kakao' },
   '구글로 식당 찾기': { zh: '用Google找餐厅', ja: 'Googleで食堂を探す', en: 'Find restaurants on Google' },
   '찾을 메뉴': { zh: '要找的菜', ja: '探すメニュー', en: 'Dish to find' },
+  '찾을 메뉴를 마이크 누르고 말하시오': { zh: '按下麦克风，说出要找的菜', ja: 'マイクを押して探すメニューを話してください', en: 'Tap the mic and say a dish' },
   '듣는 중…': { zh: '正在听…', ja: '聞いています…', en: 'Listening…' },
   '말로 입력하기': { zh: '语音输入', ja: '音声で入力', en: 'Speak to type' },
   '음성 입력 멈추기': { zh: '停止语音输入', ja: '音声入力を止める', en: 'Stop voice input' },

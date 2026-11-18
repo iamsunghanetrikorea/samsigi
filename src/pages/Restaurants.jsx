@@ -90,11 +90,12 @@ function MenuInput({ value, onChange }) {
     try { rec.start(); setListening(true); } catch { setListening(false); }
   };
   return (
-    <form className="menu-input" onSubmit={(e) => { e.preventDefault(); e.currentTarget.querySelector('input')?.blur(); }}>
+    <form className="menu-input" onSubmit={(e) => e.preventDefault()}>
       <span className="menu-input-box">
-        <input aria-label={t('찾을 메뉴')} placeholder={listening ? t('듣는 중…') : t('찾을 메뉴')} value={value} onChange={(e) => onChange(e.target.value)} maxLength={30} />
+        <textarea rows={3} aria-label={t('찾을 메뉴')} placeholder={listening ? t('듣는 중…') : t('찾을 메뉴를 마이크 누르고 말하시오')} value={value}
+          onChange={(e) => onChange(e.target.value.replace(/\s*\n\s*/g, ' '))} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } }} maxLength={30} />
         <button type="button" className={`mic-btn ${listening ? 'on' : ''}`} onClick={mic} aria-pressed={listening} aria-label={listening ? t('음성 입력 멈추기') : t('말로 입력하기')}>
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z" /></svg>
+          <svg viewBox="4.6 1.6 14.8 19.8" aria-hidden><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z" /></svg>
         </button>
       </span>
     </form>
