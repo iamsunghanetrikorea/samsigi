@@ -5,6 +5,11 @@ import { go } from '../router';
 import Plate from './Plate';
 import { todayRecipe } from './dashboard';
 import { t } from '../i18n';
+import { BIBLE_VERSES } from '../data/bibleVerses';
+import { today } from '../lib/date';
+
+// 오늘(월·일)의 성경 구절 — 연도 무시, 2/29는 2/28 구절
+const todayVerse = () => { const md = today().slice(5); return BIBLE_VERSES[md] || BIBLE_VERSES[md === '02-29' ? '02-28' : ''] || null; };
 
 // 번역된 제목으로 짧은 이름 만들기 (한국어일 땐 그대로)
 const st = (r) => (r ? shortTitle({ ...r, title: t(r.title) }) : '');
@@ -67,6 +72,7 @@ export function BabSangPanel() {
   const { state } = useStore();
   const { d, k, r } = todayRecipe(state);
   const open = () => r && go(`/recipe/${r.id}?date=${d}&meal=${k}`);
+  const verse = todayVerse();
   return (
     <section className="panel bab-sang-panel" aria-labelledby="bab-sang-h">
       <h2 id="bab-sang-h"><span aria-hidden>🥢</span> {t('오늘의 밥상')}</h2>
@@ -79,6 +85,7 @@ export function BabSangPanel() {
           </button>
         )}
       </div></div>
+      {verse && <p className="bs-verse">“{verse[0]}” <cite>({verse[1]})</cite></p>}
     </section>
   );
 }
