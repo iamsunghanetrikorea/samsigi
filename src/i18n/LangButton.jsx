@@ -7,7 +7,6 @@ export default function LangButton({ lang, onChange }) {
   return (
     <button type="button" className="lang-btn" onClick={() => onChange(nextLang(lang))} title={`Language: ${order}`} aria-label={`Language: ${LANG_NAMES[lang]}`}>
       {FLAGS[lang]}
-      <span className="nm">{LANG_NAMES[lang]}</span>
     </button>
   );
 }

@@ -831,3 +831,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .naver-news { display: flex; width: 100%; justify-content: center; align-items: center; gap: .4rem; margin-top: .6rem; background: #03c75a; border-color: #03c75a; color: #fff; font-weight: 800; }
 .naver-news:hover { background: #02b351; color: #fff; }
 .naver-news b { display: inline-grid; place-items: center; width: 1.4em; height: 1.4em; border-radius: 4px; background: #fff; color: #03c75a; font-weight: 900; line-height: 1; }
+/* 헤더: 국기와 −/+ 버튼 사이 간격 */
+.lang-btn { margin-right: .5rem; }
+@media (max-width: 380px) { .lang-btn { margin-right: .35rem; } }
