@@ -113,7 +113,7 @@ export function BabSangPanel() {
     <section className="panel bab-sang-panel" aria-labelledby="bab-sang-h">
       <h2 id="bab-sang-h"><span aria-hidden>🥢</span> {t('오늘의 밥상')}</h2>
       <div className="bab-sang"><div className="bab-sang-in">
-        <img src="./bab-sang.webp?v=3" alt={t('밥, 반찬과 {dish}가 차려진 밥상', { dish: r ? t(r.title) : t('오늘의 요리') })} loading="lazy" decoding="async" />
+        <img src="./bab-sang.webp?v=4" alt={t('밥, 반찬과 {dish}가 차려진 밥상', { dish: r ? t(r.title) : t('오늘의 요리') })} loading="lazy" decoding="async" />
         {r && (
           <button className="bs-today" onClick={open} aria-label={t('오늘의 레시피 {title} 보기', { title: t(r.title) })}>
             <span className="bs-bowl"><Plate recipe={r} size="lg" /></span>
