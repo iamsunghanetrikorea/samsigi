@@ -103,7 +103,7 @@ export const INGREDIENTS = [
   I('shrimp', '새우(손질)', '수산물', [85, 0, 19, 0.8, 200], { price: 3000, storage: 3, seasons: [9, 10, 11], allergens: ['새우'] }),
   I('clam', '바지락(살)', '수산물', [60, 3, 10, 0.8, 500], { price: 1500, storage: 2, seasons: [2, 3, 4], allergens: ['조개류'] }),
   I('broth', '멸치육수', '수산물', [5, 0.2, 0.8, 0.1, 60], { price: 3000, storage: 3, unit: 'mL', allergens: ['생선'], buyAs: { name: '육수용 멸치(육수 1L당 약 20g)', ratio: 0.02 } }),
-  I('miyeok', '마른 미역', '수산물', [125, 40, 20, 3, 3000], { price: 4000, storage: 365 }),
+  I('miyeok', '미역', '수산물', [125, 40, 20, 3, 3000], { price: 4000, storage: 365 }),
   I('laver', '김(구운 것)', '수산물', [165, 40, 35, 1, 120], { price: 8000, storage: 60, piece: { label: '장', g: 2 } }),
 
   // 달걀·유제품
