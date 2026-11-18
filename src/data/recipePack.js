@@ -3,7 +3,7 @@
 // 재료량은 1인분 기준(g·mL), 영양은 식재료 DB로 계산합니다. 참고 영상·자료 링크는 recipeRefs()로 만듭니다.
 import { RECIPES, RECIPE_BY_ID, CATEGORIES } from './recipes';
 
-const P = (r) => ({ difficulty: 1, soft: false, tags: [], subs: {}, isNew: true, source: '건강한 세 끼 추천 레시피 (가정식 조리법 참고, 저염 조정)', ...r });
+const P = (r) => ({ difficulty: 1, soft: false, tags: [], subs: {}, isNew: true, source: '삼식이家 추천 레시피 (가정식 조리법 참고, 저염 조정)', ...r });
 const LD = ['lunch', 'dinner'];
 
 export const PACK = [

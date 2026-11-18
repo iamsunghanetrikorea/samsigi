@@ -1,6 +1,6 @@
 {
-  "name": "건강한 세 끼 — 맞춤 식단 관리",
-  "short_name": "건강한 세 끼",
+  "name": "삼식이家 — 시니어 맞춤 식단",
+  "short_name": "삼식이家",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

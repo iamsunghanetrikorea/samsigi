@@ -3,10 +3,10 @@ export default {
   // ───── 공통 ─────
   '유튜브 조리 영상': { zh: 'YouTube 烹饪视频', ja: 'YouTube 料理動画', en: 'YouTube cooking videos' },
   '만개의레시피': { zh: '万个食谱（韩国食谱网站）', ja: '万個のレシピ（韓国のレシピサイト）', en: '10000 Recipes (Korean recipe site)' },
-  '건강한 세 끼 추천 레시피 (가정식 조리법 참고, 저염 조정)': {
-    zh: '健康三餐推荐食谱（参考家常做法，已减盐）',
-    ja: '健康な三食のおすすめレシピ（家庭料理の作り方を参考、減塩調整済み）',
-    en: 'Healthy three-meals recommended recipe (based on home cooking, lower salt)',
+  '삼식이家 추천 레시피 (가정식 조리법 참고, 저염 조정)': {
+    zh: '三食家推荐食谱（参考家常做法，已减盐）',
+    ja: 'サムシギ家のおすすめレシピ（家庭料理の作り方を参考、減塩調整済み）',
+    en: 'Samsigi-ga recommended recipe (based on home cooking, lower salt)',
   },
   '한식': { zh: '韩餐', ja: '韓国料理', en: 'Korean' },
   '중식': { zh: '中餐', ja: '中華料理', en: 'Chinese' },

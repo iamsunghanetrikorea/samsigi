@@ -4,7 +4,7 @@
 import { ING, NUTRITION_SOURCE } from './ingredients';
 import { BUNSIK } from './bunsik';
 
-const R = (r) => ({ difficulty: 1, soft: false, tags: [], subs: {}, source: '건강한 세 끼 자체 구성 레시피', ...r });
+const R = (r) => ({ difficulty: 1, soft: false, tags: [], subs: {}, source: '삼식이家 자체 구성 레시피', ...r });
 
 export const RECIPES = [
   // ───────── 아침 ─────────

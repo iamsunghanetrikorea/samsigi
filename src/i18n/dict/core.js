@@ -70,7 +70,6 @@ export default {
   '취소': { zh: '取消', ja: 'キャンセル', en: 'Cancel' },
 
   // 처음 설정
-  '건강한 세 끼': { zh: '健康三餐', ja: '健康な3食', en: 'Three healthy meals' },
   '아침·점심·저녁 식단을 내 몸에 맞게 짜 드려요.': { zh: '为您量身安排早餐、午餐和晚餐。', ja: '朝・昼・夜の献立を、あなたの体に合わせて作ります。', en: 'We plan breakfast, lunch and dinner to suit your body.' },
   '회원가입 없이 이 기기에서 바로 시작합니다.': { zh: '无需注册，在这台设备上即可开始。', ja: '会員登録なしで、この端末ですぐに始められます。', en: 'No sign-up needed. Start right away on this device.' },
   '나이·키·몸무게만 넣으면 바로 시작할 수 있어요. 나머지는 건너뛰어도 돼요.': { zh: '只要填写年龄、身高和体重就能开始。其余的可以跳过。', ja: '年齢・身長・体重を入れるだけで始められます。ほかは飛ばしても大丈夫です。', en: 'Just enter your age, height and weight to start. You can skip the rest.' },

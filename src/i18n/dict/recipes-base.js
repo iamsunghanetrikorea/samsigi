@@ -2,7 +2,7 @@
 // (분식 bunsik.js 레시피는 별도 사전)
 export default {
   // 공통 라벨
-  '건강한 세 끼 자체 구성 레시피': { zh: '“健康一日三餐”自编食谱', ja: '「健康な三食」オリジナルレシピ', en: 'Original recipe by Healthy Three Meals' },
+  '삼식이家 자체 구성 레시피': { zh: '“三食家”自编食谱', ja: '「サムシギ家」オリジナルレシピ', en: 'Original recipe by Samsigi-ga' },
   '죽': { zh: '粥', ja: 'お粥', en: 'Porridge' },
   '간편': { zh: '简单', ja: '手軽', en: 'Quick & easy' },
   '빵': { zh: '面包', ja: 'パン', en: 'Bread' },

@@ -1,4 +1,4 @@
-// 건강한 세 끼 — 오프라인 지원 서비스 워커
+// 삼식이家 — 오프라인 지원 서비스 워커
 const CACHE = 'samsigi-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './favicon-32.png', './icon-192.png'];
 
