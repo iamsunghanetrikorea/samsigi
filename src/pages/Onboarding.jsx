@@ -32,7 +32,7 @@ export default function Onboarding() {
   return (
     <div className="onboard">
       <header className="hero">
-        <img src="./icon.svg" alt="" width="72" height="72" />
+        <img src="./house-logo.webp" alt="" width="100" height="80" />
         <h1>{t('건강한 세 끼')}</h1>
         <p>{t('아침·점심·저녁 식단을 내 몸에 맞게 짜 드려요.')}<br />{t('회원가입 없이 이 기기에서 바로 시작합니다.')}</p>
         <p className="muted small">{t('나이·키·몸무게만 넣으면 바로 시작할 수 있어요. 나머지는 건너뛰어도 돼요.')}</p>
