@@ -19,14 +19,14 @@ export default function ProfileForm({ initial, onSave, submitLabel, short, wizar
   const set = (patch) => setP((x) => ({ ...x, ...patch }));
   const toggle = (key, v) => set({ [key]: p[key].includes(v) ? p[key].filter((x) => x !== v) : [...p[key], v] });
 
-  const valid = p.age >= 40 && p.age <= 110 && p.height >= 120 && p.height <= 210 && p.weight >= 30 && p.weight <= 200;
+  const valid = p.age >= 20 && p.age <= 110 && p.height >= 120 && p.height <= 210 && p.weight >= 30 && p.weight <= 200;
   const pctSum = Number(p.carbPct) + Number(p.proteinPct) + Number(p.fatPct);
   const splitSum = MEAL_KEYS.reduce((s, k) => s + Number(p.split[k] || 0), 0);
   const tg = valid ? computeTargets(p) : null;
   const cond = p.conditions || {};
   const okCount = valid ? MEAL_KEYS.map((k) => allowedRecipes({ ...p, exclusions: parseEx(exText) }, k).filter((r) => !r.noAuto).length) : [];
 
-  const blocker = !valid ? t('나이(40~110세), 키(120~210cm), 몸무게(30~200kg)를 확인해 주세요.')
+  const blocker = !valid ? t('나이(20~110세), 키(120~210cm), 몸무게(30~200kg)를 확인해 주세요.')
     : pctSum !== 100 ? t('영양 비율 합계가 {n}%예요. 100%로 맞춰 주세요.', { n: pctSum })
     : splitSum !== 100 ? t('끼니 배분 합계가 {n}%예요. 100%로 맞춰 주세요.', { n: splitSum }) : null;
   const finish = () => { if (!blocker) onSave({ ...p, exclusions: parseEx(exText) }); };
@@ -39,7 +39,7 @@ export default function ProfileForm({ initial, onSave, submitLabel, short, wizar
         <p className="muted small">{t('열량 추정에만 쓰이며, 이 기기에만 저장됩니다.')}</p>
         <label className="field"><span>{t('부르실 이름 (선택)')}</span><input value={p.name || ''} maxLength={20} onChange={(e) => set({ name: e.target.value })} placeholder={t('예: 홍길동')} /></label>
         <div className="grid2">
-          <label className="field"><span>{t('나이 (세)')}</span><input type="number" inputMode="numeric" min={40} max={110} value={p.age} onChange={(e) => set({ age: num(e.target.value) })} required /></label>
+          <label className="field"><span>{t('나이 (세)')}</span><input type="number" inputMode="numeric" min={20} max={110} value={p.age} onChange={(e) => set({ age: num(e.target.value) })} required /></label>
           <div className="field"><span>{t('성별 (열량 추정식 선택용)')}</span>
             <Seg label={t('성별')} value={p.sex} onChange={(v) => set({ sex: v })} options={[{ value: 'female', label: t('여성') }, { value: 'male', label: t('남성') }]} />
           </div>

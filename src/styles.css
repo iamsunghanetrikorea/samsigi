@@ -873,15 +873,17 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .lang-btn { margin-right: .5rem; }
 @media (max-width: 380px) { .lang-btn { margin-right: .35rem; } }
 /* 헤더: 글자 없이 집 로고만 크게 */
-.topbar .brand img { width: 100px; height: 80px; }
+.topbar .brand img { width: 80px; height: 80px; border-radius: 50%; }
 .topbar .brand small { font-size: .85rem; font-weight: 700; }
+.topbar .brand b { font-size: 1.6rem; }
 @media (max-width: 639px) {
   .topbar .brand { flex: 0 1 auto; min-width: 0; gap: .3rem; }
-  .topbar .brand img { width: 60px; height: 48px; }
+  .topbar .brand img { width: 48px; height: 48px; }
+  .topbar .brand b { font-size: 1.25rem; white-space: nowrap; }
   .topbar .brand > span { min-width: 0; }
   .topbar .brand small { font-size: clamp(10px, 3vw, .7rem); white-space: nowrap; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; }
 }
-@media (max-width: 380px) { .topbar .brand img { width: 50px; height: 40px; } .lang-btn { margin-right: .2rem; } }
+@media (max-width: 380px) { .topbar .brand img { width: 40px; height: 40px; } .topbar .brand b { font-size: 1.1rem; } .lang-btn { margin-right: .2rem; } }
 /* 넓은 화면 헤더(메뉴가 위에 나올 때): 글자가 세로로 한 글자씩 쌓이지 않게 줄바꿈 금지.
    영어·중국어·일본어는 메뉴 이름이 길어서, 화면이 좁은 구간에서는 부제·'내 정보' 글자를 숨기고 메뉴를 작게 */
 @media (min-width: 1100px) {
@@ -910,3 +912,9 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 찾을 메뉴 안내 문구: 넓은 화면은 두 줄, 휴대폰은 세 줄(작은 글씨) */
 @media (min-width: 561px) { .menu-input-box textarea { height: 2.6em; } }
 @media (max-width: 560px) { .menu-input-box textarea { font-size: .85em; line-height: 1.15; } .menu-input-box textarea::placeholder { font-size: .76em; line-height: 1.15; } }
+/* 달력 누르면 1.5배 확대 (아래쪽 기준으로 위로 커짐, 휴대폰에서 왼쪽이 잘리지 않게 왼쪽 가까이 기준) */
+.bs-cal { transform-origin: 15% 100%; transition: transform .25s ease-out; }
+.bs-cal.zoom { transform: scale(1.5); z-index: 6; }
+@media (prefers-reduced-motion: reduce) { .bs-cal { transition: none; } }
+.bs-cal-verse.cut { -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+.bs-cal-more { flex: none; font-size: 1.4cqw; font-weight: 900; line-height: .6; color: #8a4b1f; }

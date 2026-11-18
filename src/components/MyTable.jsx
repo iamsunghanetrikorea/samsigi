@@ -7,7 +7,7 @@ import { todayRecipe } from './dashboard';
 import { t, getLang } from '../i18n';
 import { BIBLE_VERSES } from '../data/bibleVerses';
 import { today, addDays, parse, fmtDate, fmtMD, WD } from '../lib/date';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Modal } from './ui';
 
 // 날짜(월·일)의 성경 구절 — 연도 무시, 2/29는 2/28 구절
@@ -49,30 +49,56 @@ function Reading({ text, reading }) {
   return out;
 }
 
-// 밥상 위 넘기는 탁상 달력: 날짜별 성경 구절. ‹ ›로 하루씩 넘기고, 종이를 누르면 크게 보기
+// 밥상 위 넘기는 탁상 달력: 날짜별 성경 구절. ‹ ›로 하루씩 넘기고,
+// 종이를 누르면 달력이 1.5배로 커지고, 커진 상태에서 구절이 잘려 있으면 한 번 더 눌러 크게 보기(창)
 function VerseCalendar() {
   const [date, setDate] = useState(today);
   const [big, setBig] = useState(false);
-  const [dir, setDir] = useState(1);
-  const flip = (n) => { setDir(n); setDate((x) => addDays(x, n)); };
+  const [zoom, setZoom] = useState(false);
+  const calRef = useRef(null);
+  const verseRef = useRef(null);
+  useEffect(() => { // 달력 밖을 누르거나 Esc → 원래 크기로
+    if (!zoom || big) return;
+    const out = (e) => { if (!calRef.current?.contains(e.target)) setZoom(false); };
+    const esc = (e) => { if (e.key === 'Escape') setZoom(false); };
+    document.addEventListener('pointerdown', out);
+    document.addEventListener('keydown', esc);
+    return () => { document.removeEventListener('pointerdown', out); document.removeEventListener('keydown', esc); };
+  }, [zoom, big]);
+  const isCut = () => { const el = verseRef.current; return !!el && el.scrollHeight > el.clientHeight + 1; };
+  const [cut, setCut] = useState(false); // 구절이 달력 안에 다 안 들어가면 흐리게 끝내고 '⋯' 표시
   const table = useVerseTable(getLang());
   const v = table ? verseOf(date, table) : null;
+  useLayoutEffect(() => {
+    const check = () => setCut(isCut());
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [date, v]);
+  const tapPage = () => {
+    if (!zoom) setZoom(true);
+    else if (cut || isCut()) setBig(true);
+    else setZoom(false);
+  };
+  const [dir, setDir] = useState(1);
+  const flip = (n) => { setDir(n); setDate((x) => addDays(x, n)); };
   const d = parse(date);
   const isToday = date === today();
   return (
     <>
-      <div className="bs-cal" role="group" aria-label={t('성경 구절 달력')}>
+      <div ref={calRef} className={`bs-cal ${zoom ? 'zoom' : ''}`} role="group" aria-label={t('성경 구절 달력')}>
         <span className="bs-cal-rings" aria-hidden><i /><i /></span>
-        <button key={date} className={`bs-cal-page ${dir < 0 ? 'back' : ''}`} onClick={() => setBig(true)} aria-label={t('{date} 성경 구절 크게 보기', { date: fmtDate(date) })}>
+        <button key={date} className={`bs-cal-page ${dir < 0 ? 'back' : ''}`} onClick={tapPage} aria-expanded={zoom} aria-label={t('{date} 성경 구절 크게 보기', { date: fmtDate(date) })}>
           <span className="bs-cal-head">{fmtMD(date)} ({WD[d.getDay()]})</span>
-          {v && <span className={`bs-cal-verse rd-${getLang()}`} translate="no"><Reading text={v[0]} reading={v[2]} /></span>}
+          {v && <span ref={verseRef} className={`bs-cal-verse rd-${getLang()} ${cut ? 'cut' : ''}`} translate="no"><Reading text={v[0]} reading={v[2]} /></span>}
+          {v && cut && <span className="bs-cal-more" aria-hidden>⋯</span>}
           {v && <span className="bs-cal-ref">{v[1]}</span>}
         </button>
         <button className="bs-cal-nav prev" onClick={() => flip(-1)} aria-label={t('이전 날')}>‹</button>
         <button className="bs-cal-nav next" onClick={() => flip(1)} aria-label={t('다음 날')}>›</button>
       </div>
       {big && (
-        <Modal title={`📖 ${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => setBig(false)}>
+        <Modal title={`📖 ${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => { setBig(false); setZoom(false); }}>
           {v && <blockquote className={`verse-big rd-${getLang()}`} translate="no">“<Reading text={v[0]} reading={v[2]} />”<cite>{v[1]}</cite></blockquote>}
           <div className="verse-nav">
             <button className="btn" onClick={() => flip(-1)}>‹ {t('이전 날')}</button>
