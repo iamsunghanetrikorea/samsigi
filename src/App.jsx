@@ -74,7 +74,7 @@ export default function App() {
       <a className="skip" href="#main">{t('본문으로 건너뛰기')}</a>
       <header className="topbar no-print">
         <a href="#/" className="brand">
-          <img src="./cover-cross.png" alt="" width="44" height="44" />
+          <img src="./house-logo.webp" alt="" width="70" height="56" />
           <span><b>삼식이家</b><small>{t('시니어를 위한 맞춤 식단')}</small></span>
         </a>
         <nav className="topnav" aria-label={t('주 메뉴')}>

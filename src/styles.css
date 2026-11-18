@@ -398,7 +398,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 @media print { .sidebar, .banner, .dash-cards { display: none !important; } .only-wide { display: block !important; } .only-narrow { display: none !important; } }
 @media (max-width: 639px) {
   .topbar { gap: .4rem; padding: .3rem 12px; }
-  .brand img { width: 36px; height: 36px; }
+  .brand img { width: 55px; height: 44px; }
   .brand b { font-size: 1.05rem; white-space: nowrap; }
   .top-tools { gap: .2rem; }
   .fontsize button { min-width: 40px; }
@@ -794,7 +794,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .fs-short { display: none; }
 @media (max-width: 639px) {
   .topbar { padding: .55rem 12px; min-height: 64px; }
-  .brand img { width: 40px; height: 40px; }
+  .brand img { width: 60px; height: 48px; }
   .brand b { font-size: 1.35rem; }
   .fs-long { display: none; }
   .fs-short { display: inline; font-size: 1.5rem; font-weight: 900; line-height: 1; }
