@@ -111,7 +111,7 @@ export default {
   '고기': { zh: '肉', ja: '肉', en: 'Meat' },
   '생선': { zh: '鱼', ja: '魚', en: 'Fish' },
   // 사진 입력 칸 (재료·메뉴·요리)
-  '나의 메뉴 입력': { zh: '输入我的菜品', ja: 'マイメニューを入力', en: 'Add my dish' },
+  '나의 메뉴 검색': { zh: '搜索我的菜品', ja: 'マイメニューを検索', en: 'Search my dish' },
   '메뉴': { zh: '菜品', ja: 'メニュー', en: 'Dish' },
   '예: 잡채, 김치볶음밥': { zh: '例：杂菜、泡菜炒饭', ja: '例：チャプチェ、キムチチャーハン', en: 'e.g. japchae, kimchi fried rice' },
   '검색요리 입력': { zh: '输入要搜索的菜', ja: '探したい料理を入力', en: 'Add a dish to search' },
