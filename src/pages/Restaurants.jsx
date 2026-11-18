@@ -4,7 +4,7 @@ import { today } from '../lib/date';
 import { Modal, Seg, longPress } from '../components/ui';
 import { EatOutModal, EATOUT_PRESETS } from '../components/meal';
 import { AddIngredient } from './Market';
-import { t } from '../i18n';
+import { t, getLang } from '../i18n';
 
 // 비밀 API 키 없이 동작: OpenStreetMap(Overpass·Nominatim) 공개 API + 네이버/카카오 지도 검색 링크
 const OVERPASS = 'https://overpass-api.de/api/interpreter';
@@ -43,7 +43,7 @@ const isNarrow = () => typeof window !== 'undefined' && !!window.matchMedia?.('(
 
 export const mapLinks = (query) => {
   const q = encodeURIComponent(query);
-  return { naver: `https://map.naver.com/p/search/${q}`, kakao: `https://map.kakao.com/?q=${q}` };
+  return { naver: `https://map.naver.com/p/search/${q}`, kakao: `https://map.kakao.com/?q=${q}`, google: `https://www.google.com/maps/search/${q}` };
 };
 
 // 모바일에서는 지도 앱·사이트를 현재 창에서 열고, 넓은 화면에서는 새 창
@@ -62,7 +62,43 @@ function MapLinks({ query, pos }) {
     <span className="row wrap map-links">
       <a className="btn small ghost full-narrow" href={l.naver} {...linkTarget()}>{t('네이버로 식당 찾기')}</a>
       <a className="btn small ghost full-narrow" href={l.kakao} {...linkTarget()}>{t('카카오로 식당 찾기')}</a>
+      <a className="btn small ghost full-narrow" href={l.google} {...linkTarget()}>{t('구글로 식당 찾기')}</a>
     </span>
+  );
+}
+
+// 말로 입력 (Web Speech API — 크롬·사파리 등 지원 브라우저에서만)
+const Speech = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
+const SPEECH_LANG = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
+
+// 오른쪽 '찾을 메뉴' 입력칸: 고른 사진 메뉴가 들어오고, 직접 쓰거나 마이크로 말해서 바꿀 수 있음. [찾기]는 네이버 지도 검색
+function MenuInput({ value, onChange, onFind }) {
+  const { notify } = useStore();
+  const [listening, setListening] = useState(false);
+  const recRef = useRef(null);
+  const mic = () => {
+    if (!Speech) { notify(t('이 기기·브라우저는 음성 입력을 지원하지 않아요')); return; }
+    if (listening) { recRef.current?.stop(); return; }
+    const rec = new Speech();
+    rec.lang = SPEECH_LANG[getLang()] || 'ko-KR';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+    rec.onresult = (e) => { const said = e.results[0]?.[0]?.transcript?.trim().replace(/[.。!?]$/, ''); if (said) onChange(said); };
+    rec.onerror = (e) => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') notify(t('마이크 사용을 허용해 주세요')); };
+    rec.onend = () => setListening(false);
+    recRef.current = rec;
+    try { rec.start(); setListening(true); } catch { setListening(false); }
+  };
+  return (
+    <form className="menu-input" onSubmit={(e) => { e.preventDefault(); onFind(); }}>
+      <span className="menu-input-box">
+        <input aria-label={t('찾을 메뉴')} placeholder={listening ? t('듣는 중…') : t('찾을 메뉴')} value={value} onChange={(e) => onChange(e.target.value)} maxLength={30} />
+        <button type="button" className={`mic-btn ${listening ? 'on' : ''}`} onClick={mic} aria-pressed={listening} aria-label={listening ? t('음성 입력 멈추기') : t('말로 입력하기')}>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z" /></svg>
+        </button>
+      </span>
+      <button className="btn primary" type="submit">{t('찾기')}</button>
+    </form>
   );
 }
 
@@ -78,6 +114,7 @@ export default function Restaurants() {
   const [radius, setRadius] = useState(last.radius || 1000);
   const [cat, setCat] = useState('');
   const [customMenu, setCustomMenu] = useState('');
+  const [menuText, setMenuText] = useState('');
   // 나의 메뉴(사진 버튼). 예전에 '검색추가'로 넣은 글자 메뉴도 그대로 가져옴
   const myMenus = state.restMenus || (state.settings.customMenus || []).map((m) => ({ id: `m_${m}`, name: m }));
   const hiddenPics = state.restHidden || [];
@@ -148,7 +185,12 @@ export default function Restaurants() {
   };
 
   const shown = (results || []).filter((r) => (!cat || r.cat === cat));
-  const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : '근처 '}${customMenu || (!c ? '백반' : c.split('·')[0])}`;
+  const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : '근처 '}${menuText.trim() || customMenu || (!c ? '백반' : c.split('·')[0])}`;
+  const findTyped = () => {
+    if (!menuText.trim()) { notify(t('찾을 메뉴를 적거나 말해 주세요')); return; }
+    const url = mapLinks(shownQuery).naver;
+    if (isNarrow()) window.location.href = url; else window.open(url, '_blank', 'noopener,noreferrer');
+  };
   const shownQuery = nearQuery(cat);
 
   return (
@@ -176,7 +218,7 @@ export default function Restaurants() {
               {CATS.map((c) => c.key).filter((c) => !hiddenPics.includes(c)).map((c) => {
                 const on = !customMenu && cat === c;
                 return (
-                  <button key={c} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} aria-label={t(c)} onClick={() => { setCat(on ? '' : c); setCustomMenu(''); }} {...longPress(() => removePic(c, t(CAT_PIC[c][0]), false))}>
+                  <button key={c} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} aria-label={t(c)} onClick={() => { setCat(on ? '' : c); setCustomMenu(''); setMenuText(on ? '' : t(CAT_PIC[c][0])); }} {...longPress(() => removePic(c, t(CAT_PIC[c][0]), false))}>
                     <img src={`./photos/${CAT_PIC[c][1]}.webp`} alt="" loading="lazy" decoding="async" />
                     <span>{t(CAT_PIC[c][0])}</span>
                   </button>
@@ -185,22 +227,27 @@ export default function Restaurants() {
               {myMenus.map((x) => {
                 const on = customMenu === x.name;
                 return (
-                  <button key={x.id} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} onClick={() => { setCustomMenu(on ? '' : x.name); setCat(''); }} {...longPress(() => removePic(x.id, x.name, true))}>
+                  <button key={x.id} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} onClick={() => { setCustomMenu(on ? '' : x.name); setCat(''); setMenuText(on ? '' : x.name); }} {...longPress(() => removePic(x.id, x.name, true))}>
                     {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden>🍽️</span>}
                     <span>{x.name}</span>
                   </button>
                 );
               })}
             </div>
+            <div className="find-tools">
+            <div className="find-tools-left">
             <AddIngredient label="검색요리 입력" unit="요리" placeholder="예: 냉면, 삼계탕" noCat custom={myMenus}
               onRemove={(id) => { const x = myMenus.find((m) => m.id === id); setMyMenus((l) => l.filter((m) => m.id !== id)); if (x && customMenu === x.name) setCustomMenu(''); }}
               onAdd={(name, _c, photo, credit) => {
-                if (myMenus.some((x) => x.name === name)) { setCustomMenu(name); setCat(''); notify(t('‘{name}’은(는) 이미 있어요', { name })); return; }
+                if (myMenus.some((x) => x.name === name)) { setCustomMenu(name); setCat(''); setMenuText(name); notify(t('‘{name}’은(는) 이미 있어요', { name })); return; }
                 setMyMenus((l) => [...l, { id: `m_${Date.now().toString(36)}`, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
-                setCustomMenu(name); setCat('');
+                setCustomMenu(name); setCat(''); setMenuText(name);
                 notify(t('‘{name}’ 요리를 추가했어요', { name }));
               }} />
             <MapLinks query={shownQuery} pos={pos} />
+            </div>
+            <MenuInput value={menuText} onChange={setMenuText} onFind={findTyped} />
+            </div>
           </section>
 
           {results && (
