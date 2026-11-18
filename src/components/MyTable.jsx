@@ -4,14 +4,24 @@ import { sumItems, round } from '../lib/nutrition';
 import { go } from '../router';
 import Plate from './Plate';
 import { todayRecipe } from './dashboard';
-import { t } from '../i18n';
+import { t, getLang } from '../i18n';
 import { BIBLE_VERSES } from '../data/bibleVerses';
 import { today, addDays, parse, fmtDate, fmtMD, WD } from '../lib/date';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from './ui';
 
 // 날짜(월·일)의 성경 구절 — 연도 무시, 2/29는 2/28 구절
-const verseOf = (date) => { const md = date.slice(5); return BIBLE_VERSES[md] || (md === '02-29' ? BIBLE_VERSES['02-28'] : null); };
+// 언어별: 한국어는 새번역, 다른 언어는 bibleVersesI18n(영어 WEB·일본어 口語訳·중국어 和合本, 필요할 때만 불러옴)
+const verseOf = (date, table = BIBLE_VERSES) => { const md = date.slice(5); return table[md] || (md === '02-29' ? table['02-28'] : null); };
+let I18N_VERSES = null;
+function useVerseTable(lang) {
+  const [tables, setTables] = useState(I18N_VERSES);
+  useEffect(() => {
+    if (lang === 'ko' || tables) return;
+    import('../data/bibleVersesI18n').then((m) => { I18N_VERSES = m.BIBLE_VERSES_I18N; setTables(I18N_VERSES); }).catch(() => {});
+  }, [lang, tables]);
+  return lang === 'ko' ? BIBLE_VERSES : tables?.[lang] || null;
+}
 
 // 밥상 위 넘기는 탁상 달력: 날짜별 성경 구절. ‹ ›로 하루씩 넘기고, 종이를 누르면 크게 보기
 function VerseCalendar() {
@@ -19,7 +29,8 @@ function VerseCalendar() {
   const [big, setBig] = useState(false);
   const [dir, setDir] = useState(1);
   const flip = (n) => { setDir(n); setDate((x) => addDays(x, n)); };
-  const v = verseOf(date);
+  const table = useVerseTable(getLang());
+  const v = table ? verseOf(date, table) : null;
   const d = parse(date);
   const isToday = date === today();
   return (
