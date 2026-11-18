@@ -881,3 +881,16 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .topbar .brand small { font-size: clamp(10px, 3vw, .7rem); white-space: nowrap; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; }
 }
 @media (max-width: 380px) { .topbar .brand img { width: 50px; height: 40px; } .lang-btn { margin-right: .2rem; } }
+/* 넓은 화면 헤더(메뉴가 위에 나올 때): 글자가 세로로 한 글자씩 쌓이지 않게 줄바꿈 금지.
+   영어·중국어·일본어는 메뉴 이름이 길어서, 화면이 좁은 구간에서는 부제·'내 정보' 글자를 숨기고 메뉴를 작게 */
+@media (min-width: 1100px) {
+  .topbar .brand small, .me-name { white-space: nowrap; }
+  .topnav { min-width: 0; flex-wrap: nowrap; }
+  .top-tools { flex: none; }
+}
+@media (min-width: 1100px) and (max-width: 1699px) {
+  :root:not(:lang(ko)) .topbar .brand small, :root:not(:lang(ko)) .me-name, :root:not(:lang(ko)) .fs-label { display: none; }
+  :root:not(:lang(ko)) .topnav { gap: 0; }
+  :root:not(:lang(ko)) .topnav a { padding: 0 .5rem; font-size: .88rem; }
+  :root:not(:lang(ko)) .topnav a span { display: none; }
+}
