@@ -71,8 +71,8 @@ function MapLinks({ query, pos }) {
 const Speech = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
 const SPEECH_LANG = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
 
-// 오른쪽 '찾을 메뉴' 입력칸: 고른 사진 메뉴가 들어오고, 직접 쓰거나 마이크로 말해서 바꿀 수 있음. [찾기]는 네이버 지도 검색
-function MenuInput({ value, onChange, onFind }) {
+// '찾을 메뉴' 입력칸(네이버 버튼 오른쪽): 고른 사진 메뉴가 들어오고, 직접 쓰거나 마이크로 말해서 바꿈 → 네이버·카카오·구글 버튼이 이 메뉴로 검색
+function MenuInput({ value, onChange }) {
   const { notify } = useStore();
   const [listening, setListening] = useState(false);
   const recRef = useRef(null);
@@ -90,14 +90,13 @@ function MenuInput({ value, onChange, onFind }) {
     try { rec.start(); setListening(true); } catch { setListening(false); }
   };
   return (
-    <form className="menu-input" onSubmit={(e) => { e.preventDefault(); onFind(); }}>
+    <form className="menu-input" onSubmit={(e) => { e.preventDefault(); e.currentTarget.querySelector('input')?.blur(); }}>
       <span className="menu-input-box">
         <input aria-label={t('찾을 메뉴')} placeholder={listening ? t('듣는 중…') : t('찾을 메뉴')} value={value} onChange={(e) => onChange(e.target.value)} maxLength={30} />
         <button type="button" className={`mic-btn ${listening ? 'on' : ''}`} onClick={mic} aria-pressed={listening} aria-label={listening ? t('음성 입력 멈추기') : t('말로 입력하기')}>
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z" /></svg>
         </button>
       </span>
-      <button className="btn primary" type="submit">{t('찾기')}</button>
     </form>
   );
 }
@@ -186,11 +185,6 @@ export default function Restaurants() {
 
   const shown = (results || []).filter((r) => (!cat || r.cat === cat));
   const nearQuery = (c) => `${place && place !== '현재 위치' ? `${place} ` : '근처 '}${menuText.trim() || customMenu || (!c ? '백반' : c.split('·')[0])}`;
-  const findTyped = () => {
-    if (!menuText.trim()) { notify(t('찾을 메뉴를 적거나 말해 주세요')); return; }
-    const url = mapLinks(shownQuery).naver;
-    if (isNarrow()) window.location.href = url; else window.open(url, '_blank', 'noopener,noreferrer');
-  };
   const shownQuery = nearQuery(cat);
 
   return (
@@ -234,8 +228,6 @@ export default function Restaurants() {
                 );
               })}
             </div>
-            <div className="find-tools">
-            <div className="find-tools-left">
             <AddIngredient label="검색요리 입력" unit="요리" placeholder="예: 냉면, 삼계탕" noCat custom={myMenus}
               onRemove={(id) => { const x = myMenus.find((m) => m.id === id); setMyMenus((l) => l.filter((m) => m.id !== id)); if (x && customMenu === x.name) setCustomMenu(''); }}
               onAdd={(name, _c, photo, credit) => {
@@ -244,9 +236,9 @@ export default function Restaurants() {
                 setCustomMenu(name); setCat(''); setMenuText(name);
                 notify(t('‘{name}’ 요리를 추가했어요', { name }));
               }} />
-            <MapLinks query={shownQuery} pos={pos} />
-            </div>
-            <MenuInput value={menuText} onChange={setMenuText} onFind={findTyped} />
+            <div className="find-tools">
+              <MapLinks query={shownQuery} pos={pos} />
+              <MenuInput value={menuText} onChange={setMenuText} />
             </div>
           </section>
 
