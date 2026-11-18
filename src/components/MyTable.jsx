@@ -6,10 +6,47 @@ import Plate from './Plate';
 import { todayRecipe } from './dashboard';
 import { t } from '../i18n';
 import { BIBLE_VERSES } from '../data/bibleVerses';
-import { today } from '../lib/date';
+import { today, addDays, parse, fmtDate, fmtMD, WD } from '../lib/date';
+import { useState } from 'react';
+import { Modal } from './ui';
 
-// 오늘(월·일)의 성경 구절 — 연도 무시, 2/29는 2/28 구절
-const todayVerse = () => { const md = today().slice(5); return BIBLE_VERSES[md] || BIBLE_VERSES[md === '02-29' ? '02-28' : ''] || null; };
+// 날짜(월·일)의 성경 구절 — 연도 무시, 2/29는 2/28 구절
+const verseOf = (date) => { const md = date.slice(5); return BIBLE_VERSES[md] || (md === '02-29' ? BIBLE_VERSES['02-28'] : null); };
+
+// 밥상 위 넘기는 탁상 달력: 날짜별 성경 구절. ‹ ›로 하루씩 넘기고, 종이를 누르면 크게 보기
+function VerseCalendar() {
+  const [date, setDate] = useState(today);
+  const [big, setBig] = useState(false);
+  const [dir, setDir] = useState(1);
+  const flip = (n) => { setDir(n); setDate((x) => addDays(x, n)); };
+  const v = verseOf(date);
+  const d = parse(date);
+  const isToday = date === today();
+  return (
+    <>
+      <div className="bs-cal" role="group" aria-label={t('성경 구절 달력')}>
+        <span className="bs-cal-rings" aria-hidden><i /><i /></span>
+        <button key={date} className={`bs-cal-page ${dir < 0 ? 'back' : ''}`} onClick={() => setBig(true)} aria-label={t('{date} 성경 구절 크게 보기', { date: fmtDate(date) })}>
+          <span className="bs-cal-head">{fmtMD(date)} ({WD[d.getDay()]})</span>
+          {v && <span className="bs-cal-verse">{v[0]}</span>}
+          {v && <span className="bs-cal-ref">{v[1]}</span>}
+        </button>
+        <button className="bs-cal-nav prev" onClick={() => flip(-1)} aria-label={t('이전 날')}>‹</button>
+        <button className="bs-cal-nav next" onClick={() => flip(1)} aria-label={t('다음 날')}>›</button>
+      </div>
+      {big && (
+        <Modal title={`📖 ${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => setBig(false)}>
+          {v && <blockquote className="verse-big">“{v[0]}”<cite>{v[1]}</cite></blockquote>}
+          <div className="verse-nav">
+            <button className="btn" onClick={() => flip(-1)}>‹ {t('이전 날')}</button>
+            {!isToday && <button className="btn ghost" onClick={() => setDate(today())}>{t('오늘')}</button>}
+            <button className="btn" onClick={() => flip(1)}>{t('다음 날')} ›</button>
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+}
 
 // 번역된 제목으로 짧은 이름 만들기 (한국어일 땐 그대로)
 const st = (r) => (r ? shortTitle({ ...r, title: t(r.title) }) : '');
@@ -72,7 +109,6 @@ export function BabSangPanel() {
   const { state } = useStore();
   const { d, k, r } = todayRecipe(state);
   const open = () => r && go(`/recipe/${r.id}?date=${d}&meal=${k}`);
-  const verse = todayVerse();
   return (
     <section className="panel bab-sang-panel" aria-labelledby="bab-sang-h">
       <h2 id="bab-sang-h"><span aria-hidden>🥢</span> {t('오늘의 밥상')}</h2>
@@ -84,8 +120,8 @@ export function BabSangPanel() {
             <span className="bs-label">{st(r)}</span>
           </button>
         )}
+        <VerseCalendar />
       </div></div>
-      {verse && <p className="bs-verse">“{verse[0]}” <cite>({verse[1]})</cite></p>}
     </section>
   );
 }

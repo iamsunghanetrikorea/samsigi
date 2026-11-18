@@ -596,9 +596,34 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 오늘의 밥상: 사진을 상자 폭에 꽉 차게 */
 .bab-sang-panel { overflow: hidden; padding-bottom: 0; }
 .bab-sang-panel .bab-sang { margin: .2rem -1rem 0; border-radius: 0; }
-/* 밥상 아래 오늘의 성경 구절 (작은 글자) */
-.bs-verse { margin: .5rem 0 .7rem; font-size: .82rem; line-height: 1.5; color: var(--muted, #666); text-align: center; word-break: keep-all; }
-.bs-verse cite { font-style: normal; font-weight: 700; white-space: nowrap; }
+/* 밥상 위 넘기는 탁상 달력 (밥 왼쪽, 좌표는 원본 그림 기준 — 모바일에서도 보이는 18.6% 오른쪽) */
+.bs-cal { position: absolute; left: 20.9%; top: 54%; width: 13.4%; height: 38.5%; z-index: 2; perspective: 60cqw; filter: drop-shadow(0 .5cqw .7cqw rgba(60, 35, 10, .35)); }
+.bs-cal-rings { position: absolute; left: 0; right: 0; top: 0; height: 5.5%; z-index: 3; background: #3a3a3a; border-radius: .6cqw .6cqw 0 0; display: flex; justify-content: space-around; align-items: flex-end; pointer-events: none; }
+.bs-cal-rings i { width: .9cqw; height: 1.8cqw; margin-bottom: -1cqw; border-radius: 99px; border: .3cqw solid #b8b8b8; background: #555; }
+.bs-cal-page { position: absolute; left: 0; right: 0; top: 5.5%; bottom: 0; appearance: none; border: 0; padding: 0 0 1.6cqw; margin: 0; cursor: pointer; font: inherit; text-align: center; color: #222; background: #fffdf8; border-radius: 0 0 .5cqw .5cqw; display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 .35cqw 0 -.05cqw #f1ebdf, 0 .7cqw 0 -.1cqw #e4dccc; transform-origin: top center; animation: bs-flip .45s ease-out; }
+.bs-cal-page.back { animation-name: bs-flip-back; }
+@keyframes bs-flip { from { transform: rotateX(-75deg); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes bs-flip-back { from { transform: rotateX(75deg); opacity: .3; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .bs-cal-page { animation: none; } }
+.bs-cal-head { flex: none; background: #d23b2f; color: #fff; font-weight: 900; font-size: 1.2cqw; line-height: 1.5; padding: .8cqw 0 .2cqw; white-space: nowrap; }
+.bs-cal-verse { flex: 0 1 auto; min-height: 0; margin: auto 0; padding: .5cqw .8cqw; font-size: 1.15cqw; line-height: 1.45; word-break: keep-all; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 9; }
+.bs-cal-ref { flex: none; font-size: 1.05cqw; font-weight: 900; color: #d23b2f; }
+.bs-cal-page:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.bs-cal-nav { position: absolute; bottom: -.4cqw; z-index: 3; width: 2.4cqw; height: 2.4cqw; padding: 0; border: 0; border-radius: 99px; background: rgba(40, 40, 40, .75); color: #fff; font: 900 1.8cqw/1 system-ui, sans-serif; cursor: pointer; display: grid; place-items: center; }
+.bs-cal-nav.prev { left: -1.2cqw; }
+.bs-cal-nav.next { right: -1.2cqw; }
+/* 모바일: 그림이 145%로 커지므로 글자를 조금 더 키움 */
+@media (max-width: 560px) {
+  .bs-cal-head { font-size: 1.45cqw; }
+  .bs-cal-verse { font-size: 1.3cqw; -webkit-line-clamp: 7; padding: .4cqw .6cqw; }
+  .bs-cal-ref { font-size: 1.35cqw; }
+  .bs-cal-nav { width: 3.6cqw; height: 3.6cqw; font-size: 2.6cqw; }
+}
+/* 크게 보기 */
+.verse-big { margin: .3rem 0; font-size: 1.3rem; line-height: 1.7; word-break: keep-all; }
+.verse-big cite { display: block; margin-top: .5rem; font-style: normal; font-weight: 900; color: #d23b2f; }
+.verse-nav { display: flex; gap: .5rem; justify-content: space-between; }
 /* 모바일: 그림 양옆을 잘라 세로로 크게 (밥상 가운데가 잘 보이게) */
 @media (max-width: 560px) {
   .bab-sang-in { width: 145%; margin-left: -27%; } /* 그림의 18.6%~87.6%가 보임: 왼쪽 장조림부터 오른쪽 숟가락·젓가락까지 */

@@ -203,6 +203,10 @@ export default {
   '오늘의 밥상': { zh: '今日饭桌', ja: '今日の食卓', en: 'Today’s table' },
   '밥, 반찬과 {dish}가 차려진 밥상': { zh: '摆着米饭、小菜和{dish}的饭桌', ja: 'ご飯、おかずと{dish}が並んだ食卓', en: 'A table set with rice, side dishes and {dish}' },
   '오늘의 요리': { zh: '今日菜肴', ja: '今日の料理', en: 'today’s dish' },
+  '성경 구절 달력': { zh: '圣经经文日历', ja: '聖書のことば カレンダー', en: 'Bible verse calendar' },
+  '{date} 성경 구절 크게 보기': { zh: '放大查看{date}的经文', ja: '{date}の聖句を大きく見る', en: 'Show the verse for {date} in large type' },
+  '이전 날': { zh: '前一天', ja: '前の日', en: 'Previous day' },
+  '다음 날': { zh: '后一天', ja: '次の日', en: 'Next day' },
   '오늘의 레시피 {title} 보기': { zh: '查看今日菜谱：{title}', ja: '今日のレシピ「{title}」を見る', en: 'View today’s recipe: {title}' },
 
   // 장보기
