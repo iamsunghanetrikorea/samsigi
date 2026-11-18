@@ -7,7 +7,6 @@ import { Modal } from '../components/ui';
 import { WelcomeBanner, WeekTable, NutritionDonut, TodayRecipe, ShoppingPreview, RestaurantPreview, MonthMini } from '../components/dashboard';
 import { go } from '../router';
 import { MyTablePanel, BabSangPanel } from '../components/MyTable';
-import { NewsPanel } from '../components/News';
 
 export default function Home() {
   const { state, targets, generate, notify, update } = useStore();
@@ -111,7 +110,6 @@ export default function Home() {
 
       <MyTablePanel />
       <BabSangPanel />
-      <NewsPanel />
 
       {confirm && (
         <Modal title={t('식단 다시 생성')} onClose={() => setConfirm(false)}>
