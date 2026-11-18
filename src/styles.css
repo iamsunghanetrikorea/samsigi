@@ -811,3 +811,23 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .news-panel h2 { margin: 0; }
 .news-frame { margin-top: .6rem; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
 .news-frame iframe { display: block; width: 100%; height: 70vh; min-height: 420px; max-height: 760px; border: 0; }
+
+/* 휴대폰 헤더: −/+ 버튼 폭 절반, 국기 1.5배 */
+@media (max-width: 639px) {
+  .fontsize { padding: .15rem .2rem; gap: .3rem; }
+  .fontsize button { min-width: 18px; width: 18px; padding: 0; }
+  .lang-btn { min-width: 56px; }
+  .lang-btn .flag { width: 54px; height: 36px; }
+}
+@media (max-width: 380px) {
+  .lang-btn .flag { width: 51px; height: 34px; }
+}
+@media (max-width: 380px) {
+  .brand { flex: 0 1 auto; min-width: 0; }
+  .brand > span { min-width: 0; }
+  .brand small { font-size: .62rem; overflow: hidden; text-overflow: ellipsis; }
+}
+/* 오늘의 뉴스: 네이버 뉴스 새 창 버튼 */
+.naver-news { display: flex; width: 100%; justify-content: center; align-items: center; gap: .4rem; margin-top: .6rem; background: #03c75a; border-color: #03c75a; color: #fff; font-weight: 800; }
+.naver-news:hover { background: #02b351; color: #fff; }
+.naver-news b { display: inline-grid; place-items: center; width: 1.4em; height: 1.4em; border-radius: 4px; background: #fff; color: #03c75a; font-weight: 900; line-height: 1; }
