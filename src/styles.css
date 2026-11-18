@@ -894,3 +894,9 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   :root:not(:lang(ko)) .topnav a { padding: 0 .5rem; font-size: .88rem; }
   :root:not(:lang(ko)) .topnav a span { display: none; }
 }
+/* 달력 구절 읽기(병음·후리가나) */
+.bs-cal-verse ruby, .verse-big ruby { ruby-position: over; }
+.bs-cal-verse rt { font-size: .62em; color: #8a4b1f; font-weight: 600; }
+.bs-cal-verse:has(ruby) { line-height: 1.9; }
+.verse-big rt { font-size: .5em; color: #8a4b1f; font-weight: 600; }
+.verse-big:has(ruby) { line-height: 2.3; }

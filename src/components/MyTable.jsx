@@ -23,6 +23,32 @@ function useVerseTable(lang) {
   return lang === 'ko' ? BIBLE_VERSES : tables?.[lang] || null;
 }
 
+// 본문 위에 읽기 달기: 중국어는 한자마다 병음, 일본어는 한자 낱말에 후리가나 (<ruby>)
+const HAN = /\p{Script=Han}/u;
+function Reading({ text, reading }) {
+  if (!reading) return text;
+  const out = [];
+  let plain = '';
+  const flush = () => { if (plain) { out.push(plain); plain = ''; } };
+  const ruby = (base, rt) => { flush(); out.push(<ruby key={out.length}>{base}<rt>{rt}</rt></ruby>); };
+  if (reading.includes('|')) { // 일본어: '漢字|よみ' 쌍이 본문 순서대로
+    let pos = 0;
+    for (const pair of reading.split(/\s+/)) {
+      const [w, yomi] = pair.split('|');
+      const i = w ? text.indexOf(w, pos) : -1;
+      if (i < 0 || !yomi) continue;
+      plain += text.slice(pos, i); ruby(w, yomi); pos = i + w.length;
+    }
+    plain += text.slice(pos);
+  } else { // 중국어: 한자 순서대로 병음
+    const py = reading.split(/\s+/);
+    let k = 0;
+    for (const ch of text) { if (HAN.test(ch) && k < py.length) ruby(ch, py[k++]); else plain += ch; }
+  }
+  flush();
+  return out;
+}
+
 // 밥상 위 넘기는 탁상 달력: 날짜별 성경 구절. ‹ ›로 하루씩 넘기고, 종이를 누르면 크게 보기
 function VerseCalendar() {
   const [date, setDate] = useState(today);
@@ -39,7 +65,7 @@ function VerseCalendar() {
         <span className="bs-cal-rings" aria-hidden><i /><i /></span>
         <button key={date} className={`bs-cal-page ${dir < 0 ? 'back' : ''}`} onClick={() => setBig(true)} aria-label={t('{date} 성경 구절 크게 보기', { date: fmtDate(date) })}>
           <span className="bs-cal-head">{fmtMD(date)} ({WD[d.getDay()]})</span>
-          {v && <span className="bs-cal-verse">{v[0]}</span>}
+          {v && <span className="bs-cal-verse"><Reading text={v[0]} reading={v[2]} /></span>}
           {v && <span className="bs-cal-ref">{v[1]}</span>}
         </button>
         <button className="bs-cal-nav prev" onClick={() => flip(-1)} aria-label={t('이전 날')}>‹</button>
@@ -47,7 +73,7 @@ function VerseCalendar() {
       </div>
       {big && (
         <Modal title={`📖 ${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => setBig(false)}>
-          {v && <blockquote className="verse-big">“{v[0]}”<cite>{v[1]}</cite></blockquote>}
+          {v && <blockquote className="verse-big">“<Reading text={v[0]} reading={v[2]} />”<cite>{v[1]}</cite></blockquote>}
           <div className="verse-nav">
             <button className="btn" onClick={() => flip(-1)}>‹ {t('이전 날')}</button>
             {!isToday && <button className="btn ghost" onClick={() => setDate(today())}>{t('오늘')}</button>}
