@@ -1,8 +1,13 @@
+import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 // base './' : GitHub Pages / Cloudflare Pages 어느 하위 경로에서도 동작
 export default defineConfig({
   base: './',
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+  },
 });
