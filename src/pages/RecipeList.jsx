@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Heart, Pencil, UtensilsCrossed } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
@@ -89,7 +90,7 @@ export default function RecipeList() {
           ))}
           {myMenus.map((x) => (
             <button key={x.id} className={`find-pic ${cat === x.id ? 'on' : ''}`} aria-pressed={cat === x.id} onClick={() => setCat(cat === x.id ? '' : x.id)} {...longPress(() => removePic(x.id, x.name, true))}>
-              {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden>🍽️</span>}
+              {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden><UtensilsCrossed size={36} strokeWidth={1.5} /></span>}
               <span>{x.name}</span>
             </button>
           ))}
@@ -105,7 +106,7 @@ export default function RecipeList() {
             notify(t('‘{name}’ 메뉴를 추가했어요', { name }));
           }} />
         <div className="chips hide-m">
-          <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}>♥ {t('즐겨찾기 메뉴리스트')} <span className="fav-n">{state.profile.favorites.length}</span></button>
+          <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}><Heart aria-hidden size={18} strokeWidth={1.75} fill={cat === FAV ? 'currentColor' : 'none'} />{t('즐겨찾기 메뉴리스트')} <span className="fav-n">{state.profile.favorites.length}</span></button>
         </div>
         <Seg label={t('끼니')} value={meal} onChange={setMeal} options={[{ value: 'all', label: t('전체') }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label: t(label) }))]} />
       </section>
@@ -121,7 +122,7 @@ export default function RecipeList() {
       )}
       <p className="muted">{t('{n}개', { n: list.length })}</p>
       {cat === FAV && list.length === 0 && (
-        <p className="notice">{state.profile.favorites.length ? t('즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.') : t('아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.')}</p>
+        <p className="notice">{state.profile.favorites.length ? t('즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.') : t('아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘즐겨찾기’를 누르면 여기에 모여요.')}</p>
       )}
       <RecipeGrid>
         {list.map((r) => {
@@ -132,7 +133,7 @@ export default function RecipeList() {
               <RecipeCard recipe={r} nutrition={n} excluded={excludeReason(r, state.profile)} narrow={editing}
                 actions={<>
                   <MyTableButton id={r.id} small />
-                  <button className={`btn small ${editing ? 'on' : 'ghost'} edit-btn`} aria-expanded={editing} onClick={() => setEditId(editing ? null : r.id)}>✏️ {t('메뉴수정')}</button>
+                  <button className={`btn small ${editing ? 'on' : 'ghost'} edit-btn`} aria-expanded={editing} onClick={() => setEditId(editing ? null : r.id)}><Pencil aria-hidden size={16} strokeWidth={1.75} />{t('메뉴수정')}</button>
                 </>} />
               {editing && (
                 <div className="edit-box">

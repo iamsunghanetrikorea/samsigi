@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ShoppingBasket, ClipboardList, Camera, Search, ExternalLink, ArrowLeft, Plus, ChevronUp, ChevronDown } from 'lucide-react';
 import { useStore } from '../store';
 import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
@@ -24,7 +25,7 @@ export default function Market({ route }) {
       {/* 휴대폰에서는 장보기 목록을 '더보기'에서 열기 때문에 전환 단추를 숨김 */}
       <div className="no-print hide-m">
         <Seg label={t('장보기 화면')} value={view} onChange={(v) => go(v === 'list' ? '/shopping?view=list' : '/shopping')}
-          options={[{ value: 'pick', label: `🧺 ${t('재료 고르기')}` }, { value: 'list', label: `📝 ${t('장보기 목록')}` }]} />
+          options={[{ value: 'pick', label: <><ShoppingBasket aria-hidden size={18} strokeWidth={1.75} />{t('재료 고르기')}</> }, { value: 'list', label: <><ClipboardList aria-hidden size={18} strokeWidth={1.75} />{t('장보기 목록')}</> }]} />
       </div>
       {view === 'list' ? <Shopping /> : result ? <Result /> : <Picker />}
     </div>
@@ -71,7 +72,7 @@ function Picker() {
           if (!items.length) return null;
           return (
             <section key={cat} className="ing-cat" aria-label={catName(cat)}>
-              <h2 className="ing-cat-h"><span aria-hidden>{CAT_EMOJI[cat]}</span> <Nm full={catName(cat)} short={tShort(CAT_LABEL[cat] || cat)} /></h2>
+              <h2 className="ing-cat-h"><Nm full={catName(cat)} short={tShort(CAT_LABEL[cat] || cat)} /></h2>
               <ul className="ing-grid">
                 {items.map((i) => {
                   const on = picked.has(i.id);
@@ -179,9 +180,9 @@ function AiBreakfast({ names }) {
   const ask = () => window.location.assign(googleAiUrl(breakfastAiPrompt(names)));
   return (
     <section className="card ai-box no-print" aria-labelledby="ai-h">
-      <h2 id="ai-h">🤖 {t('인공지능 레시피추천')}</h2>
+      <h2 id="ai-h">{t('인공지능 레시피추천')}</h2>
       <p className="muted small">{names.length ? t('고른 재료({names})로 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.', { names: names.join(', ') }) : t('재료를 고르지 않아도 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.')}</p>
-      <button type="button" className="btn ai-btn" onClick={ask}>🤖 {t('인공지능 레시피추천')}</button>
+      <button type="button" className="btn ai-btn" onClick={ask}>{t('인공지능 레시피추천')}</button>
     </section>
   );
 }
@@ -224,7 +225,7 @@ export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기
   const google = `https://www.google.com/search?udm=2&q=${encodeURIComponent(name.trim())}`;
   return (
     <div className="card ing-add no-print">
-      <button type="button" className="btn soft ing-add-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>{t(label)} <span aria-hidden>{open ? '▲' : '▼'}</span></button>
+      <button type="button" className="btn soft ing-add-toggle" aria-expanded={open} onClick={() => setOpen((o) => !o)}>{t(label)}{open ? <ChevronUp aria-hidden size={18} strokeWidth={1.75} /> : <ChevronDown aria-hidden size={18} strokeWidth={1.75} />}</button>
       {open && (
         <form className="ing-add-form" onSubmit={submit}>
           <div className="row wrap">
@@ -240,10 +241,10 @@ export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기
             <span className="ing-ph ing-add-prev">{photo ? <img src={photo} alt={t('{unit} 사진 미리보기', { unit: t(unit) })} /> : <span className="ing-emoji" aria-hidden>{noCat ? '🍽️' : CAT_EMOJI[cat]}</span>}</span>
             <div className="ing-add-btns">
               <label className="btn ghost small">
-                📷 {photo ? t('사진 바꾸기') : t('사진 올리기')}
+                <Camera aria-hidden size={18} strokeWidth={1.75} />{photo ? t('사진 바꾸기') : t('사진 올리기')}
                 <input type="file" accept="image/*" className="sr-file" onChange={pick} />
               </label>
-              <button type="button" className="btn ghost small" onClick={find} disabled={busy}>🔎 {busy ? t('찾는 중…') : t('인터넷 찾기')}</button>
+              <button type="button" className="btn ghost small" onClick={find} disabled={busy}><Search aria-hidden size={18} strokeWidth={1.75} />{busy ? t('찾는 중…') : t('인터넷 찾기')}</button>
               {photo && <button type="button" className="btn ghost small" onClick={clear}>{t('사진 빼기')}</button>}
             </div>
           </div>
@@ -261,7 +262,7 @@ export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기
                 </>
               ) : <p className="muted small">{t('자유 이용 사진을 찾지 못했어요. 다른 이름(예: 영어 이름)으로 찾아보시거나, 아래 구글 이미지에서 사진을 저장한 뒤 ‘사진 올리기’로 넣어 주세요.')}</p>}
               <div className="row wrap">
-                <a className="btn ghost small" href={google} target="_blank" rel="noopener noreferrer">{t('구글 이미지에서 보기')} ↗</a>
+                <a className="btn ghost small" href={google} target="_blank" rel="noopener noreferrer">{t('구글 이미지에서 보기')}<ExternalLink aria-hidden size={16} strokeWidth={1.75} /></a>
                 <button type="button" className="btn ghost small" onClick={() => setFound(null)}>{t('닫기')}</button>
               </div>
             </div>
@@ -326,7 +327,7 @@ function Result() {
       <section className="card">
         <div className="row between wrap">
           <h2>{t('고른 재료 {n}가지', { n: names.length })}</h2>
-          <button className="btn ghost repick-btn" onClick={() => go('/shopping')}>← {t('재료 다시 고르기')}</button>
+          <button className="btn ghost repick-btn" onClick={() => go('/shopping')}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('재료 다시 고르기')}</button>
         </div>
         <div className="chips">{names.map((n) => <span key={n} className="tag-have">{n}</span>)}</div>
       </section>
@@ -339,15 +340,15 @@ function Result() {
       )}
       {noRecipe.length > 0 && (
         <section className="card stack">
-          <h2>📝 {t('아직 레시피가 없는 메뉴')}</h2>
+          <h2>{t('아직 레시피가 없는 메뉴')}</h2>
           <p className="muted small">{t('레시피 모음에 없는 메뉴예요. 누르면 이름으로 1인분 레시피 초안을 만들어 드려요. 고쳐서 저장하면 다음부터 추천에 나와요.')}</p>
           <div className="row wrap">
             {noRecipe.map((n) => <button key={n} className="btn soft" onClick={() => go(`/recipes?make=${encodeURIComponent(n)}`)}>{t('‘{name}’ 레시피 만들기', { name: t(n) })}</button>)}
           </div>
         </section>
       )}
-      {ready.length > 0 && <RecGroup title={`✅ ${t('바로 만들 수 있어요')}`} note={t('더 살 재료 없이 고른 재료와 기본 양념으로 만들어요.')} list={ready} />}
-      {more.length > 0 && <RecGroup title={`🛒 ${t('조금만 더 사면 돼요')}`} note={t('빠진 재료는 버튼 한 번으로 장보기 목록에 담을 수 있어요.')} list={more} onAdd={addNeed} />}
+      {ready.length > 0 && <RecGroup title={t('바로 만들 수 있어요')} note={t('더 살 재료 없이 고른 재료와 기본 양념으로 만들어요.')} list={ready} />}
+      {more.length > 0 && <RecGroup title={t('조금만 더 사면 돼요')} note={t('빠진 재료는 버튼 한 번으로 장보기 목록에 담을 수 있어요.')} list={more} onAdd={addNeed} />}
       <p className="muted small">{t('조리 시간이 짧고 쉬운 메뉴를 먼저 보여 줘요. 내 조건(알레르기·제외 재료 등)에 맞지 않는 메뉴는 뺐어요.')}</p>
     </>
   );
@@ -362,7 +363,7 @@ function RecGroup({ title, note, list, onAdd }) {
           <RecipeGridItem key={x.recipe.id}>
             <RecipeCard recipe={x.recipe} time={x.time} note={t(DIFFICULTY_LABEL[x.recipe.difficulty] || '쉬움')}
               actions={<>
-                {onAdd && <button className="btn small soft" onClick={() => onAdd(x)}>＋ {t('장보기 목록에 담기')}</button>}
+                {onAdd && <button className="btn small soft" onClick={() => onAdd(x)}><Plus aria-hidden size={16} strokeWidth={1.75} />{t('장보기 목록에 담기')}</button>}
                 <MyTableButton id={x.recipe.id} small />
               </>}>
               <IngredientTags label={t('쓰는 재료')} items={x.used.map((u) => u.name)} />

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Pencil, ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useStore } from '../store';
 import { CATEGORIES, MEAL_LABEL } from '../data/recipes';
 import { ING, CATEGORY_ORDER } from '../data/ingredients';
@@ -36,7 +37,7 @@ export default function RecipeMaker({ onAdded }) {
   return (
     <div className="maker" ref={box}>
       <button className="btn full-narrow" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        ✏️ {t('나의 레시피 추가')} {open ? '▲' : '▼'}
+        <Pencil aria-hidden size={18} strokeWidth={1.75} />{t('나의 레시피 추가')}{open ? <ChevronUp aria-hidden size={18} strokeWidth={1.75} /> : <ChevronDown aria-hidden size={18} strokeWidth={1.75} />}
       </button>
       {open && (
         <div className="maker-body">
@@ -48,7 +49,7 @@ export default function RecipeMaker({ onAdded }) {
 
           {draft && (
             <RecipeEditor key={draft.id + draft.title} initial={draft} saveLabel={t('레시피 모음에 추가')}
-              note={`💡 ${t('메뉴 이름으로 자동으로 만든 초안이에요. 이름에 없는 재료(예: 오징어)는 목록에 없을 수 있으니 비슷한 재료로 바꾸거나 더해 주세요.')}`}
+              note={`${t('메뉴 이름으로 자동으로 만든 초안이에요. 이름에 없는 재료(예: 오징어)는 목록에 없을 수 있으니 비슷한 재료로 바꾸거나 더해 주세요.')}`}
               extra={<button type="button" className="btn ghost" onClick={() => create(name)}>{t('처음부터 다시 만들기')}</button>}
               onCancel={() => setDraft(null)}
               onSave={(recipe) => {
@@ -140,7 +141,7 @@ export function RecipeEditor({ initial, onSave, onCancel, saveLabel, note, extra
             <span className="row">
               <input type="number" min="0" step={g < 5 ? 0.5 : 5} inputMode="decimal" aria-label={t('{name} 양(g)', { name: ING[id] ? t(ING[id].name) : id })} value={g} onChange={(e) => setGram(i, e.target.value)} style={{ width: '5.5rem' }} />
               <span className="muted small">g</span>
-              <button type="button" className="btn small ghost" aria-label={t('{name} 빼기', { name: ING[id] ? t(ING[id].name) : id })} onClick={() => removeItem(i)}>✕</button>
+              <button type="button" className="btn small ghost" aria-label={t('{name} 빼기', { name: ING[id] ? t(ING[id].name) : id })} onClick={() => removeItem(i)}><X aria-hidden size={18} strokeWidth={1.75} /></button>
             </span>
           </li>
         ))}

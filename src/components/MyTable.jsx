@@ -1,4 +1,5 @@
 import { useStore } from '../store';
+import { Check, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { RECIPE_BY_ID, shortTitle } from '../data/recipes';
 import { sumItems, round } from '../lib/nutrition';
 import { go } from '../router';
@@ -98,12 +99,12 @@ function VerseCalendar() {
         <button className="bs-cal-nav next" onClick={() => flip(1)} aria-label={t('다음 날')}>›</button>
       </div>
       {big && (
-        <Modal title={`📖 ${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => { setBig(false); setZoom(false); }}>
+        <Modal title={`${fmtDate(date)}${isToday ? ` · ${t('오늘')}` : ''}`} onClose={() => { setBig(false); setZoom(false); }}>
           {v && <blockquote className={`verse-big rd-${getLang()}`} translate="no">“<Reading text={v[0]} reading={v[2]} />”<cite>{v[1]}</cite></blockquote>}
           <div className="verse-nav">
-            <button className="btn" onClick={() => flip(-1)}>‹ {t('이전 날')}</button>
+            <button className="btn" onClick={() => flip(-1)}><ChevronLeft aria-hidden size={18} strokeWidth={1.75} />{t('이전 날')}</button>
             {!isToday && <button className="btn ghost" onClick={() => setDate(today())}>{t('오늘')}</button>}
-            <button className="btn" onClick={() => flip(1)}>{t('다음 날')} ›</button>
+            <button className="btn" onClick={() => flip(1)}>{t('다음 날')}<ChevronRight aria-hidden size={18} strokeWidth={1.75} /></button>
           </div>
         </Modal>
       )}
@@ -125,7 +126,7 @@ export function MyTableButton({ id, small }) {
   };
   return (
     <button type="button" className={`btn ${small ? 'small' : ''} ${on ? 'on' : 'ghost'} table-btn`} aria-pressed={on} onClick={toggle}>
-      {on ? `✓ ${t('후보요리')}` : `＋ ${t('후보요리 추가')}`}
+      {on ? <Check aria-hidden size={16} strokeWidth={1.75} /> : <Plus aria-hidden size={16} strokeWidth={1.75} />}{on ? t('후보요리') : t('후보요리 추가')}
     </button>
   );
 }
@@ -144,7 +145,7 @@ export function MyTablePanel() {
       </div>
       {list.length === 0 ? (
         <div className="my-table empty">
-          <p>{t('레시피 모음에서 {btn}를 눌러 올려 보세요.').split('{btn}').map((part, i) => (i ? [<b key={i}>＋ {t('후보요리 추가')}</b>, part] : part))}</p>
+          <p>{t('레시피 모음에서 {btn}를 눌러 올려 보세요.').split('{btn}').map((part, i) => (i ? [<b key={i} className="inline-btn-name"><Plus aria-hidden size={16} strokeWidth={1.75} />{t('후보요리 추가')}</b>, part] : part))}</p>
           <button className="btn primary small" onClick={() => go('/recipes')}>{t('레시피 모음 열기')}</button>
         </div>
       ) : (
@@ -156,7 +157,7 @@ export function MyTablePanel() {
                   <Plate recipe={r} size="lg" />
                   <span className="my-dish-name">{st(r)}</span>
                 </button>
-                <button className="my-dish-x" aria-label={t('{title} 후보요리에서 빼기', { title: t(r.title) })} onClick={() => update('myTable', (l) => l.filter((x) => x !== r.id))}>✕</button>
+                <button className="my-dish-x" aria-label={t('{title} 후보요리에서 빼기', { title: t(r.title) })} onClick={() => update('myTable', (l) => l.filter((x) => x !== r.id))}><X aria-hidden size={16} strokeWidth={1.75} /></button>
               </li>
             ))}
           </ul>

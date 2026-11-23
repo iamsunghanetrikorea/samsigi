@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { X } from 'lucide-react';
 import { NUTRIENTS, round } from '../lib/nutrition';
 import { t } from '../i18n';
 
@@ -29,7 +30,7 @@ export function Modal({ title, onClose, children, wide }) {
       <div className={`modal ${wide ? 'wide' : ''}`} role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={ref}>
         <div className="modal-head">
           <h2>{title}</h2>
-          <button className="btn ghost icon" onClick={onClose} aria-label={t('닫기')}>✕</button>
+          <button className="btn ghost icon" onClick={onClose} aria-label={t('닫기')}><X aria-hidden size={22} strokeWidth={1.75} /></button>
         </div>
         <div className="modal-body">{children}</div>
       </div>

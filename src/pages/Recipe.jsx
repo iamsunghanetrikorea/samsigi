@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Timer as TimerIcon, ArrowLeft, TriangleAlert, Heart, Volume2, Send, CupSoda, Check, ShoppingCart, Play, ChevronRight } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPE_BY_ID, MEAL_LABEL, DIFFICULTY_LABEL, recipeAllergens, menuNo } from '../data/recipes';
 import { ING, formatAmount, NUTRITION_SOURCE } from '../data/ingredients';
@@ -54,7 +55,7 @@ function Timer({ minutes }) {
     }, 500);
   };
   const stop = () => { clearInterval(ref.current); setLeft(null); };
-  if (left === null) return <button className="btn small" onClick={start}>⏱ {t('{n}분 타이머', { n: minutes })}</button>;
+  if (left === null) return <button className="btn small" onClick={start}><TimerIcon aria-hidden size={18} strokeWidth={1.75} />{t('{n}분 타이머', { n: minutes })}</button>;
   const mm = Math.floor(left / 60); const ss = String(left % 60).padStart(2, '0');
   return (
     <span className="timer" role="timer" aria-live="off">
@@ -111,7 +112,7 @@ export default function RecipePage({ id, query }) {
 
   return (
     <article className="stack recipe">
-      <button className="btn ghost small no-print" onClick={() => history.back()}>← {t('뒤로')}</button>
+      <button className="btn ghost small no-print" onClick={() => history.back()}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('뒤로')}</button>
       {PHOTOS[id] ? (
         <figure className="recipe-photo">
           <img src={`./photos/${id}.webp`} alt={t('{title} 예시 사진', { title: t(recipe.title) })} />
@@ -128,18 +129,18 @@ export default function RecipePage({ id, query }) {
           {recipe.tags.map((tag) => <span key={tag} className="badge light">{t(tag)}</span>)}
         </div>
       </div>
-      {warnAllergy.length > 0 && <p className="warn">⚠️ {t('알레르기 성분이 들어 있어요:')} {warnAllergy.map((a) => t(a)).join(', ')}</p>}
+      {warnAllergy.length > 0 && <p className="warn"><TriangleAlert className="warn-ico" aria-hidden size={20} strokeWidth={1.75} />{t('알레르기 성분이 들어 있어요:')} {warnAllergy.map((a) => t(a)).join(', ')}</p>}
 
       <div className="row wrap no-print">
         {/* 즐겨찾기·후보요리는 휴대폰에서도 한 줄에 나란히 */}
         <div className="pair-btns">
-          <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}>{fav ? `♥ ${t('즐겨찾기됨')}` : `♡ ${t('즐겨찾기')}`}</button>
+          <button className={`btn ${fav ? 'on' : 'ghost'}`} aria-pressed={fav} onClick={() => update('profile', (p) => ({ ...p, favorites: fav ? p.favorites.filter((x) => x !== id) : [...p.favorites, id] }))}><Heart aria-hidden size={18} strokeWidth={1.75} fill={fav ? 'currentColor' : 'none'} />{fav ? t('즐겨찾기됨') : t('즐겨찾기')}</button>
           <MyTableButton id={id} />
         </div>
-        {canSpeak && <button className="btn ghost" onClick={readAll}>🔊 {t('조리법 읽어 주기')}</button>}
+        {canSpeak && <button className="btn ghost" onClick={readAll}><Volume2 aria-hidden size={18} strokeWidth={1.75} />{t('조리법 읽어 주기')}</button>}
         <button className="btn ghost" onClick={() => window.print()}>{t('인쇄')}</button>
-        <button className="btn soft full-narrow" onClick={() => setSending(true)}>📤 {t('GPT로 보내기')}</button>
-        {isSnack && <button className="btn full-narrow" onClick={() => { update('snacks', (x) => ({ ...x, [today()]: [...(x[today()] || []), { name: recipe.title, kcal: Math.round(n.kcal * servings) }] })); notify(t("오늘 간식에 '{title}'({kcal}kcal)을 기록했어요", { title: t(recipe.title), kcal: Math.round(n.kcal * servings) })); }}>🥛 {t('오늘 간식으로 기록')}</button>}
+        <button className="btn soft full-narrow" onClick={() => setSending(true)}><Send aria-hidden size={18} strokeWidth={1.75} />{t('GPT로 보내기')}</button>
+        {isSnack && <button className="btn full-narrow" onClick={() => { update('snacks', (x) => ({ ...x, [today()]: [...(x[today()] || []), { name: recipe.title, kcal: Math.round(n.kcal * servings) }] })); notify(t("오늘 간식에 '{title}'({kcal}kcal)을 기록했어요", { title: t(recipe.title), kcal: Math.round(n.kcal * servings) })); }}><CupSoda aria-hidden size={18} strokeWidth={1.75} />{t('오늘 간식으로 기록')}</button>}
       </div>
       {sending && (
         <SendToGpt title={t('이 레시피 ChatGPT로 보내기')} onClose={() => setSending(false)}
@@ -165,7 +166,7 @@ export default function RecipePage({ id, query }) {
             return (
               <li key={i.orig}>
                 <div className="ing-row">
-                  <span>{have && <span className="have" title={t('보유 중')}>✓ </span>}{t(ing.name)}</span>
+                  <span>{have && <Check className="have" aria-label={t('보유 중')} size={18} strokeWidth={2.25} />}{t(ing.name)}</span>
                   <b>{formatAmount(i.id, i.g * servings)}</b>
                 </div>
                 {alts && (
@@ -181,7 +182,7 @@ export default function RecipePage({ id, query }) {
           })}
         </ul>
         {allergens.length > 0 && <p className="muted small">{t('알레르기 유발 성분:')} {allergens.map((a) => t(a)).join(', ')}</p>}
-        <button className="btn no-print" onClick={addMissing}>🛒 {t('없는 재료만 장보기에 담기')}</button>
+        <button className="btn no-print" onClick={addMissing}><ShoppingCart aria-hidden size={18} strokeWidth={1.75} />{t('없는 재료만 장보기에 담기')}</button>
       </section>
 
       <section className="card">
@@ -208,14 +209,14 @@ export default function RecipePage({ id, query }) {
               <div className="step-body">
                 <p>{t(text)}{min ? <span className="muted">{t(' (약 {min}분)', { min })}</span> : null}</p>
                 <div className="row wrap no-print">
-                  {canSpeak && <button className="btn small ghost" onClick={() => speak(stepSay(i, text))}>🔊 {t('읽기')}</button>}
+                  {canSpeak && <button className="btn small ghost" onClick={() => speak(stepSay(i, text))}><Volume2 aria-hidden size={16} strokeWidth={1.75} />{t('읽기')}</button>}
                   {min ? <Timer minutes={min} /> : null}
                 </div>
               </div>
             </li>
           ))}
         </ol>
-        {recipe.tip && <p className="notice">💡 {t(recipe.tip)}</p>}
+        {recipe.tip && <p className="notice">{t(recipe.tip)}</p>}
         <p className="muted small">{t('출처:')} {t(recipe.source)}</p>
         {(recipe.isNew || recipe.isCustom || recipe.refs) && (
           <p className="small">{t('참고 자료:')} {recipeRefs(recipe).map((x, i) => <span key={x.url}>{i > 0 && ' · '}<a href={x.url} {...linkTarget()}>{t(x.label)}</a></span>)}</p>
@@ -223,15 +224,15 @@ export default function RecipePage({ id, query }) {
       </section>
 
       <section className="card no-print">
-        <h2><span aria-hidden>▶️</span> {t('유튜브 추천 영상')}</h2>
+        <h2>{t('유튜브 추천 영상')}</h2>
         <p className="muted small">{t('누르면 지금 창에서 유튜브 조리 영상이 열려요. 다 보신 뒤 ‘뒤로 가기’를 누르면 이 레시피로 돌아와요.')}</p>
         <ul className="yt-list">
           {youtubeSuggestions(recipe).map((y) => (
             <li key={y.q}>
               <a href={y.url} rel="noreferrer">
-                <span className="yt-ico" aria-hidden>▶</span>
+                <span className="yt-ico" aria-hidden><Play size={16} strokeWidth={2} fill="currentColor" /></span>
                 <span className="yt-body"><b>{y.label}</b><span className="muted small">{y.desc}</span></span>
-                <span aria-hidden>›</span>
+                <ChevronRight className="rest-go" aria-hidden size={20} strokeWidth={1.75} />
               </a>
             </li>
           ))}

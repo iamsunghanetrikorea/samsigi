@@ -79,7 +79,7 @@ export default {
   '보유 재료:': { zh: '已有食材：', ja: '手持ちの材料：', en: 'You have:' },
   '{n}개': { zh: '{n}个', ja: '{n}件', en: '{n} items' },
   '즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.': { zh: '收藏的菜品不符合上面的条件（餐次·搜索），所以没有显示。请放宽条件试试。', ja: 'お気に入りのメニューが上の条件（食事・検索）に合わないため表示されません。条件をはずしてみてください。', en: 'Your favorites don’t match the filters above (meal, search). Try clearing the filters.' },
-  '아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.': { zh: '还没有收藏的菜品。打开食谱并点“♡ 收藏”，就会集中显示在这里。', ja: 'まだお気に入りのメニューがありません。レシピを開いて「♡ お気に入り」を押すと、ここに集まります。', en: 'No favorites yet. Open a recipe and tap “♡ Favorite” to collect it here.' },
+  '아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘즐겨찾기’를 누르면 여기에 모여요.': { zh: '还没有收藏的菜品。打开食谱并点“收藏”，就会集中显示在这里。', ja: 'まだお気に入りのメニューがありません。レシピを開いて「お気に入り」を押すと、ここに集まります。', en: 'No favorites yet. Open a recipe and tap “Favorite” to collect it here.' },
   '내 메뉴': { zh: '我的菜', ja: 'マイメニュー', en: 'My dish' },
   '수정됨': { zh: '已修改', ja: '編集済み', en: 'Edited' },
   '단백질 {n}g': { zh: '蛋白质 {n}g', ja: 'たんぱく質 {n}g', en: 'Protein {n}g' },

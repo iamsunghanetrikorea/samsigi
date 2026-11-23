@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { LocateFixed, UtensilsCrossed } from 'lucide-react';
 import { useStore } from '../store';
 import { today } from '../lib/date';
 import { Modal, Seg, longPress } from '../components/ui';
@@ -196,7 +197,7 @@ export default function Restaurants() {
       {tab === 'search' && (
         <>
           <section className="card stack hide-narrow">
-            <button className="btn primary big" onClick={locate}>📍 {t('내 위치 주변 찾기')}</button>
+            <button className="btn primary big" onClick={locate}><LocateFixed aria-hidden size={20} strokeWidth={1.75} />{t('내 위치 주변 찾기')}</button>
             <form className="row wrap" onSubmit={geocode}>
               <input aria-label={t('주소 또는 동네')} placeholder={t('또는 동네·주소 입력 (예: 마포구 공덕동)')} value={address} onChange={(e) => setAddress(e.target.value)} />
               <button className="btn" type="submit">{t('찾기')}</button>
@@ -223,7 +224,7 @@ export default function Restaurants() {
                 const on = customMenu === x.name;
                 return (
                   <button key={x.id} className={`find-pic ${on ? 'on' : ''}`} aria-pressed={on} onClick={() => { setCustomMenu(on ? '' : x.name); setCat(''); setMenuText(on ? '' : x.name); }} {...longPress(() => removePic(x.id, x.name, true))}>
-                    {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden>🍽️</span>}
+                    {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden><UtensilsCrossed size={36} strokeWidth={1.5} /></span>}
                     <span>{x.name}</span>
                   </button>
                 );

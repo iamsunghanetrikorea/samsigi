@@ -992,3 +992,17 @@ input, select, textarea { border-width: 1.5px; border-color: var(--line-strong);
   .wt-cell { min-height: 168px; gap: 8px; padding: 12px 4px; justify-content: center; }
   .wt-cell .plate.md { width: 68px; height: 68px; }
 }
+
+/* 레시피·장보기·식당: 선 아이콘 자리 맞춤 */
+.seg button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.warn { display: flex; align-items: flex-start; gap: 8px; }
+.warn-ico { flex: none; margin-top: 4px; }
+.have { color: var(--ok-ink); vertical-align: -3px; margin-right: 4px; }
+.find-emoji { color: var(--muted); }
+.meal-emoji { color: var(--muted); }
+.badge { display: inline-flex; align-items: center; gap: 4px; }
+.my-dish-x { display: grid; place-items: center; padding: 0; }
+.inline-btn-name { display: inline-flex; align-items: center; gap: 2px; vertical-align: -2px; }
+.chip.fav-chip { gap: 8px; }
+.yt-ico svg { margin-left: 2px; }
+.ing-cat-h { display: flex; align-items: center; }

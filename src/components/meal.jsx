@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Lock, UtensilsCrossed } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPE_BY_ID, MEAL_LABEL } from '../data/recipes';
 import { MEAL_KEYS, entryNutrition, dayTotals, round, won } from '../lib/nutrition';
@@ -25,7 +26,7 @@ export function MealCard({ date, meal, entry, compact, showEaten, readOnly }) {
     <div className={`meal ${entry?.locked ? 'locked' : ''} ${entry?.eaten ? 'eaten' : ''}`}>
       <div className="meal-top">
         <span className="meal-label">{t(MEAL_LABEL[meal])}</span>
-        {entry?.locked && <span className="badge">🔒 {t('고정')}</span>}
+        {entry?.locked && <span className="badge"><Lock aria-hidden size={14} strokeWidth={2} />{t('고정')}</span>}
         {entry?.fixed && !entry.locked && <span className="badge">{t('매주 고정')}</span>}
         {entry?.eatOut && <span className="badge out">{t('외식')}</span>}
         {entry && entry.servings > 1 && <span className="badge">{t('{n}인분', { n: entry.servings })}</span>}
@@ -38,7 +39,7 @@ export function MealCard({ date, meal, entry, compact, showEaten, readOnly }) {
       )}
       {entry?.eatOut && (
         <div className="meal-main">
-          <span className="meal-emoji" aria-hidden>🍽️</span>
+          <span className="meal-emoji" aria-hidden><UtensilsCrossed size={26} strokeWidth={1.5} /></span>
           <div>
             <div className="meal-title">{t(entry.eatOut.name || '외식')}</div>
             <div className="meal-sub">{entry.eatOut.kcal ? <>{t('약 {n}kcal', { n: entry.eatOut.kcal })} <Estimate /></> : t('영양정보 없음 (합계에서 제외)')}</div>
@@ -143,7 +144,7 @@ function EntryModal({ date, meal, entry, onClose, onEatOut }) {
         {entry.recipeId && !entry.eatOut && (
           <button className="btn ghost" onClick={toggleRule}>{rule ? t('매주 {day} 고정 해제', { day: t(`${WD[wd]}요일`) }) : t('매주 {day} {meal}에 이 메뉴 고정', { day: t(`${WD[wd]}요일`), meal: t(MEAL_LABEL[meal]) })}</button>
         )}
-        <button className="btn ghost" onClick={onEatOut}>🍽️ {entry.eatOut ? t('외식 정보 고치기') : t('외식으로 표시하기')}</button>
+        <button className="btn ghost" onClick={onEatOut}><UtensilsCrossed aria-hidden size={18} strokeWidth={1.75} />{entry.eatOut ? t('외식 정보 고치기') : t('외식으로 표시하기')}</button>
         {entry.eatOut && (
           <button className="btn ghost" onClick={() => { setEntry(date, meal, null); notify(t('외식 표시를 지웠어요. 메뉴를 다시 골라 주세요.')); onClose(); }}>{t('외식 표시 지우기')}</button>
         )}
