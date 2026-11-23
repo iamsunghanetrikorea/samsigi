@@ -1006,3 +1006,17 @@ input, select, textarea { border-width: 1.5px; border-color: var(--line-strong);
 .chip.fav-chip { gap: 8px; }
 .yt-ico svg { margin-left: 2px; }
 .ing-cat-h { display: flex; align-items: center; }
+
+/* 머리줄 한 줄 맞춤 (App.jsx useHeaderFit 이 단계를 정함) */
+.topbar { flex-wrap: nowrap; }
+.topbar .brand { flex: none; }
+.topnav { justify-content: center; }
+.app[data-fit="1"] .topnav a svg, .app[data-fit="2"] .topnav a svg, .app[data-fit="3"] .topnav a svg,
+.app[data-fit="1"] .fs-label, .app[data-fit="2"] .fs-label, .app[data-fit="3"] .fs-label, .app[data-fit="4"] .fs-label { display: none; }
+.app[data-fit="2"] .topbar .brand small, .app[data-fit="3"] .topbar .brand small, .app[data-fit="4"] .topbar .brand small,
+.app[data-fit="2"] .me-name, .app[data-fit="3"] .me-name, .app[data-fit="4"] .me-name { display: none; }
+.app[data-fit="3"] .topnav { gap: 0; }
+.app[data-fit="3"] .topnav a { padding: 0 8px; font-size: .85rem; }
+.app[data-fit="4"] .topnav { display: none; }
+.app[data-fit="4"] .tabbar { display: grid; }
+.app[data-fit="4"] .content { padding-bottom: 7rem; }

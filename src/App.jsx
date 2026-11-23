@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useStore } from './store';
 import { useRoute } from './router';
 import Home from './pages/Home';
@@ -46,6 +47,7 @@ export default function App() {
   setLang(lang); // 화면을 그리기 전에 언어를 맞춤 (아래 key={lang}로 언어가 바뀌면 화면 전체를 새로 그림)
   const changeLang = (l) => update('settings', (s) => ({ ...s, lang: l }));
 
+  const [barRef] = useHeaderFit([lang, state.settings.fontSize, state.profile?.name, state.profile?.completed]);
   if (!state.profile?.completed) return <div key={lang}><div className="onb-lang no-print"><LangButton lang={lang} onChange={changeLang} /></div><Onboarding /><Toast toast={toast} /></div>;
 
   const p = route.path;
@@ -74,7 +76,7 @@ export default function App() {
   return (
     <div className="app" key={lang}>
       <a className="skip" href="#main">{t('본문으로 건너뛰기')}</a>
-      <header className="topbar no-print">
+      <header className="topbar no-print" ref={barRef}>
         <a href="#/" className="brand">
           <BrandMark />
           <span><b translate="no">삼식이家</b><small>{t('시니어를 위한 맞춤 식단')}</small></span>
@@ -129,6 +131,33 @@ export default function App() {
       <Toast toast={toast} />
     </div>
   );
+}
+
+// 넓은 화면 머리줄이 한 줄에 다 들어가도록 단계적으로 줄임
+// 1: 메뉴 아이콘·'글자크기' 글자 숨김 → 2: 로고 부제·이름 숨김 → 3: 메뉴 글자 조금 작게 → 4: 메뉴를 아래 탭으로
+function useHeaderFit(deps) {
+  const ref = useRef(null);
+  const [level, setLevel] = useState(0);
+  useLayoutEffect(() => {
+    const bar = ref.current;
+    if (!bar) return;
+    const app = bar.parentElement;
+    const fit = () => {
+      const nav = bar.querySelector('.topnav');
+      let lv = 0;
+      app.dataset.fit = '0';
+      const navShown = nav && getComputedStyle(nav).display !== 'none';
+      const over = () => bar.scrollWidth > bar.clientWidth + 1 || (navShown && nav.scrollWidth > nav.clientWidth + 1);
+      if (navShown) while (over() && lv < 4) { lv += 1; app.dataset.fit = String(lv); }
+      setLevel(lv);
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(document.documentElement);
+    document.fonts?.ready.then(fit);
+    return () => ro.disconnect();
+  }, deps); // eslint-disable-line react-hooks/exhaustive-deps
+  return [ref, level];
 }
 
 function Toast({ toast }) {
