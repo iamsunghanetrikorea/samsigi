@@ -12,11 +12,12 @@ import { mapLinks, linkTarget } from '../pages/Restaurants';
 import { go } from '../router';
 import { t } from '../i18n';
 import TargetStats from './shadcn-space/TargetStats';
+import { Sunrise, Sun, Moon, Lock, CookingPot, ShoppingBasket, MapPin, CalendarDays, Soup, Fish, UtensilsCrossed, ChevronRight } from 'lucide-react';
 
 // 번역된 제목으로 짧은 이름 만들기 (한국어일 땐 그대로)
 const st = (r) => (r ? shortTitle({ ...r, title: t(r.title) }) : '');
 
-export const MEAL_ICON = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
+export const MEAL_ICON = { breakfast: Sunrise, lunch: Sun, dinner: Moon };
 const fmtMD = (d) => `${Number(d.slice(5, 7))}/${Number(d.slice(8))}`;
 
 export { Plate };
@@ -42,7 +43,7 @@ export function WeekTable({ dates }) {
         <tbody>
           {MEAL_KEYS.map((k) => (
             <tr key={k}>
-              <th scope="row" className="wt-meal"><span aria-hidden>{MEAL_ICON[k]}</span>{t(MEAL_LABEL[k])}</th>
+              <th scope="row" className="wt-meal">{(() => { const I = MEAL_ICON[k]; return <I aria-hidden size={22} strokeWidth={1.75} />; })()}{t(MEAL_LABEL[k])}</th>
               {dates.map((d) => {
                 const e = state.plans[d]?.[k];
                 const r = e && RECIPE_BY_ID[e.recipeId];
@@ -54,7 +55,7 @@ export function WeekTable({ dates }) {
                       <Plate recipe={r} eatOut={e?.eatOut} />
                       <span className="wt-name">{e ? (e.eatOut ? t(e.eatOut.name) : st(r)) : t('메뉴 고르기')}</span>
                       {n && !n.unknown && <span className="wt-kcal">{round(n.kcal)} kcal</span>}
-                      {e?.locked && <span className="wt-lock" aria-hidden>🔒</span>}
+                      {e?.locked && <Lock className="wt-lock" aria-hidden size={14} strokeWidth={2} />}
                       {e?.eaten && <span className="wt-done" aria-hidden>✓</span>}
                     </button>
                   </td>
@@ -91,7 +92,7 @@ export function TodayRecipe({ className = '' }) {
   const n = entryNutrition(e, k, targets);
   return (
     <section className={`panel ${className}`}>
-      <h2><span aria-hidden>🍲</span> {t('오늘의 레시피')}</h2>
+      <h2><CookingPot aria-hidden size={20} strokeWidth={1.75} />{t('오늘의 레시피')}</h2>
       {!r ? <p className="muted">{t('오늘 집밥 메뉴가 없어요.')}</p> : (
         <>
           <div className="tr-head">
@@ -99,7 +100,7 @@ export function TodayRecipe({ className = '' }) {
             <div>
               <p className="muted small">{t(MEAL_LABEL[k])}</p>
               <h3>{t(r.title)}</h3>
-              <div className="pills"><span className="pill green">⏱ {t('약 {n}분', { n: r.prep + r.cook })}</span><span className="pill orange">🔥 {round(n.kcal)} kcal</span></div>
+              <p className="tr-meta">{t('약 {n}분', { n: r.prep + r.cook })} · {round(n.kcal)} kcal</p>
             </div>
           </div>
           <p className="small"><b>{t('재료({n}인분)', { n: e.servings || 1 })}</b> {n.items.filter((i) => ING[i.id].cat !== '양념').map((i) => t(ING[i.id].name).replace(/[(（].*[)）]/, '')).join(', ')}</p>
@@ -124,7 +125,7 @@ export function ShoppingPreview({ className = '' }) {
   const fmt = (g, u) => (g >= 1000 ? `${round(g / 1000, 1)}${u === 'mL' ? 'L' : 'kg'}` : `${Math.round(g)}${u}`);
   return (
     <section className={`panel ${className}`}>
-      <h2><span aria-hidden>🛒</span> {t('이번 주 장보기 목록')}</h2>
+      <h2><ShoppingBasket aria-hidden size={20} strokeWidth={1.75} />{t('이번 주 장보기 목록')}</h2>
       {!rows.length ? <p className="muted">{t('살 재료가 없어요.')}</p> : (
         <ul className="mini-shop">
           {rows.slice(0, 7).map((r) => (
@@ -148,15 +149,15 @@ export function RestaurantPreview({ className = '' }) {
   const saved = state.restaurants.slice(0, 3);
   return (
     <section className={`panel ${className}`}>
-      <h2><span aria-hidden>📍</span> {t('주변 식당 추천')}</h2>
+      <h2><MapPin aria-hidden size={20} strokeWidth={1.75} />{t('주변 식당 추천')}</h2>
       {saved.length ? (
         <ul className="rest-list">
           {saved.map((r) => (
             <li key={r.id}>
               <a href={mapLinks(r.address ? `${r.name} ${r.address}` : r.name).naver} {...linkTarget()}>
-                <span className="rest-ico" aria-hidden>🍚</span>
+                <span className="rest-ico" aria-hidden><UtensilsCrossed size={22} strokeWidth={1.75} /></span>
                 <span className="rest-body"><b>{r.name}</b><span className="tags"><em>{t(r.cat)}</em>{r.solo && <em>{t('혼밥 가능')}</em>}{r.price && <em>{t('{n}원', { n: Number(r.price).toLocaleString() })}</em>}</span></span>
-                <span aria-hidden>›</span>
+                <ChevronRight className="rest-go" aria-hidden size={20} strokeWidth={1.75} />
               </a>
             </li>
           ))}
@@ -165,8 +166,8 @@ export function RestaurantPreview({ className = '' }) {
         <>
           <p className="muted small">{t('근처 백반·생선구이·두부요리 식당을 찾아 저장해 두면 여기에 보여요.')}</p>
           <ul className="rest-list">
-            {[['🍚', '백반·한식'], ['🐟', '생선구이'], ['🥘', '두부요리']].map(([ic, c]) => (
-              <li key={c}><a href={mapLinks(`근처 ${c.split('·')[0]}`).naver} {...linkTarget()}><span className="rest-ico" aria-hidden>{ic}</span><span className="rest-body"><b>{t('근처 {c}', { c: t(c) })}</b><span className="muted small">{t('네이버지도에서 찾기')}</span></span><span aria-hidden>›</span></a></li>
+            {[[UtensilsCrossed, '백반·한식'], [Fish, '생선구이'], [Soup, '두부요리']].map(([Ic, c]) => (
+              <li key={c}><a href={mapLinks(`근처 ${c.split('·')[0]}`).naver} {...linkTarget()}><span className="rest-ico" aria-hidden><Ic size={22} strokeWidth={1.75} /></span><span className="rest-body"><b>{t('근처 {c}', { c: t(c) })}</b><span className="muted small">{t('네이버지도에서 찾기')}</span></span><ChevronRight className="rest-go" aria-hidden size={20} strokeWidth={1.75} /></a></li>
             ))}
           </ul>
         </>
@@ -188,7 +189,7 @@ export function MonthMini() {
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
   return (
     <section className="panel">
-      <h2 className="mm-h"><span aria-hidden>📅</span> {t('이번 달 식단 한눈에 보기')} <span className="muted mm-ym">({fmtMonth(ym)})</span></h2>
+      <h2 className="mm-h"><CalendarDays aria-hidden size={20} strokeWidth={1.75} />{t('이번 달 식단 한눈에 보기')} <span className="muted mm-ym">({fmtMonth(ym)})</span></h2>
       <table className="mm">
         <thead><tr>{['월', '화', '수', '목', '금', '토', '일'].map((w, i) => <th key={w} className={i === 5 ? 'sat' : i === 6 ? 'sun' : ''}>{t(w)}</th>)}</tr></thead>
         <tbody>
@@ -223,16 +224,11 @@ export function MonthMini() {
 
 // 상단 환영 배너 + 권장 섭취량
 export function WelcomeBanner() {
-  const { state } = useStore();
-  const name = state.profile.name?.trim();
   return (
     <section className="banner hide-narrow">
       <div className="banner-text">
-        <span className="banner-ico" aria-hidden>🌱</span>
-        <div>
-          <h1>{name ? t('{name}님, 건강한 한 끼로 활기찬 하루를 시작하세요!', { name }) : t('건강한 한 끼로 활기찬 하루를 시작하세요!')}</h1>
-          <p>{t('연령과 활동량에 맞춘 균형 식단을 매주·매월 자동으로 제안해 드립니다.')}</p>
-        </div>
+        <h1>{fmtDate(today())}</h1>
+        <p>{t('연령과 활동량에 맞춘 균형 식단을 매주·매월 자동으로 제안해 드립니다.')}</p>
       </div>
       <TargetStats />
     </section>

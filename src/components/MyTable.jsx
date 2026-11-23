@@ -139,7 +139,7 @@ export function MyTablePanel() {
   return (
     <section className="panel my-table-panel" aria-labelledby="my-table-h">
       <div className="row between wrap">
-        <h2 id="my-table-h"><span aria-hidden>🍚</span> {t('후보요리')}</h2>
+        <h2 id="my-table-h">{t('후보요리')}</h2>
         {list.length > 0 && <button className="btn small ghost" onClick={() => update('myTable', [])}><span className="hide-m">{t('모두 치우기')}</span><span className="only-m">{t('메뉴비우기')}</span></button>}
       </div>
       {list.length === 0 ? (
@@ -174,7 +174,7 @@ export function BabSangPanel() {
   const open = () => r && go(`/recipe/${r.id}?date=${d}&meal=${k}`);
   return (
     <section className="panel bab-sang-panel" aria-labelledby="bab-sang-h">
-      <h2 id="bab-sang-h"><span aria-hidden>🥢</span> {t('오늘의 밥상')}</h2>
+      <h2 id="bab-sang-h">{t('오늘의 밥상')}</h2>
       <div className="bab-sang"><div className="bab-sang-in">
         <img src="./bab-sang.webp?v=4" alt={t('밥, 반찬과 {dish}가 차려진 밥상', { dish: r ? t(r.title) : t('오늘의 요리') })} loading="lazy" decoding="async" />
         {r && (

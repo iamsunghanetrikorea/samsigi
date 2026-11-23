@@ -155,7 +155,7 @@ export default {
   '섭취 예상': { zh: '预计摄入', ja: '摂取予定', en: 'Expected' },
   '목표 {n} kcal': { zh: '目标 {n} kcal', ja: '目標 {n} kcal', en: 'Goal {n} kcal' },
   '오늘 식단이 아직 없어요.': { zh: '今天还没有食谱。', ja: '今日の献立はまだありません。', en: 'No meals planned for today yet.' },
-  '권장 범위 내에서 균형이 잘 맞아요!': { zh: '在推荐范围内，营养均衡很好！', ja: 'おすすめの範囲内で、バランスがよくとれています！', en: 'Well balanced and within the recommended range!' },
+  '권장 범위 내에서 균형이 잘 맞아요': { zh: '在推荐范围内，营养均衡很好', ja: 'おすすめの範囲内で、バランスがよくとれています', en: 'Well balanced and within the recommended range' },
   '단백질이 조금 부족해요. 달걀·두부·우유를 곁들여 보세요.': { zh: '蛋白质有点不足。可以配些鸡蛋、豆腐或牛奶。', ja: 'たんぱく質が少し足りません。卵・豆腐・牛乳を添えてみてください。', en: 'A little low on protein. Try adding eggs, tofu or milk.' },
   '나트륨이 많아요. 국물은 절반만 드세요.': { zh: '钠偏多。汤只喝一半吧。', ja: 'ナトリウムが多めです。スープは半分だけにしましょう。', en: 'High in sodium. Try drinking only half the soup.' },
   '열량이 목표보다 조금 많아요.': { zh: '热量比目标稍多。', ja: 'カロリーが目標より少し多めです。', en: 'Calories are a little over your goal.' },

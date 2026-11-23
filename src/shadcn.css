@@ -113,9 +113,9 @@
     --sc-ring: var(--primary);
     --sc-radius: var(--radius);
     /* 영양소 색: 단백질·탄수화물·지방 */
-    --sc-chart-1: #2b66d9;
-    --sc-chart-2: #f2a93b;
-    --sc-chart-3: #3aa757;
+    --sc-chart-1: var(--primary);   /* 단백질: 시니어에게 가장 중요한 값이라 강조색 */
+    --sc-chart-2: #c9bfae;           /* 탄수화물: 따뜻한 무채색 */
+    --sc-chart-3: #8f8577;           /* 지방: 한 단계 진한 무채색 */
 }
 
 .dark {

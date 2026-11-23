@@ -8,6 +8,7 @@ import { WelcomeBanner, WeekTable, TodayRecipe, ShoppingPreview, RestaurantPrevi
 import { go } from '../router';
 import NutritionSummary from '../components/shadcn-space/NutritionSummary';
 import { MyTablePanel, BabSangPanel } from '../components/MyTable';
+import { ChevronLeft, ChevronRight, RefreshCw, SlidersHorizontal, CupSoda, Plus } from 'lucide-react';
 
 export default function Home() {
   const { state, targets, generate, notify, update } = useStore();
@@ -45,14 +46,14 @@ export default function Home() {
               <button role="tab" aria-selected="false" onClick={() => go(`/plan?view=month&d=${anchor}`)}>{t('이번 달 식단')}</button>
             </div>
             <div className="week-nav">
-              <button className="btn icon ghost" onClick={() => setAnchor(addDays(dates[0], -7))} aria-label={t('지난 주')}>‹</button>
+              <button className="btn icon ghost" onClick={() => setAnchor(addDays(dates[0], -7))} aria-label={t('지난 주')}><ChevronLeft aria-hidden size={24} strokeWidth={1.75} /></button>
               <b>{fmtDate(dates[0])} ~ {fmtDate(dates[6])}</b>
-              <button className="btn icon ghost" onClick={() => setAnchor(addDays(dates[0], 7))} aria-label={t('다음 주')}>›</button>
+              <button className="btn icon ghost" onClick={() => setAnchor(addDays(dates[0], 7))} aria-label={t('다음 주')}><ChevronRight aria-hidden size={24} strokeWidth={1.75} /></button>
               {weekStart(anchor) !== weekStart(d) && <button className="btn small ghost" onClick={() => setAnchor(d)}>{t('오늘')}</button>}
             </div>
             <div className="row wrap">
-              <button className="btn soft" onClick={() => (filled ? setConfirm(true) : make(false))}>↻ {filled ? t('식단 다시 생성') : t('이 주 식단 만들기')}</button>
-              <button className="btn ghost" onClick={() => go('/settings')}>⚙ {t('식단 조건 설정')}</button>
+              <button className="btn soft" onClick={() => (filled ? setConfirm(true) : make(false))}><RefreshCw aria-hidden size={18} strokeWidth={1.75} />{filled ? t('식단 다시 생성') : t('이 주 식단 만들기')}</button>
+              <button className="btn ghost" onClick={() => go('/settings')}><SlidersHorizontal aria-hidden size={18} strokeWidth={1.75} />{t('식단 조건 설정')}</button>
             </div>
           </div>
           {filled ? (
@@ -81,7 +82,7 @@ export default function Home() {
       </div>
 
       <section className="panel hide-narrow">
-        <h2><span aria-hidden>🥛</span> {t('간식·음료')}</h2>
+        <h2><CupSoda aria-hidden size={20} strokeWidth={1.75} />{t('간식·음료')}</h2>
         <p className="muted small">{t('오늘 {a}kcal / 목표 {b}kcal (세 끼와 따로 관리)', { a: snackTotal, b: targets.snackKcal })}</p>
         {snacks.length > 0 && (
           <ul className="plain">
@@ -100,7 +101,7 @@ export default function Home() {
         </form>
         <div className="chips">
           {[['우유 1잔', 130], ['사과 반 개', 70], ['바나나 1개', 105], ['요거트', 90], ['삶은 계란', 70], ['믹스커피', 50]].map(([n, k]) => (
-            <button key={n} className="chip" onClick={() => update('snacks', (x) => ({ ...x, [d]: [...(x[d] || []), { name: n, kcal: k }] }))}>+ {t(n)}</button>
+            <button key={n} className="chip" onClick={() => update('snacks', (x) => ({ ...x, [d]: [...(x[d] || []), { name: n, kcal: k }] }))}><Plus aria-hidden size={16} strokeWidth={2} />{t(n)}</button>
           ))}
         </div>
       </section>
