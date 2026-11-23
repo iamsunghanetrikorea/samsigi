@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { RECIPE_BY_ID, MEAL_LABEL, FOOD_GROUPS, foodGroup, shortTitle } from '../data/recipes';
 import { ING } from '../data/ingredients';
-import { MEAL_KEYS, entryNutrition, dayTotals, round } from '../lib/nutrition';
+import { MEAL_KEYS, entryNutrition, round } from '../lib/nutrition';
 import { buildShopping } from '../lib/shopping';
 import { today, weekDates, weekStart, monthDates, monthKey, parse, WD, fmtMonth, fmtDate } from '../lib/date';
 import { Modal } from './ui';
@@ -11,6 +11,7 @@ import { MealCard } from './meal';
 import { mapLinks, linkTarget } from '../pages/Restaurants';
 import { go } from '../router';
 import { t } from '../i18n';
+import TargetStats from './shadcn-space/TargetStats';
 
 // 번역된 제목으로 짧은 이름 만들기 (한국어일 땐 그대로)
 const st = (r) => (r ? shortTitle({ ...r, title: t(r.title) }) : '');
@@ -73,59 +74,6 @@ export function WeekTable({ dates }) {
 }
 
 // 오늘의 영양 요약 — 탄단지 열량 비율 도넛
-export function NutritionDonut({ date }) {
-  const { state, targets, setEntry } = useStore();
-  const day = state.plans[date] || {};
-  const tot = dayTotals(day, targets);
-  const parts = [
-    { key: 'protein', label: t('단백질'), g: tot.protein, kcal: tot.protein * 4, color: '#2b66d9' },
-    { key: 'carb', label: t('탄수화물'), g: tot.carb, kcal: tot.carb * 4, color: '#f2a93b' },
-    { key: 'fat', label: t('지방'), g: tot.fat, kcal: tot.fat * 9, color: '#3aa757' },
-  ];
-  const sum = parts.reduce((s, p) => s + p.kcal, 0) || 1;
-  const R = 52; const C = 2 * Math.PI * R;
-  let acc = 0;
-  const kcalOk = Math.abs(tot.kcal - targets.meals.kcal) <= targets.meals.kcal * 0.1;
-  const protOk = tot.protein >= targets.meals.protein * 0.85;
-  const naOk = tot.sodium <= targets.sodium;
-  const msg = t(!tot.count ? '오늘 식단이 아직 없어요.' : kcalOk && protOk && naOk ? '권장 범위 내에서 균형이 잘 맞아요!' : !protOk ? '단백질이 조금 부족해요. 달걀·두부·우유를 곁들여 보세요.' : !naOk ? '나트륨이 많아요. 국물은 절반만 드세요.' : tot.kcal > targets.meals.kcal ? '열량이 목표보다 조금 많아요.' : '열량이 목표보다 조금 적어요.');
-  return (
-    <section className="panel donut-card hide-narrow">
-      <h2>{t('오늘의 영양 요약')}</h2>
-      <div className="donut-row">
-        <svg viewBox="0 0 140 140" className="donut" role="img" aria-label={t('섭취 예상 {kcal}kcal, 단백질 {protein}g, 탄수화물 {carb}g, 지방 {fat}g', { kcal: round(tot.kcal), protein: round(tot.protein), carb: round(tot.carb), fat: round(tot.fat) })}>
-          <circle cx="70" cy="70" r={R} fill="none" stroke="var(--track)" strokeWidth="14" />
-          {tot.count > 0 && parts.map((p) => {
-            const len = (p.kcal / sum) * C;
-            const el = <circle key={p.key} cx="70" cy="70" r={R} fill="none" stroke={p.color} strokeWidth="14" strokeDasharray={`${Math.max(0, len - 2)} ${C}`} strokeDashoffset={-acc} transform="rotate(-90 70 70)" />;
-            acc += len;
-            return el;
-          })}
-          <text x="70" y="58" textAnchor="middle" className="donut-s">{t('섭취 예상')}</text>
-          <text x="70" y="80" textAnchor="middle" className="donut-b">{round(tot.kcal).toLocaleString()}</text>
-          <text x="70" y="98" textAnchor="middle" className="donut-s">{t('목표 {n} kcal', { n: round(targets.meals.kcal).toLocaleString() })}</text>
-        </svg>
-        <ul className="legend">
-          {parts.map((p) => (
-            <li key={p.key}><span className="dot" style={{ background: p.color }} />{p.label}<b>{round(p.g)} g <em>({round((p.kcal / sum) * 100)}%)</em></b></li>
-          ))}
-          <li><span className="dot" style={{ background: '#8a94a6' }} />{t('나트륨')}<b>{round(tot.sodium).toLocaleString()} mg</b></li>
-        </ul>
-      </div>
-      <p className={`donut-msg ${tot.count && kcalOk && protOk && naOk ? 'ok' : ''}`}>{tot.count && kcalOk && protOk && naOk ? '✔ ' : ''}{msg}</p>
-      {tot.count > 0 && (
-        <div className="eat-checks">
-          <span className="muted small">{t('먹은 끼니 체크')}</span>
-          {MEAL_KEYS.filter((k) => day[k]).map((k) => (
-            <label key={k} className="check"><input type="checkbox" checked={!!day[k].eaten} onChange={(e) => setEntry(date, k, { ...day[k], eaten: e.target.checked })} />{t(MEAL_LABEL[k])}</label>
-          ))}
-        </div>
-      )}
-      <p className="muted small">{t('식품성분표 기반 추정치')}</p>
-    </section>
-  );
-}
-
 // 오늘의 레시피: 지금 시각 기준 다음 끼니의 집밥 메뉴
 export function todayRecipe(state) {
   const d = today();
@@ -275,15 +223,8 @@ export function MonthMini() {
 
 // 상단 환영 배너 + 권장 섭취량
 export function WelcomeBanner() {
-  const { state, targets } = useStore();
+  const { state } = useStore();
   const name = state.profile.name?.trim();
-  const range = (v) => `${round(v * 0.9)}~${round(v * 1.1)} g`;
-  const kpis = [
-    { ico: '🔥', label: t('권장 섭취량 (1일)'), val: t('약 {n} kcal', { n: targets.kcal.toLocaleString() }) },
-    { ico: '💪', label: t('단백질'), val: range(targets.protein) },
-    { ico: '🌾', label: t('탄수화물'), val: range(targets.carb) },
-    { ico: '💧', label: t('지방'), val: range(targets.fat) },
-  ];
   return (
     <section className="banner hide-narrow">
       <div className="banner-text">
@@ -293,9 +234,7 @@ export function WelcomeBanner() {
           <p>{t('연령과 활동량에 맞춘 균형 식단을 매주·매월 자동으로 제안해 드립니다.')}</p>
         </div>
       </div>
-      <ul className="kpis-row">
-        {kpis.map((k) => <li key={k.label}><span className="kpi-ico" aria-hidden>{k.ico}</span><span><span className="kpi-l">{k.label}</span><b>{k.val}</b></span></li>)}
-      </ul>
+      <TargetStats />
     </section>
   );
 }

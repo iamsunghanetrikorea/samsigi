@@ -4,8 +4,9 @@ import { today, weekDates, addDays, weekStart, fmtDate, fmtMD } from '../lib/dat
 import { t } from '../i18n';
 import { DayPanel } from '../components/meal';
 import { Modal } from '../components/ui';
-import { WelcomeBanner, WeekTable, NutritionDonut, TodayRecipe, ShoppingPreview, RestaurantPreview, MonthMini } from '../components/dashboard';
+import { WelcomeBanner, WeekTable, TodayRecipe, ShoppingPreview, RestaurantPreview, MonthMini } from '../components/dashboard';
 import { go } from '../router';
+import NutritionSummary from '../components/shadcn-space/NutritionSummary';
 import { MyTablePanel, BabSangPanel } from '../components/MyTable';
 
 export default function Home() {
@@ -69,7 +70,7 @@ export default function Home() {
             </div>
           )}
         </section>
-        <NutritionDonut date={d} />
+        <NutritionSummary date={d} className="hide-narrow" />
       </div>
 
       <div className="dash-cards">

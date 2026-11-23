@@ -91,6 +91,33 @@
     --sc-sidebar-ring: oklch(0.708 0 0);
 }
 
+/* 앱 색(styles.css)에 맞춤 — 고대비 모드(data-contrast='high')에서도 함께 바뀜 */
+:root {
+    --sc-background: var(--bg);
+    --sc-foreground: var(--text);
+    --sc-card: var(--surface);
+    --sc-card-foreground: var(--text);
+    --sc-popover: var(--surface);
+    --sc-popover-foreground: var(--text);
+    --sc-primary: var(--primary);
+    --sc-primary-foreground: var(--primary-ink);
+    --sc-secondary: var(--surface-2);
+    --sc-secondary-foreground: var(--text);
+    --sc-muted: var(--surface-2);
+    --sc-muted-foreground: var(--muted);
+    --sc-accent: var(--primary-soft);
+    --sc-accent-foreground: var(--text);
+    --sc-destructive: var(--bad);
+    --sc-border: var(--line);
+    --sc-input: var(--line);
+    --sc-ring: var(--primary);
+    --sc-radius: var(--radius);
+    /* 영양소 색: 단백질·탄수화물·지방 */
+    --sc-chart-1: #2b66d9;
+    --sc-chart-2: #f2a93b;
+    --sc-chart-3: #3aa757;
+}
+
 .dark {
     --sc-background: oklch(0.145 0 0);
     --sc-foreground: oklch(0.985 0 0);

@@ -297,11 +297,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .banner-ico { font-size: 2.6rem; }
 .banner h1 { font-size: 1.3rem; }
 .banner p { color: var(--muted); font-size: .9rem; }
-.kpis-row { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; flex: 1 1 560px; }
-.kpis-row li { flex: 1 1 130px; padding: .5rem .6rem !important; gap: .4rem !important; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: .6rem .7rem; display: flex; gap: .5rem; align-items: center; box-shadow: var(--shadow); }
-.kpi-ico { font-size: 1.3rem; }
-.kpi-l { display: block; font-size: .72rem; color: var(--muted); }
-.kpis-row b { font-size: .95rem; white-space: nowrap; }
 
 .dash-main { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 @media (min-width: 1200px) { .dash-main { grid-template-columns: minmax(0, 1fr) 300px; } }
@@ -341,18 +336,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .plate.lg { width: 96px; height: 96px; font-size: 3.2rem; }
 
 /* 영양 도넛 */
-.donut-card { display: flex; flex-direction: column; gap: .4rem; }
-.donut-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center; }
-.donut { width: 160px; height: 160px; flex: none; }
-.donut-s { font-size: 9px; fill: var(--muted); }
-.donut-b { font-size: 20px; font-weight: 900; fill: var(--text); }
-.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; font-size: .85rem; flex: 1; min-width: 150px; }
-.legend li { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
-.legend b { margin-left: auto; }
-.legend em { font-style: normal; color: var(--muted); font-weight: 500; font-size: .8rem; }
 .dot { width: .7rem; height: .7rem; border-radius: 999px; display: inline-block; flex: none; }
-.donut-msg { background: var(--surface-2); border-radius: 10px; padding: .5rem .7rem; font-size: .88rem; font-weight: 700; }
-.donut-msg.ok { background: var(--green-soft); color: var(--green); }
 .eat-checks { display: flex; flex-wrap: wrap; gap: .2rem .8rem; align-items: center; border-top: 1px solid var(--line); padding-top: .4rem; }
 .eat-checks > span { flex-basis: 100%; }
 
@@ -409,10 +393,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .banner-ico { font-size: 1.8rem; }
   .banner h1 { font-size: 1.1rem; }
   .banner p { display: none; }
-  .kpis-row { gap: .4rem; }
-  .kpis-row li { flex: 1 1 40%; min-width: 0; }
-  .kpi-ico { display: none; }
-  .kpis-row b { font-size: .85rem; }
 }
 
 /* 음식 사진 */
