@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
-import { RECIPES, MEAL_LABEL, RECIPE_BY_ID, menuNo } from '../data/recipes';
+import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
 import { ING } from '../data/ingredients';
 import { mealItems, sumItems, round } from '../lib/nutrition';
@@ -13,6 +13,7 @@ import RecipeMaker, { RecipeEditor } from '../components/RecipeMaker';
 import { MyTableButton } from '../components/MyTable';
 import { AddIngredient } from './Market';
 import { t } from '../i18n';
+import RecipeCard, { RecipeGrid, RecipeGridItem } from '../components/shadcn-space/RecipeCard';
 
 const FAV = '즐겨찾기';
 
@@ -122,24 +123,18 @@ export default function RecipeList() {
       {cat === FAV && list.length === 0 && (
         <p className="notice">{state.profile.favorites.length ? t('즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.') : t('아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘♡ 즐겨찾기’를 누르면 여기에 모여요.')}</p>
       )}
-      <ul className="choice-list">
+      <RecipeGrid>
         {list.map((r) => {
           const n = sumItems(mealItems(r, { kcal: targets.perMeal[r.meals[0]]?.kcal }).items.map((i) => [i.id, i.g]));
-          const why = excludeReason(r, state.profile);
+          const editing = editId === r.id;
           return (
-            <li key={r.id} className={`choice-row ${editId === r.id ? 'editing' : ''}`}>
-              <button className="choice" onClick={() => go(`/recipe/${r.id}`)}>
-                <Plate recipe={r} />
-                <span className="choice-body">
-                  <b><span className="menu-no" aria-label={t('메뉴 {n}번', { n: menuNo(r) })}>{menuNo(r)}</span>{r.isNew && <span className="new-badge">NEW</span>}{r.isCustom && <span className="my-badge">{t('내 메뉴')}</span>}{r.isEdited && <span className="edit-badge">{t('수정됨')}</span>} {t(r.title)}{state.profile.favorites.includes(r.id) ? ' ♥' : ''}</b>
-                  <span className="meal-sub">{t(r.category)} · {r.meals.map((m) => t(MEAL_LABEL[m])).join('·')} · {round(n.kcal)}kcal · {t('단백질 {n}g', { n: round(n.protein) })} · {t('{n}분', { n: r.prep + r.cook })}{why ? ` · ${t('제외됨({why})', { why: t(why) })}` : ''}</span>
-                </span>
-              </button>
-              <div className="row-btns">
-                <MyTableButton id={r.id} small />
-                <button className={`btn small ${editId === r.id ? 'on' : 'ghost'} edit-btn`} aria-expanded={editId === r.id} onClick={() => setEditId(editId === r.id ? null : r.id)}>✏️ {t('메뉴수정')}</button>
-              </div>
-              {editId === r.id && (
+            <RecipeGridItem key={r.id} wide={editing}>
+              <RecipeCard recipe={r} nutrition={n} excluded={excludeReason(r, state.profile)} narrow={editing}
+                actions={<>
+                  <MyTableButton id={r.id} small />
+                  <button className={`btn small ${editing ? 'on' : 'ghost'} edit-btn`} aria-expanded={editing} onClick={() => setEditId(editing ? null : r.id)}>✏️ {t('메뉴수정')}</button>
+                </>} />
+              {editing && (
                 <div className="edit-box">
                   <RecipeEditor key={r.id} initial={r} saveLabel={t('수정 저장')}
                     note={r.isCustom ? null : t('기본 메뉴를 고치면 이 기기에만 저장돼요. 언제든 ‘원래대로’로 되돌릴 수 있어요.')}
@@ -153,10 +148,10 @@ export default function RecipeList() {
                     }} />
                 </div>
               )}
-            </li>
+            </RecipeGridItem>
           );
         })}
-      </ul>
+      </RecipeGrid>
       <section className="card update-card">
         <div className="row between wrap">
           <div>

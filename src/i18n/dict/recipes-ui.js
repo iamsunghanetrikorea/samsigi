@@ -336,4 +336,6 @@ export default {
   '죽': { zh: '粥', ja: 'お粥', en: 'Porridge' },
   '국밥·탕': { zh: '汤饭·汤', ja: 'クッパ・スープ', en: 'Rice soups & stews' },
   '면 요리': { zh: '面食', ja: '麺料理', en: 'Noodle dishes' },
+  '{title} 즐겨찾기': { zh: '收藏{title}', ja: '{title}をお気に入りに追加', en: 'Add {title} to favorites' },
+  '{title} 즐겨찾기 빼기': { zh: '取消收藏{title}', ja: '{title}をお気に入りから外す', en: 'Remove {title} from favorites' },
 };

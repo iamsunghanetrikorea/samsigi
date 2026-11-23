@@ -462,20 +462,8 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .bad-text { color: var(--bad); font-weight: 700; }
 
 /* 나의 밥상 */
-.choice-row { display: flex; gap: .4rem; align-items: stretch; }
-.choice-row > .choice { flex: 1; min-width: 0; }
-.choice-row > .table-btn { flex: none; white-space: nowrap; align-self: center; min-width: 9.5em; }
-.choice-row { flex-wrap: wrap; }
-.choice-row > .row-btns { flex: none; display: flex; flex-direction: column; gap: .3rem; justify-content: center; }
-.row-btns .btn { white-space: nowrap; min-width: 9.5em; }
-.choice-row > .edit-box { flex: 1 1 100%; border: 2px solid var(--primary); border-radius: 14px; padding: .8rem; background: var(--surface); }
+.edit-box { flex: 1 1 100%; border: 2px solid var(--primary); border-radius: 14px; padding: .8rem; background: var(--surface); }
 .edit-badge { display: inline-block; margin-left: .25rem; padding: 0 .4em; border-radius: 6px; background: var(--warn-bg); color: var(--warn); font-size: .7em; font-weight: 800; vertical-align: .15em; }
-@media (max-width: 560px) {
-  .choice-row { flex-wrap: wrap; }
-  .choice-row > .table-btn { width: 100%; }
-  .choice-row > .row-btns { flex: 1 1 100%; flex-direction: row; }
-  .row-btns .btn { flex: 1; min-width: 0; }
-}
 .my-table-panel h2 { margin-bottom: .3rem; }
 .my-table {
   list-style: none; margin: .4rem 0; padding: 1.1rem .8rem;
@@ -717,13 +705,13 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 }
 
 /* 레시피 편집 칸(메뉴수정·나의 메뉴 추가): 화면 폭을 넘지 않게 */
-.choice-row > .edit-box { min-width: 0; }
+.edit-box { min-width: 0; }
 .maker-draft { min-width: 0; }
 .maker-draft input, .maker-draft select, .maker-draft textarea { max-width: 100%; min-width: 0; }
 .maker-draft .row > select { flex: 1 1 auto; }
 @media (max-width: 640px) {
   /* 메뉴수정 칸은 휴대폰 가로 폭을 꽉 채움 */
-  .choice-row > .edit-box { margin: 0 -16px; padding: .4rem; border-radius: 0; border-left: 0; border-right: 0; }
+  .edit-box { margin: 0 -16px; padding: .4rem; border-radius: 0; border-left: 0; border-right: 0; }
   .edit-box .maker-draft { padding: .6rem; border: 0; }
   /* 분류·준비·조리 한 줄, 끼니 네 칸 한 줄 */
   .maker-fields { flex-wrap: nowrap; gap: .4rem; }
@@ -799,7 +787,7 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 사진 이름: 짧은 이름은 휴대폰에서만 (넓은 화면은 원래 이름) */
 .nm-short { display: none; }
 @media (max-width: 640px) { .nm-short { display: inline; } .nm-full { display: none; } }
-:root:not(:lang(ko)) .row-btns .btn, :root:not(:lang(ko)) .choice-row > .table-btn, :root:not(:lang(ko)) .pair-btns .btn { white-space: normal; min-width: 0; }
+:root:not(:lang(ko)) .pair-btns .btn { white-space: normal; min-width: 0; }
 :root:not(:lang(ko)) .brand { flex: 0 1 auto; min-width: 0; }
 :root:not(:lang(ko)) .brand > span { min-width: 0; }
 :root:not(:lang(ko)) .brand small { white-space: normal; line-height: 1.15; }
