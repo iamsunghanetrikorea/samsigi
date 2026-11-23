@@ -628,14 +628,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .tag-have { background: var(--green-soft); color: #1d6b30; }
 .tag-need { background: var(--warn-bg); color: var(--warn); }
 .rec-group h2 { margin: 0; }
-.rec-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); gap: .8rem; }
-.rec-card { display: flex; gap: .9rem; align-items: flex-start; }
-.rec-open { appearance: none; border: 0; background: none; padding: 0; cursor: pointer; }
-.rec-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .2rem; }
-.rec-body p { margin: 0; }
-.rec-title { font-weight: 800; font-size: 1.05rem; color: var(--text); text-decoration: none; }
-.rec-title:hover { text-decoration: underline; }
-.rec-ings { line-height: 1.7; }
 
 /* 모바일: 작은 사진 7칸 격자(분류마다 줄 바꿈), 이름은 사진 위에 */
 @media (max-width: 640px) {
@@ -663,8 +655,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .pick-box .btn { min-height: 40px; padding: .1rem .6rem; font-size: .85rem; flex: none; }
   .pick-go { width: 100%; min-height: 54px; font-size: 1.05rem; }
   .ing-add .btn.soft { width: 100%; }
-  .rec-list { grid-template-columns: 1fr; }
-  .rec-card .plate.lg { width: 72px; height: 72px; }
 }
 
 /* 모바일 전용·모바일에서 숨김 */

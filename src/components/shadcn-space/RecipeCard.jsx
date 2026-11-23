@@ -11,7 +11,8 @@ import { round } from '../../lib/nutrition';
 import { go } from '../../router';
 import { t } from '../../i18n';
 
-export default function RecipeCard({ recipe: r, nutrition: n, excluded, actions, narrow, className }) {
+// nutrition 이 없으면 열량·단백질은 빼고, time·note(예: 난이도)·children(재료 태그 등)은 선택
+export default function RecipeCard({ recipe: r, nutrition: n, time, note, excluded, actions, narrow, className, children }) {
   const { state, update } = useStore();
   const fav = state.profile.favorites.includes(r.id);
   const title = t(r.title);
@@ -53,10 +54,11 @@ export default function RecipeCard({ recipe: r, nutrition: n, excluded, actions,
           {title}
         </button>
         <ul className="m-0 flex list-none flex-wrap gap-x-3 gap-y-1 p-0 text-base text-foreground">
-          <li className="flex items-center gap-1"><Flame aria-hidden className="size-4 text-[var(--accent)]" />{round(n.kcal)}kcal</li>
-          <li className="flex items-center gap-1"><Beef aria-hidden className="size-4 text-primary" />{t('단백질 {n}g', { n: round(n.protein) })}</li>
-          <li className="flex items-center gap-1"><Clock aria-hidden className="size-4 text-muted-foreground" />{t('{n}분', { n: r.prep + r.cook })}</li>
+          {n && <li className="flex items-center gap-1"><Flame aria-hidden className="size-4 text-[var(--accent)]" />{round(n.kcal)}kcal</li>}
+          {n && <li className="flex items-center gap-1"><Beef aria-hidden className="size-4 text-primary" />{t('단백질 {n}g', { n: round(n.protein) })}</li>}
+          <li className="flex items-center gap-1"><Clock aria-hidden className="size-4 text-muted-foreground" />{t('{n}분', { n: time ?? r.prep + r.cook })}{note ? ` · ${note}` : ''}</li>
         </ul>
+        {children}
         {excluded && <p className="m-0 text-sm font-semibold text-destructive">{t('제외됨({why})', { why: t(excluded) })}</p>}
         <div className="mt-auto flex flex-wrap gap-2 pt-1 [&>.btn]:min-w-0 [&>.btn]:flex-1">{actions}</div>
       </CardContent>
@@ -70,4 +72,16 @@ export function RecipeGrid({ children }) {
 }
 export function RecipeGridItem({ wide, children }) {
   return <li className={wide ? 'col-span-full flex flex-col gap-3' : 'min-w-0'}>{children}</li>;
+}
+
+// 재료 태그 줄 (쓰는 재료 = 초록, 더 필요 = 주황)
+export function IngredientTags({ label, items, need }) {
+  return (
+    <p className="m-0 flex flex-wrap items-center gap-1.5">
+      <span className="mr-0.5 text-sm text-muted-foreground">{label}</span>
+      {items.map((x) => (
+        <Badge key={x} className={cn('h-auto rounded-full px-2.5 py-0.5 text-sm font-bold', need ? 'bg-[var(--warn-bg)] text-[var(--warn)]' : 'bg-[var(--green-soft)] text-[var(--green)]')}>{x}</Badge>
+      ))}
+    </p>
+  );
 }

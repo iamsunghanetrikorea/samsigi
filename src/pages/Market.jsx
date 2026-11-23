@@ -6,12 +6,12 @@ import { DIFFICULTY_LABEL } from '../data/recipes';
 import { PICK_CATS, PICK_ITEMS, PICK_EXTRA, EXTRA_BY, CAT_LABEL, CAT_EMOJI, shortName, ingLabel, matchIngredient, recommend, dishesWithoutRecipe } from '../lib/market';
 import { Seg, longPress } from '../components/ui';
 import { go } from '../router';
-import Plate from '../components/Plate';
 import { MyTableButton } from '../components/MyTable';
 import { tShort } from '../i18n/short';
 import Shopping from './Shopping';
 import { googleAiUrl, breakfastAiPrompt } from '../lib/share';
 import { t } from '../i18n';
+import RecipeCard, { RecipeGrid, RecipeGridItem, IngredientTags } from '../components/shadcn-space/RecipeCard';
 
 // 장보기 탭: 재료 고르기(사진) → 추천 레시피, 그리고 기존 장보기 목록
 export default function Market({ route }) {
@@ -357,25 +357,20 @@ function RecGroup({ title, note, list, onAdd }) {
   return (
     <section className="stack rec-group">
       <div><h2>{title}</h2><p className="muted small">{note}</p></div>
-      <ul className="rec-list">
+      <RecipeGrid>
         {list.map((x) => (
-          <li key={x.recipe.id} className="card rec-card">
-            <button className="rec-open" onClick={() => go(`/recipe/${x.recipe.id}`)} aria-label={t('{title} 레시피 보기', { title: t(x.recipe.title) })}>
-              <Plate recipe={x.recipe} size="lg" />
-            </button>
-            <div className="rec-body">
-              <a className="rec-title" href={`#/recipe/${x.recipe.id}`}>{t(x.recipe.title)}</a>
-              <p className="muted small">⏱ {t('{n}분', { n: x.time })} · {t(DIFFICULTY_LABEL[x.recipe.difficulty] || '쉬움')}</p>
-              <p className="rec-ings"><span className="muted small">{t('쓰는 재료')}</span> {x.used.map((u) => <span key={u.name} className="tag-have">{u.name}</span>)}</p>
-              {x.need.length > 0 && <p className="rec-ings"><span className="muted small">{t('더 필요')}</span> {x.need.map((n) => <span key={n.id} className="tag-need">{n.name}</span>)}</p>}
-              <div className="row wrap">
+          <RecipeGridItem key={x.recipe.id}>
+            <RecipeCard recipe={x.recipe} time={x.time} note={t(DIFFICULTY_LABEL[x.recipe.difficulty] || '쉬움')}
+              actions={<>
                 {onAdd && <button className="btn small soft" onClick={() => onAdd(x)}>＋ {t('장보기 목록에 담기')}</button>}
                 <MyTableButton id={x.recipe.id} small />
-              </div>
-            </div>
-          </li>
+              </>}>
+              <IngredientTags label={t('쓰는 재료')} items={x.used.map((u) => u.name)} />
+              {x.need.length > 0 && <IngredientTags label={t('더 필요')} items={x.need.map((n) => n.name)} need />}
+            </RecipeCard>
+          </RecipeGridItem>
         ))}
-      </ul>
+      </RecipeGrid>
     </section>
   );
 }
