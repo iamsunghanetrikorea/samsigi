@@ -16,6 +16,7 @@ import { AddIngredient } from './Market';
 import { t } from '../i18n';
 import RecipeCard, { RecipeGrid, RecipeGridItem } from '../components/shadcn-space/RecipeCard';
 import { MicButton, useSpeech } from '../components/Mic';
+import { photoIdForName } from '../lib/photoMatch';
 
 const FAV = '즐겨찾기';
 
@@ -118,7 +119,8 @@ export default function RecipeList() {
           ))}
           {myMenus.map((x) => (
             <button key={x.id} className={`find-pic ${cat === x.id ? 'on' : ''}`} aria-pressed={cat === x.id} onClick={() => setCat(cat === x.id ? '' : x.id)} {...longPress(() => removePic(x.id, x.name, true))}>
-              {x.photo ? <img src={x.photo} alt="" /> : <span className="find-emoji" aria-hidden><UtensilsCrossed size={36} strokeWidth={1.5} /></span>}
+              {/* 올린 사진이 없으면 이름이 비슷한 메뉴 사진을 빌려 씀 */}
+              {x.photo ? <img src={x.photo} alt="" /> : photoIdForName(x.name) ? <img src={`./photos/${photoIdForName(x.name)}.webp`} alt="" loading="lazy" decoding="async" /> : <span className="find-emoji" aria-hidden><UtensilsCrossed size={36} strokeWidth={1.5} /></span>}
               <span>{x.name}</span>
             </button>
           ))}

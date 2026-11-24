@@ -216,6 +216,7 @@ export default {
   '장보기 목록': { zh: '购物清单', ja: '買い物リスト', en: 'Shopping list' },
   '재료 검색': { zh: '食材搜索', ja: '材料検索', en: 'Ingredient search' },
   '재료 이름으로 찾기': { zh: '按食材名称搜索', ja: '材料名で探す', en: 'Search by ingredient name' },
+  '‘{name}’의 예시 사진': { zh: '“{name}”的示例照片', ja: '「{name}」の参考写真', en: 'Example photo of “{name}”' },
   '찾은 메뉴 {n}개': { zh: '找到 {n} 道菜', ja: '見つかったメニュー{n}品', en: '{n} dishes found' },
   '마이크를 누르고 재료를 말하면 바로 찾아 드려요': { zh: '按下麦克风说出食材，马上为您查找', ja: 'マイクを押して材料を言うとすぐに探します', en: 'Tap the mic and say an ingredient — we’ll find dishes right away' },
   '예: 두부, 계란': { zh: '例：豆腐、鸡蛋', ja: '例：豆腐、卵', en: 'e.g. tofu, egg' },

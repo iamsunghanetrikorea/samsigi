@@ -8,6 +8,7 @@ import { fmtDate, today } from '../lib/date';
 import { Estimate } from '../components/ui';
 import { go } from '../router';
 import { PHOTOS } from '../data/photos';
+import { photoIdFor, borrowedFrom } from '../lib/photoMatch';
 import SendToGpt from '../components/SendToGpt';
 import { youtubeSuggestions } from '../lib/youtube';
 import { recipeRefs } from '../data/recipePack';
@@ -113,12 +114,18 @@ export default function RecipePage({ id, query }) {
   return (
     <article className="stack recipe">
       <button className="btn ghost small no-print" onClick={() => history.back()}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('뒤로')}</button>
-      {PHOTOS[id] ? (
-        <figure className="recipe-photo">
-          <img src={`./photos/${id}.webp`} alt={t('{title} 예시 사진', { title: t(recipe.title) })} />
-          <figcaption>{t('예시 사진')} · <a href={PHOTOS[id].page} target="_blank" rel="noopener noreferrer">{PHOTOS[id].artist || t('작성자 미상')}</a>, {PHOTOS[id].licenseUrl ? <a href={PHOTOS[id].licenseUrl} target="_blank" rel="noopener noreferrer">{PHOTOS[id].license}</a> : PHOTOS[id].license} (Wikimedia Commons)</figcaption>
-        </figure>
-      ) : <div className="recipe-hero" aria-hidden>{recipe.emoji}</div>}
+      {/* 자기 사진이 없으면 가장 비슷한 메뉴 사진을 빌려 쓰고, 어느 메뉴 사진인지 밝힘 */}
+      {photoIdFor(recipe) ? (() => {
+        const pid = photoIdFor(recipe);
+        const c = PHOTOS[pid];
+        const from = borrowedFrom(recipe);
+        return (
+          <figure className="recipe-photo">
+            <img src={`./photos/${pid}.webp`} alt={t('{title} 예시 사진', { title: t(recipe.title) })} />
+            <figcaption>{from ? t('‘{name}’의 예시 사진', { name: t(from) }) : t('예시 사진')} · <a href={c.page} target="_blank" rel="noopener noreferrer">{c.artist || t('작성자 미상')}</a>, {c.licenseUrl ? <a href={c.licenseUrl} target="_blank" rel="noopener noreferrer">{c.license}</a> : c.license} (Wikimedia Commons)</figcaption>
+          </figure>
+        );
+      })() : <div className="recipe-hero" aria-hidden>{recipe.emoji}</div>}
       <div>
         {linked && <p className="muted">{fmtDate(date)} {t(MEAL_LABEL[meal])}</p>}
         <h1><span className="menu-no big" aria-label={t('메뉴 {n}번', { n: menuNo(recipe) })}>{menuNo(recipe)}</span>{t(recipe.title)}</h1>

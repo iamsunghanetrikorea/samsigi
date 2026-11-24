@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useStore } from '../../store';
 import { MEAL_LABEL, FOOD_GROUPS, foodGroup, menuNo } from '../../data/recipes';
-import { PHOTOS } from '../../data/photos';
+import { photoUrl } from '../../lib/photoMatch';
 import { round } from '../../lib/nutrition';
 import { go } from '../../router';
 import { t } from '../../i18n';
@@ -24,8 +24,8 @@ export default function RecipeCard({ recipe: r, nutrition: n, time, note, exclud
     <Card className={cn('group h-full gap-0 rounded-2xl p-0 ring-0 border-2 border-border shadow-xs transition-colors hover:border-primary', excluded && 'opacity-75', narrow && 'mx-auto w-full max-w-sm', className)}>
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <button type="button" onClick={open} className="block size-full cursor-pointer border-0 bg-transparent p-0" aria-label={t('{title} 레시피 보기', { title })}>
-          {PHOTOS[r.id]
-            ? <img src={`./photos/${r.id}.webp`} alt="" loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+          {photoUrl(r)
+            ? <img src={photoUrl(r)} alt="" loading="lazy" decoding="async" className="size-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
             : <span aria-hidden className="grid size-full place-items-center text-6xl">{r.emoji || '🍽️'}</span>}
         </button>
         <div className="pointer-events-none absolute top-3 left-3 flex flex-wrap gap-1.5">
