@@ -89,7 +89,7 @@ export default function RecipeList() {
     <div className="stack">
       {/* 제목 오른쪽에 마이크, 그 오른쪽에 검색칸 — 말하거나 적으면 메뉴 이름으로 바로 찾음 */}
       <div className="recipe-head">
-        <h1>{t('레시피 검색')}</h1>
+        <h1>{t('요리 검색')}</h1>
         <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />
         <span className="recipe-search">
           <input type="search" aria-label={t('메뉴 이름으로 찾기')} placeholder={listening ? t('듣는 중…') : t('예: 잡채, 김치볶음밥')}

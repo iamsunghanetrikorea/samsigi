@@ -66,7 +66,7 @@ export default {
   '‘{name}’ 사진을 지울까요?': { zh: '要删除“{name}”的照片吗？', ja: '「{name}」の写真を削除しますか？', en: 'Delete the “{name}” photo?' },
   '‘{name}’ 사진을 지웠어요': { zh: '已删除“{name}”的照片', ja: '「{name}」の写真を削除しました', en: 'Deleted the “{name}” photo' },
   '레시피 추천': { zh: '食谱推荐', ja: 'レシピのおすすめ', en: 'Recipe ideas' },
-  '레시피 검색': { zh: '食谱搜索', ja: 'レシピ検索', en: 'Recipe search' },
+  '요리 검색': { zh: '菜品搜索', ja: '料理検索', en: 'Dish search' },
   '아래 메뉴사진을 선택하면 관련 레시피 추천': { zh: '选择下方的菜品照片，就会推荐相关食谱', ja: '下のメニュー写真を選ぶと、関連するレシピをおすすめします', en: 'Pick a photo below to see related recipes' },
   '분류': { zh: '分类', ja: '分類', en: 'Category' },
   '지운 기본 사진 {n}개 다시 보이기': { zh: '重新显示已删除的{n}张默认照片', ja: '削除した基本の写真{n}枚を再表示', en: 'Show {n} deleted default photos again' },
