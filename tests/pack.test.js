@@ -27,20 +27,20 @@ describe('업데이트 추천 메뉴 묶음', () => {
       else expect(n.kcal, r.id).toBeGreaterThan(300), expect(n.kcal, r.id).toBeLessThan(800);
     }
   });
-  it('업데이트할 때마다 분류별 1개씩, 6번이면 모두 추가', () => {
-    let added = [];
-    for (let i = 0; i < 6; i++) {
-      const ids = nextUpdate(added);
-      expect(ids).toHaveLength(6);
-      expect(new Set(ids.map((id) => PACK.find((r) => r.id === id).category)).size).toBe(6);
-      added = [...added, ...ids];
-    }
-    expect(nextUpdate(added)).toHaveLength(0);
+  it('한 번에 남은 추천 메뉴를 모두 추가, 이미 있는 메뉴는 빼고 분류 차례대로', () => {
+    const ids = nextUpdate([]);
+    expect(ids).toHaveLength(PACK.length);
+    expect(new Set(ids.map((id) => PACK.find((r) => r.id === id).category)).size).toBe(6);
+    const cats = ids.map((id) => PACK.find((r) => r.id === id).category);
+    expect(cats).toEqual([...cats].sort((a, b) => CATEGORIES.indexOf(a) - CATEGORIES.indexOf(b)));
+    const half = ids.slice(0, 10);
+    expect(nextUpdate(half)).toHaveLength(PACK.length - half.length);
+    expect(nextUpdate(ids)).toHaveLength(0);
   });
   it('추가한 메뉴만 레시피 목록에 올라가고, 지우면 빠짐', () => {
     const ids = nextUpdate([]);
     syncPack(ids);
-    expect(RECIPES.length).toBe(baseCount + 6);
+    expect(RECIPES.length).toBe(baseCount + PACK.length);
     ids.forEach((id) => expect(RECIPE_BY_ID[id]).toBeTruthy());
     syncPack([]);
     expect(RECIPES.length).toBe(baseCount);
