@@ -5,7 +5,8 @@ import { today } from '../lib/date';
 import { Modal, Seg, longPress } from '../components/ui';
 import { EatOutModal, EATOUT_PRESETS } from '../components/meal';
 import { AddIngredient } from './Market';
-import { t, getLang } from '../i18n';
+import { MicButton, useSpeech } from '../components/Mic';
+import { t } from '../i18n';
 
 // 비밀 API 키 없이 동작: OpenStreetMap(Overpass·Nominatim) 공개 API + 네이버/카카오 지도 검색 링크
 const OVERPASS = 'https://overpass-api.de/api/interpreter';
@@ -68,36 +69,15 @@ function MapLinks({ query, pos }) {
   );
 }
 
-// 말로 입력 (Web Speech API — 크롬·사파리 등 지원 브라우저에서만)
-const Speech = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
-const SPEECH_LANG = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
-
 // '찾을 메뉴' 입력칸(네이버 버튼 오른쪽): 고른 사진 메뉴가 들어오고, 직접 쓰거나 마이크로 말해서 바꿈 → 네이버·카카오·구글 버튼이 이 메뉴로 검색
 function MenuInput({ value, onChange }) {
-  const { notify } = useStore();
-  const [listening, setListening] = useState(false);
-  const recRef = useRef(null);
-  const mic = () => {
-    if (!Speech) { notify(t('이 기기·브라우저는 음성 입력을 지원하지 않아요')); return; }
-    if (listening) { recRef.current?.stop(); return; }
-    const rec = new Speech();
-    rec.lang = SPEECH_LANG[getLang()] || 'ko-KR';
-    rec.interimResults = false;
-    rec.maxAlternatives = 1;
-    rec.onresult = (e) => { const said = e.results[0]?.[0]?.transcript?.trim().replace(/[.。!?]$/, ''); if (said) onChange(said); };
-    rec.onerror = (e) => { if (e.error === 'not-allowed' || e.error === 'service-not-allowed') notify(t('마이크 사용을 허용해 주세요')); };
-    rec.onend = () => setListening(false);
-    recRef.current = rec;
-    try { rec.start(); setListening(true); } catch { setListening(false); }
-  };
+  const { listening, toggle } = useSpeech(onChange);
   return (
     <form className="menu-input" onSubmit={(e) => e.preventDefault()}>
       <span className="menu-input-box">
         <textarea rows={3} aria-label={t('찾을 메뉴')} placeholder={listening ? t('듣는 중…') : t('찾을 메뉴를 마이크 누르고 말하시오')} value={value}
           onChange={(e) => onChange(e.target.value.replace(/\s*\n\s*/g, ' '))} onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } }} maxLength={30} />
-        <button type="button" className={`mic-btn ${listening ? 'on' : ''}`} onClick={mic} aria-pressed={listening} aria-label={listening ? t('음성 입력 멈추기') : t('말로 입력하기')}>
-          <svg viewBox="4.6 1.6 14.8 19.8" aria-hidden><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z" /></svg>
-        </button>
+        <MicButton listening={listening} onClick={toggle} />
       </span>
     </form>
   );
