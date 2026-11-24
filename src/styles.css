@@ -755,6 +755,21 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .mic-btn.mic-inline { width: 40px; height: 40px; }
   .recipe-search > input { padding-left: .5rem; }
 }
+/* 메뉴 사진 카드 격자: 글자를 키워도 카드가 화면(또는 칸)보다 넓어지지 않게 */
+ul.recipe-grid { grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); }
+
+/* 메뉴 종류: 화면 왼쪽에 세로 분류 단추, 오른쪽에 그 종류의 메뉴 목록 */
+.kind-layout { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .8rem; align-items: start; }
+.kind-tabs { display: flex; flex-direction: column; gap: .5rem; }
+.kind-tab { appearance: none; width: 100%; min-height: 52px; padding: .5rem .3rem; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); font: inherit; font-weight: 600; line-height: 1.2; cursor: pointer; }
+.kind-tab:hover { border-color: var(--primary); }
+.kind-tab.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.kind-body { min-width: 0; display: flex; flex-direction: column; gap: .9rem; }
+@media (max-width: 420px) {
+  .kind-layout { grid-template-columns: 4.6rem minmax(0, 1fr); gap: .5rem; }
+  .kind-tab { min-height: 46px; font-size: min(.95rem, 3.9vw); letter-spacing: -.03em; padding: .4rem .15rem; }
+}
+
 /* 즐겨찾기·끼니 펼치기 버튼: 조용하게, 상자 폭에 맞춰 */
 .more-find { width: 100%; justify-content: center; }
 /* 식당 찾기: 검색요리 입력은 가로 전체, 그 아래 왼쪽 2/3 네이버·카카오·구글 버튼, 네이버 오른쪽에 '찾을 메뉴' 입력칸(마이크) */

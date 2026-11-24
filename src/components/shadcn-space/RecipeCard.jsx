@@ -68,7 +68,7 @@ export default function RecipeCard({ recipe: r, nutrition: n, time, note, exclud
 
 // 카드 격자 (Tailwind 클래스는 이 폴더에서만 만들어지므로 여기서 감싼다)
 export function RecipeGrid({ children }) {
-  return <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] gap-4 p-0">{children}</ul>;
+  return <ul className="recipe-grid m-0 grid list-none gap-4 p-0">{children}</ul>;
 }
 export function RecipeGridItem({ wide, children }) {
   return <li className={wide ? 'col-span-full flex flex-col gap-3' : 'min-w-0'}>{children}</li>;

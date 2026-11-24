@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Heart, Pencil, UtensilsCrossed, X, ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { useStore } from '../store';
-import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
+import { RECIPES, MEAL_LABEL, RECIPE_BY_ID, CATEGORIES } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
 import { ING } from '../data/ingredients';
 import { mealItems, sumItems, round } from '../lib/nutrition';
@@ -63,6 +63,7 @@ export default function RecipeList() {
   // 제목 줄 검색칸: 직접 쓰거나 마이크로 말해서 메뉴 이름으로 바로 찾기
   const [q, setQ] = useState('');
   const [more, setMore] = useState(false);
+  const [kind, setKind] = useState(''); // 왼쪽 메뉴 종류 (한식·중식…)
   const { listening, toggle } = useSpeech((said) => setQ(said.slice(0, 20)));
   const leftovers = leftoverRecipes(state.pantry);
   const myMenus = state.recipeMenus || [];
@@ -81,6 +82,7 @@ export default function RecipeList() {
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
     && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : filterOf(cat)(r)))
     && (!query || byName(query)(r))
+    && (!kind || query || r.category === kind) // 이름으로 찾을 때는 종류를 가리지 않음(왼쪽 분류가 숨어 있어서)
     && (!onlyOk || !excludeReason(r, state.profile)));
   const noHit = !!query && list.length === 0; // 적거나 말한 메뉴를 못 찾았을 때
   const showMore = more || meal !== 'all' || cat === FAV; // 즐겨찾기·끼니를 쓰고 있으면 계속 보임
@@ -160,6 +162,17 @@ export default function RecipeList() {
           </ul>
         </section>
       )}
+      {/* 왼쪽에 메뉴 종류, 오른쪽에 그 종류의 메뉴들 */}
+      <div className="kind-layout">
+        {!query && (
+          <nav className="kind-tabs" aria-label={t('메뉴 종류')}>
+            <button type="button" className={`kind-tab ${kind === '' ? 'on' : ''}`} aria-pressed={kind === ''} onClick={() => setKind('')}>{t('전체')}</button>
+            {CATEGORIES.map((c) => (
+              <button key={c} type="button" className={`kind-tab ${kind === c ? 'on' : ''}`} aria-pressed={kind === c} onClick={() => setKind(kind === c ? '' : c)}>{t(c)}</button>
+            ))}
+          </nav>
+        )}
+        <div className="kind-body">
       {!query && <p className="muted">{t('{n}개', { n: list.length })}</p>}
       {query && list.length === 0 && (
         <p className="notice">{t('‘{name}’(으)로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, ‘검색 메뉴 추가’로 넣어 보세요.', { name: query })}</p>
@@ -196,6 +209,8 @@ export default function RecipeList() {
           );
         })}
       </RecipeGrid>
+        </div>
+      </div>
       <section className="card update-card">
         {/* 추가할 추천 메뉴가 남아 있을 때만 보임 — 누르면 남은 메뉴를 한 번에 모두 추가 */}
         {remaining > 0 && (
