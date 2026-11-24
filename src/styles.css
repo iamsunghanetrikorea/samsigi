@@ -760,6 +760,7 @@ ul.recipe-grid { grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%
 
 /* 메뉴 종류: 화면 왼쪽에 세로 분류 단추, 오른쪽에 그 종류의 메뉴 목록 */
 .kind-layout { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .8rem; align-items: start; }
+.kind-layout.no-tabs { grid-template-columns: minmax(0, 1fr); } /* 이름으로 찾는 중에는 분류 줄이 없으니 한 칸으로 */
 .kind-tabs { display: flex; flex-direction: column; gap: .5rem; }
 .kind-tab { appearance: none; width: 100%; min-height: 52px; padding: .5rem .3rem; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); font: inherit; font-weight: 600; line-height: 1.2; cursor: pointer; }
 .kind-tab:hover { border-color: var(--primary); }

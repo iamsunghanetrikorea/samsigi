@@ -60,7 +60,7 @@ export function photoIdFor(recipe) {
   return best;
 }
 
-// 이름만 있는 메뉴(검색 메뉴 추가로 넣은 사진 없는 메뉴)에 쓸 사진 id
+// 이름만 있는 메뉴에 쓸 사진 id
 export const photoIdForName = (name) => photoIdFor({ title: name, items: [] });
 
 // 사진 주소 (없으면 null)
