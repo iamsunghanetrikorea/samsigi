@@ -118,23 +118,30 @@
 | 오트밀 | [Rolled oats 2.jpg](https://commons.wikimedia.org/wiki/File:Rolled_oats_2.jpg) | Yonygg | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 통밀식빵 | [Vegan no-knead whole wheat bread loaf, sliced, September 2010.jpg](https://commons.wikimedia.org/wiki/File:Vegan_no-knead_whole_wheat_bread_loaf,_sliced,_September_2010.jpg) | Veganbaking.net | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
 | 고구마 | [Liat Portal for Foodie Disorder - Sweet potatoes from San Francisco farmers market.jpg](https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Sweet_potatoes_from_San_Francisco_farmers_market.jpg) | HaJunkiyada | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 국수(소면) | [Somen 001.jpg](https://commons.wikimedia.org/wiki/File:Somen_001.jpg) | Kropsoq | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
-| 메밀국수 | [Dried soba noodles by FotoosVanRobin.jpg](https://commons.wikimedia.org/wiki/File:Dried_soba_noodles_by_FotoosVanRobin.jpg) | FotoosVanRobin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
-| 칼국수면 | [Bajirak-kal-guksu 3.jpg](https://commons.wikimedia.org/wiki/File:Bajirak-kal-guksu_3.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 감자 | [20251223 102610 04 potatoes for sale.jpg](https://commons.wikimedia.org/wiki/File:20251223_102610_04_potatoes_for_sale.jpg) | Isaackahoto | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 국수(삶은 것) | [Somen 001.jpg](https://commons.wikimedia.org/wiki/File:Somen_001.jpg) | Kropsoq | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
+| 메밀국수(삶은 것) | [Dried soba noodles by FotoosVanRobin.jpg](https://commons.wikimedia.org/wiki/File:Dried_soba_noodles_by_FotoosVanRobin.jpg) | FotoosVanRobin | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
+| 칼국수면(삶은 것) | [Bajirak-kal-guksu 3.jpg](https://commons.wikimedia.org/wiki/File:Bajirak-kal-guksu_3.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 떡국떡 | [Tteokguk-tteok.jpg](https://commons.wikimedia.org/wiki/File:Tteokguk-tteok.jpg) | Sulkkun | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 밀가루 | [All-Purpose Flour (4107895947).jpg](https://commons.wikimedia.org/wiki/File:All-Purpose_Flour_(4107895947).jpg) | Veganbaking.net from USA | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
-| 당면 | [Dangmyeon.jpg](https://commons.wikimedia.org/wiki/File:Dangmyeon.jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
-| 파스타 | [Spaghetti measure macro.jpg](https://commons.wikimedia.org/wiki/File:Spaghetti_measure_macro.jpg) | Bodhi Peace | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 라면사리 | [Mama instant noodle block.jpg](https://commons.wikimedia.org/wiki/File:Mama_instant_noodle_block.jpg) | Takeaway | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 쫄면 | [Boiled jjolmyeon 3.jpg](https://commons.wikimedia.org/wiki/File:Boiled_jjolmyeon_3.jpg) | 몽상가 | [CC BY 2.0 kr](https://creativecommons.org/licenses/by/2.0/kr/deed.en) |
-| 우동면 | [Udon by udono.jpg](https://commons.wikimedia.org/wiki/File:Udon_by_udono.jpg) | udono | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 밀가루(부침용) | [All-Purpose Flour (4107895947).jpg](https://commons.wikimedia.org/wiki/File:All-Purpose_Flour_(4107895947).jpg) | Veganbaking.net from USA | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
+| 당면(삶은 것) | [Dangmyeon.jpg](https://commons.wikimedia.org/wiki/File:Dangmyeon.jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
+| 파스타(삶은 것) | [Spaghetti measure macro.jpg](https://commons.wikimedia.org/wiki/File:Spaghetti_measure_macro.jpg) | Bodhi Peace | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 라면사리(마른 면) | [Mama instant noodle block.jpg](https://commons.wikimedia.org/wiki/File:Mama_instant_noodle_block.jpg) | Takeaway | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 쫄면(삶은 것) | [Boiled jjolmyeon 3.jpg](https://commons.wikimedia.org/wiki/File:Boiled_jjolmyeon_3.jpg) | 몽상가 | [CC BY 2.0 kr](https://creativecommons.org/licenses/by/2.0/kr/deed.en) |
+| 우동면(삶은 것) | [Udon by udono.jpg](https://commons.wikimedia.org/wiki/File:Udon_by_udono.jpg) | udono | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 냉면사리(삶은 것) | [Korean hot and spicy cold buckwheat noodles with raw fish-Hoe naengmyeon-01.jpg](https://commons.wikimedia.org/wiki/File:Korean_hot_and_spicy_cold_buckwheat_noodles_with_raw_fish-Hoe_naengmyeon-01.jpg) | Jinho Jung at Flickr from South Korea | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 쌀국수(삶은 것) | [Whole-grain rice vermicelli noodles (Thai).jpg](https://commons.wikimedia.org/wiki/File:Whole-grain_rice_vermicelli_noodles_(Thai).jpg) | Susan Slater | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 또띠아 | [Stack of corn and flour tortillas and a large flour tortilla.jpg](https://commons.wikimedia.org/wiki/File:Stack_of_corn_and_flour_tortillas_and_a_large_flour_tortilla.jpg) | Vigilantcosmicpenguin | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
+| 도토리묵 | [Korean acorn jelly-Dotorimuk-02.jpg](https://commons.wikimedia.org/wiki/File:Korean_acorn_jelly-Dotorimuk-02.jpg) | by HapaK at Flickr | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
 | 빵가루 | [011221-Spicy-IMG 3990.jpg](https://commons.wikimedia.org/wiki/File:011221-Spicy-IMG_3990.jpg) | Safa.daneshvar | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 전분 (양념) | [Potato flour2.jpg](https://commons.wikimedia.org/wiki/File:Potato_flour2.jpg) | Jon Pallbo | Public domain |
 | 양파 | [Mixed onions.jpg](https://commons.wikimedia.org/wiki/File:Mixed_onions.jpg) | Colin | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 애호박 | [Aehobak 1.jpg](https://commons.wikimedia.org/wiki/File:Aehobak_1.jpg) | Choi Sunyoung | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 대파 | [HK SYP Best of Best Vegetable Peking Welsh onion Allium Aug-2012.JPG](https://commons.wikimedia.org/wiki/File:HK_SYP_Best_of_Best_Vegetable_Peking_Welsh_onion_Allium_Aug-2012.JPG) | Genmewcaugsa | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 마늘 | [Liat Portal for Foodie Disorder - Garlic Bulbs and Cloves.jpg](https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Garlic_Bulbs_and_Cloves.jpg) | HaJunkiyada | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 다진 마늘 | [Liat Portal for Foodie Disorder - Garlic Bulbs and Cloves.jpg](https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Garlic_Bulbs_and_Cloves.jpg) | HaJunkiyada | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 시금치 | [Spinach leaves.jpg](https://commons.wikimedia.org/wiki/File:Spinach_leaves.jpg) | Nillerdk | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0) |
 | 콩나물 | [Kongnamul (soybean sprout) 2.jpg](https://commons.wikimedia.org/wiki/File:Kongnamul_(soybean_sprout)_2.jpg) | Hyeon-Jeong Suk | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 양배추 | [Cabbage in a stack.jpg](https://commons.wikimedia.org/wiki/File:Cabbage_in_a_stack.jpg) | Jeffery Martin | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 배추 | [Napa Cabbage.jpg](https://commons.wikimedia.org/wiki/File:Napa_Cabbage.jpg) | SarKaLay စာကလေး | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 무 | [Korean radish (34503365590).jpg](https://commons.wikimedia.org/wiki/File:Korean_radish_(34503365590).jpg) | Tim Evanson from Cleveland Heights, Ohio, USA | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
 | 당근 | [Carrots at Ljubljana Central Market.JPG](https://commons.wikimedia.org/wiki/File:Carrots_at_Ljubljana_Central_Market.JPG) | domdomegg | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
@@ -144,47 +151,62 @@
 | 토마토 | [Tomato je.jpg](https://commons.wikimedia.org/wiki/File:Tomato_je.jpg) | Softeis | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
 | 단호박 | [Kabocha Cut Open 29September2005.jpg](https://commons.wikimedia.org/wiki/File:Kabocha_Cut_Open_29September2005.jpg) | Namayasai LLP | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 깻잎 | [Korean perilla leaves.jpg](https://commons.wikimedia.org/wiki/File:Korean_perilla_leaves.jpg) | Ies (Commons 업로더) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
+| 부추 | [Chinese chives (1).jpg](https://commons.wikimedia.org/wiki/File:Chinese_chives_(1).jpg) | Fumikas Sagisavas | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 청경채 | [Brassica rapa var. chinensis (leaf).jpg](https://commons.wikimedia.org/wiki/File:Brassica_rapa_var._chinensis_(leaf).jpg) | おむこさん志望 | [CC BY 2.5](https://creativecommons.org/licenses/by/2.5) |
 | 파프리카 | [Capsicum annuum fruits IMGP0049.jpg](https://commons.wikimedia.org/wiki/File:Capsicum_annuum_fruits_IMGP0049.jpg) | Nikodem Nijaki | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 숙주 | [Mung bean sprouts.jpg](https://commons.wikimedia.org/wiki/File:Mung_bean_sprouts.jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
+| 우엉 | [Greater burdock (Vegetables).jpg](https://commons.wikimedia.org/wiki/File:Greater_burdock_(Vegetables).jpg) | Wilhelmmarvel | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 열무 | [Yeolmu (Korean radish).jpg](https://commons.wikimedia.org/wiki/File:Yeolmu_(Korean_radish).jpg) | 경빈마마 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
+| 시래기(삶은 것) | [Siraegi.jpg](https://commons.wikimedia.org/wiki/File:Siraegi.jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
+| 곤드레(삶은 것) | [Gondrebap (gondre rice) (Cirsium setidens) Korean thistle.jpg](https://commons.wikimedia.org/wiki/File:Gondrebap_(gondre_rice)_(Cirsium_setidens)_Korean_thistle.jpg) | 방신애 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
+| 아스파라거스 | [Steam-boiling green asparagus.jpg](https://commons.wikimedia.org/wiki/File:Steam-boiling_green_asparagus.jpg) | W.carter | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 바질 | [Sweet basil leaves.jpg](https://commons.wikimedia.org/wiki/File:Sweet_basil_leaves.jpg) | TheTechnician27 | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 버섯(느타리·표고) | [20210719 Pleurotus ostreatus 001-016.jpg](https://commons.wikimedia.org/wiki/File:20210719_Pleurotus_ostreatus_001-016.jpg) | Zinnmann | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 사과 | [Red Apple.jpg](https://commons.wikimedia.org/wiki/File:Red_Apple.jpg) | Abhijit Tembhekar from Mumbai, India | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 바나나 | [Bunch of bananas on sale.jpg](https://commons.wikimedia.org/wiki/File:Bunch_of_bananas_on_sale.jpg) | Wilfredor | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 호두 | [Walnuts - whole and open with halved kernel.jpg](https://commons.wikimedia.org/wiki/File:Walnuts_-_whole_and_open_with_halved_kernel.jpg) | Ivar Leidus | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 땅콩 | [Peanuts (Arachis hypogaea) - in shell, shell cracked open, shelled, peeled.jpg](https://commons.wikimedia.org/wiki/File:Peanuts_(Arachis_hypogaea)_-_in_shell,_shell_cracked_open,_shelled,_peeled.jpg) | Ivar Leidus | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 두부 | [Japanese SilkyTofu (Kinugoshi Tofu).JPG](https://commons.wikimedia.org/wiki/File:Japanese_SilkyTofu_(Kinugoshi_Tofu).JPG) | DryPot | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
-| 팥 | [Adzuki beans 02.jpg](https://commons.wikimedia.org/wiki/File:Adzuki_beans_02.jpg) | 維基小霸王 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 검은콩 | [Black Turtle Bean.jpg](https://commons.wikimedia.org/wiki/File:Black_Turtle_Bean.jpg) | Sanjay Acharya | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 순두부 | [Sun-dubu 8.jpg](https://commons.wikimedia.org/wiki/File:Sun-dubu_8.jpg) | Scudsvlad | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 팥(삶은 것) | [Adzuki beans 02.jpg](https://commons.wikimedia.org/wiki/File:Adzuki_beans_02.jpg) | 維基小霸王 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 검은콩(삶은 것) | [Black Turtle Bean.jpg](https://commons.wikimedia.org/wiki/File:Black_Turtle_Bean.jpg) | Sanjay Acharya | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 건두부 | [Dried tofu knot.jpg](https://commons.wikimedia.org/wiki/File:Dried_tofu_knot.jpg) | Fumikas Sagisavas | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 유부 | [Aburaage 1.jpg](https://commons.wikimedia.org/wiki/File:Aburaage_1.jpg) | David Niergarth | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 콩국물 | [Soy milk (2).jpg](https://commons.wikimedia.org/wiki/File:Soy_milk_(2).jpg) | LinasD (this version uploaded by SlimVirgin) | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 닭가슴살 | [Raw chicken slices.jpg](https://commons.wikimedia.org/wiki/File:Raw_chicken_slices.jpg) | kakyusei | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 닭다리살 | [Raw chicken thighs.jpg](https://commons.wikimedia.org/wiki/File:Raw_chicken_thighs.jpg) | gran | [CC BY 3.0](https://creativecommons.org/licenses/by/3.0) |
-| 돼지고기 | [HK food ingredient red meat frozen pork chop raw butt steak October 2021 SS2 013.jpg](https://commons.wikimedia.org/wiki/File:HK_food_ingredient_red_meat_frozen_pork_chop_raw_butt_steak_October_2021_SS2_013.jpg) | Presixlla MOON | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 소고기 | [Assorted Raw Beef, Pork & Chicken Slices for Yakiniku.jpg](https://commons.wikimedia.org/wiki/File:Assorted_Raw_Beef,_Pork_%26_Chicken_Slices_for_Yakiniku.jpg) | Ceeseven | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 돼지고기(안심·앞다리) | [HK food ingredient red meat frozen pork chop raw butt steak October 2021 SS2 013.jpg](https://commons.wikimedia.org/wiki/File:HK_food_ingredient_red_meat_frozen_pork_chop_raw_butt_steak_October_2021_SS2_013.jpg) | Presixlla MOON | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 소고기(우둔·국거리) | [Assorted Raw Beef, Pork & Chicken Slices for Yakiniku.jpg](https://commons.wikimedia.org/wiki/File:Assorted_Raw_Beef,_Pork_%26_Chicken_Slices_for_Yakiniku.jpg) | Ceeseven | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 베이컨 | [Bacon slices (54440452722).jpg](https://commons.wikimedia.org/wiki/File:Bacon_slices_(54440452722).jpg) | Milwaukee VA Medical Center | Public domain |
 | 고등어 | [Atlantic mackerel (Scomber scombrus).jpg](https://commons.wikimedia.org/wiki/File:Atlantic_mackerel_(Scomber_scombrus).jpg) | Petar Milošević | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 동태(명태) | [Walleye pollock.jpg](https://commons.wikimedia.org/wiki/File:Walleye_pollock.jpg) | National Oceanic and Atmospheric Administration | Public domain |
-| 연어 | [Salmon2.jpg](https://commons.wikimedia.org/wiki/File:Salmon2.jpg) | Tiia Monto | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 참치 통조림 | [Tuna can (2).jpg](https://commons.wikimedia.org/wiki/File:Tuna_can_(2).jpg) | Sevela.p | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 새우 | [Liat Portal for Foodie Disorder - Fresh shrimp from San Francisco farmers market.jpg](https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Fresh_shrimp_from_San_Francisco_farmers_market.jpg) | HaJunkiyada | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 바지락 | [Ruditapes philippinarum siphon.jpg](https://commons.wikimedia.org/wiki/File:Ruditapes_philippinarum_siphon.jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
-| 마른 미역 | [Gedroogde Wakame.jpg](https://commons.wikimedia.org/wiki/File:Gedroogde_Wakame.jpg) | Denkhenk | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 김 | [Nori.jpg](https://commons.wikimedia.org/wiki/File:Nori.jpg) | Alice Wiegand, (Lyzzy) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
-| 달걀 | [Eggs Chicken.jpg](https://commons.wikimedia.org/wiki/File:Eggs_Chicken.jpg) | safaritravelplus | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
-| 양배추 | [Cabbage in a stack.jpg](https://commons.wikimedia.org/wiki/File:Cabbage_in_a_stack.jpg) | Jeffery Martin | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 가자미 | [Pleuronectes platessa.jpg](https://commons.wikimedia.org/wiki/File:Pleuronectes_platessa.jpg) | Hans Hillewaert | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 순두부 | [Sun-dubu 8.jpg](https://commons.wikimedia.org/wiki/File:Sun-dubu_8.jpg) | Scudsvlad | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 부추 | [Chinese chives (1).jpg](https://commons.wikimedia.org/wiki/File:Chinese_chives_(1).jpg) | Fumikas Sagisavas | [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.en) |
-| 감자 | [20251223 102610 04 potatoes for sale.jpg](https://commons.wikimedia.org/wiki/File:20251223_102610_04_potatoes_for_sale.jpg) | Isaackahoto | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 연어 | [Salmon2.jpg](https://commons.wikimedia.org/wiki/File:Salmon2.jpg) | Tiia Monto | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 참치(통조림, 기름 뺀 것) | [Tuna can (2).jpg](https://commons.wikimedia.org/wiki/File:Tuna_can_(2).jpg) | Sevela.p | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
 | 오징어 | [Todarodes pacificus (white background).jpg](https://commons.wikimedia.org/wiki/File:Todarodes_pacificus_(white_background).jpg) | Chiswick Chap | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 새우(손질) | [Liat Portal for Foodie Disorder - Fresh shrimp from San Francisco farmers market.jpg](https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Fresh_shrimp_from_San_Francisco_farmers_market.jpg) | HaJunkiyada | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 바지락(살) | [Ruditapes philippinarum siphon.jpg](https://commons.wikimedia.org/wiki/File:Ruditapes_philippinarum_siphon.jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
+| 낙지 | [Octopus minor by OpenCage.jpg](https://commons.wikimedia.org/wiki/File:Octopus_minor_by_OpenCage.jpg) | 작성자 미상 | [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5) |
+| 굴 | [Oysters p1040741.jpg](https://commons.wikimedia.org/wiki/File:Oysters_p1040741.jpg) | David Monniaux | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
+| 골뱅이(통조림) | [Whelk (5633835492).jpg](https://commons.wikimedia.org/wiki/File:Whelk_(5633835492).jpg) | Leslie Seaton from Seattle, WA, USA | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 게맛살 | [Surimi - bâtonnet et miettes.jpg](https://commons.wikimedia.org/wiki/File:Surimi_-_b%C3%A2tonnet_et_miettes.jpg) | Frrrrred | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 잔멸치 | [Anchovies.jpg](https://commons.wikimedia.org/wiki/File:Anchovies.jpg) | DromoTetteh | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 황태채 | [Typical North Korean snack (안주) at the Rakwon Paradise Microbrewery (11416187434).jpg](https://commons.wikimedia.org/wiki/File:Typical_North_Korean_snack_(%EC%95%88%EC%A3%BC)_at_the_Rakwon_Paradise_Microbrewery_(11416187434).jpg) | Uri Tours | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0) |
+| 날치알 | [Tobiko.jpg](https://commons.wikimedia.org/wiki/File:Tobiko.jpg) | 작성자 미상 | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 사골육수 | [Seolleongtang.jpg](https://commons.wikimedia.org/wiki/File:Seolleongtang.jpg) | 이동원 | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 미역 | [Gedroogde Wakame.jpg](https://commons.wikimedia.org/wiki/File:Gedroogde_Wakame.jpg) | Denkhenk | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
+| 김(구운 것) | [Nori.jpg](https://commons.wikimedia.org/wiki/File:Nori.jpg) | Alice Wiegand, (Lyzzy) | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
+| 계란 | [Eggs Chicken.jpg](https://commons.wikimedia.org/wiki/File:Eggs_Chicken.jpg) | safaritravelplus | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 우유 | [Glas melk.jpg](https://commons.wikimedia.org/wiki/File:Glas_melk.jpg) | Amarant | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0) |
-| 플레인 요거트 | [Turkish strained yogurt.jpg](https://commons.wikimedia.org/wiki/File:Turkish_strained_yogurt.jpg) | Takeaway | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 슬라이스 치즈 | [White cheddar cheese sliced CNE.jpg](https://commons.wikimedia.org/wiki/File:White_cheddar_cheese_sliced_CNE.jpg) | CNEcija12345 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 요거트 | [Turkish strained yogurt.jpg](https://commons.wikimedia.org/wiki/File:Turkish_strained_yogurt.jpg) | Takeaway | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 치즈 | [White cheddar cheese sliced CNE.jpg](https://commons.wikimedia.org/wiki/File:White_cheddar_cheese_sliced_CNE.jpg) | CNEcija12345 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 배추김치 | [Korean cuisine-Kimchi-08.jpg](https://commons.wikimedia.org/wiki/File:Korean_cuisine-Kimchi-08.jpg) | Jeremy Keith | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 단무지 | [Takuan by mdid.jpg](https://commons.wikimedia.org/wiki/File:Takuan_by_mdid.jpg) | mdid | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 깍두기 | [Korean.food-kkakdugi-01.jpg](https://commons.wikimedia.org/wiki/File:Korean.food-kkakdugi-01.jpg) | by milkchug (a flickr user) | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 동치미 | [Korean-Dongchimi-01.jpg](https://commons.wikimedia.org/wiki/File:Korean-Dongchimi-01.jpg) | by karendotcom127 | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 무장아찌 | [Mu-jangajji.jpg](https://commons.wikimedia.org/wiki/File:Mu-jangajji.jpg) | 아이해피 | [CC BY 2.0 kr](https://creativecommons.org/licenses/by/2.0/kr/deed.en) |
 | 어묵 | [2016-02-06 Agekamaboko-揚げかまぼこ 大黒天物産 12個 100円 DSCF8724.JPG](https://commons.wikimedia.org/wiki/File:2016-02-06_Agekamaboko-%E6%8F%9A%E3%81%92%E3%81%8B%E3%81%BE%E3%81%BC%E3%81%93_%E5%A4%A7%E9%BB%92%E5%A4%A9%E7%89%A9%E7%94%A3_12%E5%80%8B_100%E5%86%86_DSCF8724.JPG) | 松岡明芳 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 만두 | [Jjin-mandu 1.jpg](https://commons.wikimedia.org/wiki/File:Jjin-mandu_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
-| 떡 (기타) | [Garae-tteok.jpg](https://commons.wikimedia.org/wiki/File:Garae-tteok.jpg) | Sulkkun | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 햄버거 (기타) | [NCI Visuals Food Hamburger.jpg](https://commons.wikimedia.org/wiki/File:NCI_Visuals_Food_Hamburger.jpg) | Len Rizzi (photographer) | Public domain |
-| 추어탕 (기타) | [Chueo-tang 1.jpg](https://commons.wikimedia.org/wiki/File:Chueo-tang_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
-| 쓰시 (기타) | [Nigirizushi at Luckiefun's Redi in June 2024.jpg](https://commons.wikimedia.org/wiki/File:Nigirizushi_at_Luckiefun%27s_Redi_in_June_2024.jpg) | JIP | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
-| 전분 (양념) | [Potato flour2.jpg](https://commons.wikimedia.org/wiki/File:Potato_flour2.jpg) | Jon Pallbo | Public domain |
+| 만두(냉동) | [Jjin-mandu 1.jpg](https://commons.wikimedia.org/wiki/File:Jjin-mandu_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 | 간장 (양념) | [Bowl of soy sauce, the sequel.jpg](https://commons.wikimedia.org/wiki/File:Bowl_of_soy_sauce,_the_sequel.jpg) | Bodhi Peace | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | 된장 (양념) | [Doenjang (cropped).jpg](https://commons.wikimedia.org/wiki/File:Doenjang_(cropped).jpg) | 국립국어원 | [CC BY-SA 2.0 kr](https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en) |
 | 고추장 (양념) | [Gochujang (chilli paste) 2.jpg](https://commons.wikimedia.org/wiki/File:Gochujang_(chilli_paste)_2.jpg) | 온맘으로 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
@@ -199,4 +221,10 @@
 | 깨 (양념) | [Toasted sesame seeds 1.jpg](https://commons.wikimedia.org/wiki/File:Toasted_sesame_seeds_1.jpg) | dabok2014 | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | 마요네즈 (양념) | [Bingham mayo.jpg](https://commons.wikimedia.org/wiki/File:Bingham_mayo.jpg) | Marcusyoder at English Wikipedia | Public domain |
 | 토마토케첩 (양념) | [Stammtisch Ruhrgebiet Januar 2007 Oberhausen Pommes.JPG](https://commons.wikimedia.org/wiki/File:Stammtisch_Ruhrgebiet_Januar_2007_Oberhausen_Pommes.JPG) | JCS | Public domain |
+| 토마토소스 (양념) | [Fresh Tomato Sauce (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Fresh_Tomato_Sauce_(Unsplash).jpg) | Dennis Klein klein2 | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
+| 카레가루 (양념) | [Curry powder in the spice-bazaar in Istanbul.jpg](https://commons.wikimedia.org/wiki/File:Curry_powder_in_the_spice-bazaar_in_Istanbul.jpg) | Thomas Steiner | [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/) |
 | 식초 (양념) | [Rice vinegar (Japanese).jpg](https://commons.wikimedia.org/wiki/File:Rice_vinegar_(Japanese).jpg) | Susan Slater | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 떡 (기타) | [Garae-tteok.jpg](https://commons.wikimedia.org/wiki/File:Garae-tteok.jpg) | Sulkkun | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| 햄버거 (기타) | [NCI Visuals Food Hamburger.jpg](https://commons.wikimedia.org/wiki/File:NCI_Visuals_Food_Hamburger.jpg) | Len Rizzi (photographer) | Public domain |
+| 추어탕 (기타) | [Chueo-tang 1.jpg](https://commons.wikimedia.org/wiki/File:Chueo-tang_1.jpg) | chomjong | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| 쓰시 (기타) | [Nigirizushi at Luckiefun's Redi in June 2024.jpg](https://commons.wikimedia.org/wiki/File:Nigirizushi_at_Luckiefun%27s_Redi_in_June_2024.jpg) | JIP | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
