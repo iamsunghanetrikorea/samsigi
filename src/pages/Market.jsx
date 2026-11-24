@@ -26,7 +26,10 @@ export default function Market({ route }) {
         <h1>{view === 'list' ? t('장보기 목록') : t('재료 검색')}</h1>
         {view === 'pick' && <PickSearch />}
       </div>
-      {view === 'pick' && !result && <p className="recipe-hint">{t('아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요')}</p>}
+      {view === 'pick' && !result && <>
+        <p className="recipe-hint hide-m">{t('아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요')}</p>
+        <p className="recipe-hint only-m">{t('마이크를 누르고 재료를 말하면 바로 찾아 드려요')}</p>
+      </>}
       {/* 휴대폰에서는 장보기 목록을 '더보기'에서 열기 때문에 전환 단추를 숨김 */}
       <div className="no-print hide-m">
         <Seg label={t('장보기 화면')} value={view} onChange={(v) => go(v === 'list' ? '/shopping?view=list' : '/shopping')}
@@ -150,7 +153,8 @@ function Picker() {
 
       {hidden.size > 0 && <p className="muted small long-help no-print"><button type="button" className="linklike" onClick={() => set((x) => ({ ...x, hidden: [] }))}>{t('지운 기본 재료 {n}가지 다시 보이기', { n: hidden.size })}</button></p>}
 
-      <div className="pick-bar no-print" role="region" aria-label={t('고른 재료')}>
+      {/* 넓은 화면에서만 보임 — 휴대폰에서는 위쪽 마이크·입력칸으로 찾음 */}
+      <div className="pick-bar no-print hide-m" role="region" aria-label={t('고른 재료')}>
         <div className="pick-box">
           <div className="pick-sum">
             <b>{t('{n}개 선택', { n: names.length })}</b>
@@ -377,7 +381,7 @@ function Result() {
 
   return (
     <>
-      <section className="card">
+      <section className="card hide-m">
         <h2>{t('찾은 메뉴 {n}개', { n: list.length })}</h2>
         {/* 이번에 고른 재료만 보임 (마이크로 다시 말하면 이 재료로 새로 찾음) */}
         <div className="chips">{names.map((n) => <span key={n} className="tag-have">{n}</span>)}</div>

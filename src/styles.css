@@ -664,6 +664,8 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 
 /* 모바일 전용·모바일에서 숨김 */
 .only-m { display: none; }
+.recipe-hint.only-m { display: none; }
+@media (max-width: 640px) { .recipe-hint.only-m { display: block; } }
 @media (max-width: 640px) {
   .only-m { display: inline; }
   .hide-m { display: none; }
