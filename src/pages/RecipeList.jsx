@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, Pencil, UtensilsCrossed } from 'lucide-react';
+import { Heart, Pencil, UtensilsCrossed, X } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
@@ -15,6 +15,7 @@ import { MyTableButton } from '../components/MyTable';
 import { AddIngredient } from './Market';
 import { t } from '../i18n';
 import RecipeCard, { RecipeGrid, RecipeGridItem } from '../components/shadcn-space/RecipeCard';
+import { MicButton, useSpeech } from '../components/Mic';
 
 const FAV = '즐겨찾기';
 
@@ -58,6 +59,9 @@ export default function RecipeList() {
     notify(ids.length ? t('새 메뉴 {n}가지를 레시피 모음에 추가했어요', { n: ids.length }) : t('추가할 새 메뉴가 없어요'));
   };
   const [onlyOk, setOnlyOk] = useState(true);
+  // 제목 줄 검색칸: 직접 쓰거나 마이크로 말해서 메뉴 이름으로 바로 찾기
+  const [q, setQ] = useState('');
+  const { listening, toggle } = useSpeech((said) => setQ(said.slice(0, 20)));
   const leftovers = leftoverRecipes(state.pantry);
   const myMenus = state.recipeMenus || [];
   const hiddenPics = state.recipeHidden || [];
@@ -71,14 +75,26 @@ export default function RecipeList() {
   };
   const byName = (name) => (r) => r.title.includes(name) || t(r.title).includes(name) || r.items.some(([id]) => ING[id]?.name.includes(name.replace(/달걀/g, '계란')));
   const filterOf = (c) => FILTER_BY[c] || byName(myMenus.find((x) => x.id === c)?.name || c);
+  const query = q.trim();
   const list = RECIPES.filter((r) => (meal === 'all' || r.meals.includes(meal))
     && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : filterOf(cat)(r)))
+    && (!query || byName(query)(r))
     && (!onlyOk || !excludeReason(r, state.profile)));
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
 
   return (
     <div className="stack">
-      <h1>{t('레시피 검색')}</h1>
+      {/* 제목 오른쪽에 마이크, 그 오른쪽에 검색칸 — 말하거나 적으면 메뉴 이름으로 바로 찾음 */}
+      <div className="recipe-head">
+        <h1>{t('레시피 검색')}</h1>
+        <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />
+        <span className="recipe-search">
+          <input type="search" aria-label={t('메뉴 이름으로 찾기')} placeholder={listening ? t('듣는 중…') : t('예: 잡채, 김치볶음밥')}
+            value={q} onChange={(e) => setQ(e.target.value)} maxLength={20}
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } }} />
+          {q && <button type="button" className="search-x" onClick={() => setQ('')} aria-label={t('검색어 지우기')}><X aria-hidden size={18} strokeWidth={2} /></button>}
+        </span>
+      </div>
       <p className="recipe-hint">{t('아래 메뉴사진을 선택하면 관련 레시피 추천')}</p>
       <section className="card update-card find-card">
         <div className="chips find-chips" role="group" aria-label={t('분류')}>
@@ -96,7 +112,7 @@ export default function RecipeList() {
           ))}
         </div>
         {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('recipeHidden', [])}>{t('지운 기본 사진 {n}개 다시 보이기', { n: hiddenPics.length })}</button></p>}
-        <AddIngredient label="검색 메뉴 추가" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat mic custom={myMenus}
+        <AddIngredient label="검색 메뉴 추가" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus}
           onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
           onAdd={(name, _c, photo, credit) => {
             if (FILTER_BY[name] || myMenus.some((x) => x.name === name)) { notify(t('‘{name}’은(는) 이미 있어요', { name })); return; }
@@ -121,6 +137,9 @@ export default function RecipeList() {
         </section>
       )}
       <p className="muted">{t('{n}개', { n: list.length })}</p>
+      {query && list.length === 0 && (
+        <p className="notice">{t('‘{name}’으로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, 아래 ‘검색 메뉴 추가’로 넣어 보세요.', { name: query })}</p>
+      )}
       {cat === FAV && list.length === 0 && (
         <p className="notice">{state.profile.favorites.length ? t('즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.') : t('아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘즐겨찾기’를 누르면 여기에 모여요.')}</p>
       )}

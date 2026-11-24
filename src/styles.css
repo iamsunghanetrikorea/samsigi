@@ -733,12 +733,19 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .recipe-hint { margin: -.6rem 0 0; color: var(--primary); opacity: .6; font-size: .75rem; font-weight: 500; }
 .find-pic .find-emoji { position: static; display: grid; place-items: center; width: 100%; height: 100%; background: none; color: inherit; font-size: 2.4rem; }
 .find-card .ing-add { padding: 0; border: 0; box-shadow: none; background: none; }
-/* 이름 칸 옆 작은 마이크: 말로 메뉴 이름을 넣음 (식당 찾기 큰 마이크와 같은 모양) */
-.ing-add-name { display: flex; align-items: center; gap: .4rem; flex: 1 1 10em; min-width: 0; }
-.ing-add-name > input { flex: 1 1 auto; min-width: 0; }
+/* 제목 줄: '레시피 검색' 오른쪽에 마이크, 그 오른쪽에 검색칸 (좁은 화면에서는 검색칸이 아랫줄로) */
+.recipe-head { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
+.recipe-head h1 { flex: none; }
+.recipe-search { position: relative; display: flex; align-items: center; flex: 1 1 12em; min-width: 0; }
+.recipe-search > input { width: 100%; min-width: 0; padding-right: 2.2rem; }
+.recipe-search > input::-webkit-search-cancel-button { display: none; }
+.search-x { position: absolute; right: .35rem; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
+.search-x:hover { background: var(--primary-soft); color: var(--text); }
+/* 입력칸 옆 작은 마이크 (식당 찾기 큰 마이크와 같은 모양) */
 .mic-btn.mic-inline { flex: none; width: 44px; height: 44px; min-height: 44px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); }
 .mic-btn.mic-inline svg { width: 24px; height: 24px; max-width: none; max-height: none; }
 .mic-btn.mic-inline.on { border-color: #d23b2f; }
+@media (max-width: 420px) { .recipe-search { flex-basis: 100%; } }
 /* 식당 찾기: 검색요리 입력은 가로 전체, 그 아래 왼쪽 2/3 네이버·카카오·구글 버튼, 네이버 오른쪽에 '찾을 메뉴' 입력칸(마이크) */
 .find-tools { display: grid; grid-template-columns: 2fr 1fr; gap: .6rem; align-items: stretch; }
 .find-tools > .map-links { display: flex; flex-direction: column; align-items: stretch; gap: .5rem; margin: 0; min-width: 0; }

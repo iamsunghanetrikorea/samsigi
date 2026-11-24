@@ -13,7 +13,6 @@ import Shopping from './Shopping';
 import { googleAiUrl, breakfastAiPrompt } from '../lib/share';
 import { t } from '../i18n';
 import RecipeCard, { RecipeGrid, RecipeGridItem, IngredientTags } from '../components/shadcn-space/RecipeCard';
-import { MicButton, useSpeech } from '../components/Mic';
 
 // 장보기 탭: 재료 고르기(사진) → 추천 레시피, 그리고 기존 장보기 목록
 export default function Market({ route }) {
@@ -188,7 +187,7 @@ function AiBreakfast({ names }) {
   );
 }
 
-export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기 재료 추가 입력', unit = '재료', placeholder = '예: 삼겹살, 연근', noCat = false, mic = false }) {
+export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기 재료 추가 입력', unit = '재료', placeholder = '예: 삼겹살, 연근', noCat = false }) {
   const { notify } = useStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -197,8 +196,6 @@ export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기
   const [credit, setCredit] = useState(null);
   const [found, setFound] = useState(null); // null: 안 찾음, []: 결과 없음
   const [busy, setBusy] = useState(false);
-  // 마이크로 말해서 이름 칸을 채움 ('검색 메뉴 추가' 등 mic을 켠 곳에서만 보임)
-  const { listening, toggle } = useSpeech((said) => setName(said.slice(0, 20)));
   const pick = async (e) => {
     const f = e.target.files?.[0];
     e.target.value = '';
@@ -232,10 +229,7 @@ export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기
       {open && (
         <form className="ing-add-form" onSubmit={submit}>
           <div className="row wrap">
-            <span className="ing-add-name">
-              <input aria-label={t('새 {unit} 이름', { unit: t(unit) })} placeholder={listening ? t('듣는 중…') : t(placeholder)} value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus />
-              {mic && <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />}
-            </span>
+            <input aria-label={t('새 {unit} 이름', { unit: t(unit) })} placeholder={t(placeholder)} value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus />
             {!noCat && (
               <select aria-label={t('분류')} value={cat} onChange={(e) => setCat(e.target.value)}>
                 {PICK_CATS.map((c) => <option key={c} value={c}>{catName(c)}</option>)}

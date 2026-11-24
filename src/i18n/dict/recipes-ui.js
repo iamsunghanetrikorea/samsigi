@@ -113,6 +113,9 @@ export default {
   '생선': { zh: '鱼', ja: '魚', en: 'Fish' },
   // 사진 입력 칸 (재료·메뉴·요리)
   '검색 메뉴 추가': { zh: '添加搜索菜品', ja: '検索メニューを追加', en: 'Add a dish to search' },
+  '메뉴 이름으로 찾기': { zh: '按菜名搜索', ja: 'メニュー名で探す', en: 'Search by dish name' },
+  '검색어 지우기': { zh: '清除搜索词', ja: '検索語を消す', en: 'Clear search' },
+  '‘{name}’으로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, 아래 ‘검색 메뉴 추가’로 넣어 보세요.': { zh: '没有找到“{name}”的菜品。请换个名称搜索，或用下面的“添加搜索菜品”加入。', ja: '「{name}」のメニューは見つかりませんでした。別の名前で探すか、下の「検索メニューを追加」から入れてみてください。', en: 'No dish found for “{name}”. Try another name, or add it with ‘Add a dish to search’ below.' },
   '메뉴': { zh: '菜品', ja: 'メニュー', en: 'Dish' },
   '예: 잡채, 김치볶음밥': { zh: '例：杂菜、泡菜炒饭', ja: '例：チャプチェ、キムチチャーハン', en: 'e.g. japchae, kimchi fried rice' },
   '검색요리 입력': { zh: '输入要搜索的菜', ja: '探したい料理を入力', en: 'Add a dish to search' },
