@@ -150,10 +150,13 @@ function useHeaderFit(deps) {
       const over = () => bar.scrollWidth > bar.clientWidth + 1 || (navShown && nav.scrollWidth > nav.clientWidth + 1);
       if (navShown) while (over() && lv < 4) { lv += 1; app.dataset.fit = String(lv); }
       setLevel(lv);
+      // 머리줄 높이를 알려 둬서, 화면에 고정한 검색줄이 머리줄 바로 아래 붙게 함
+      document.documentElement.style.setProperty('--topbar-h', `${Math.round(bar.getBoundingClientRect().height)}px`);
     };
     fit();
     const ro = new ResizeObserver(fit);
     ro.observe(document.documentElement);
+    ro.observe(bar);
     document.fonts?.ready.then(fit);
     return () => ro.disconnect();
   }, deps); // eslint-disable-line react-hooks/exhaustive-deps

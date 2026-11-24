@@ -105,7 +105,8 @@ export default function RecipeList() {
         <section className="card">
           <div className="row between wrap">
             <h2>{t('‘{name}’(으)로 찾은 메뉴 {n}개', { name: query, n: list.length })}</h2>
-            <button className="btn ghost repick-btn" onClick={() => setQ('')}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('메뉴 사진 다시 보기')}</button>
+            {/* 휴대폰에서는 위에 붙어 있는 검색칸의 ✕로 돌아가므로 단추를 숨김 */}
+            <button className="btn ghost repick-btn hide-m" onClick={() => setQ('')}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('메뉴 사진 다시 보기')}</button>
           </div>
         </section>
       )}
