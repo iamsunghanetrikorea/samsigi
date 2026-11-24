@@ -214,7 +214,9 @@ export default {
 
   // ── 식재료로 요리 추천(장보기) ──
   '장보기 목록': { zh: '购物清单', ja: '買い物リスト', en: 'Shopping list' },
-  '식재료로 요리 검색': { zh: '按食材搜索菜品', ja: '食材から料理を検索', en: 'Search dishes by ingredient' },
+  '재료 검색': { zh: '食材搜索', ja: '材料検索', en: 'Ingredient search' },
+  '재료 이름으로 찾기': { zh: '按食材名称搜索', ja: '材料名で探す', en: 'Search by ingredient name' },
+  '예: 두부, 계란': { zh: '例：豆腐、鸡蛋', ja: '例：豆腐、卵', en: 'e.g. tofu, egg' },
   '아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요': { zh: '请选择下方的食材照片，然后点“食谱推荐”按钮', ja: '下の材料の写真を選んで、「レシピのおすすめ」ボタンを押してください', en: 'Pick ingredient photos below, then tap “Recipe ideas”' },
   '장보기 화면': { zh: '购物页面', ja: '買い物画面', en: 'Shopping view' },
   '재료 고르기': { zh: '选择食材', ja: '材料を選ぶ', en: 'Pick ingredients' },

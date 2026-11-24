@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingBasket, ClipboardList, Camera, Search, ExternalLink, ArrowLeft, Plus, ChevronUp, ChevronDown } from 'lucide-react';
+import { ShoppingBasket, ClipboardList, Camera, Search, ExternalLink, ArrowLeft, Plus, ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useStore } from '../store';
 import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
@@ -23,8 +23,8 @@ export default function Market({ route }) {
     <div className="stack">
       {/* 제목 오른쪽 마이크: 재료를 말하면 바로 골라서 추천 결과까지 보여 줌 */}
       <div className="recipe-head">
-        <h1>{view === 'list' ? t('장보기 목록') : t('식재료로 요리 검색')}</h1>
-        {view === 'pick' && <PickMic />}
+        <h1>{view === 'list' ? t('장보기 목록') : t('재료 검색')}</h1>
+        {view === 'pick' && <PickSearch />}
       </div>
       {view === 'pick' && !result && <p className="recipe-hint">{t('아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요')}</p>}
       {/* 휴대폰에서는 장보기 목록을 '더보기'에서 열기 때문에 전환 단추를 숨김 */}
@@ -39,6 +39,8 @@ export default function Market({ route }) {
 
 // 말한 이름을 사진 재료와 맞춰 봄: 같은 이름 먼저, 없으면 이름에 들어간 말로
 const norm = (x) => (x || '').replace(/\s+/g, '').replace(/달걀/g, '계란').toLowerCase();
+// 흔히 쓰는 말이 재료 이름과 다를 때 (재료는 '닭가슴살·돼지고기(안심·앞다리)'처럼 적혀 있음)
+const SPOKEN_ALIAS = { 닭: 'chicken_breast', 닭고기: 'chicken_breast', 치킨: 'chicken_breast', 돼지: 'pork', 삼겹살: 'pork', 목살: 'pork', 쇠고기: 'beef', 소고기: 'beef', 한우: 'beef' };
 function matchSpoken(said, custom = []) {
   const pool = [...PICK_ITEMS, ...PICK_EXTRA, ...custom];
   const names = pool.map((i) => ({ id: i.id, ns: [i.name, shortName(i.name), label(i.id, custom)].filter(Boolean).map(norm) }));
@@ -46,6 +48,7 @@ function matchSpoken(said, custom = []) {
   for (const w of said.split(/[,·/]|\s+/).map((x) => x.trim()).filter(Boolean)) {
     const n = norm(w);
     const hit = matchIngredient(w)
+      || SPOKEN_ALIAS[n]
       || names.find((i) => i.ns.includes(n))?.id
       || (n.length >= 2 ? names.find((i) => i.ns.some((x) => x.includes(n) || n.includes(x)))?.id : null);
     if (hit && !out.includes(hit)) out.push(hit);
@@ -53,21 +56,31 @@ function matchSpoken(said, custom = []) {
   return out;
 }
 
-// 제목 옆 마이크: 말한 재료를 골라 두고 바로 추천 결과 화면으로 (재료 사진은 잠시 숨고 결과가 바로 나옴)
-function PickMic() {
+// 제목 옆 마이크와 입력칸: 말하거나 적은 재료를 골라 두고 바로 추천 결과 화면으로
+// (재료 사진은 잠시 숨고 결과가 바로 나옴)
+function PickSearch() {
   const { notify } = useStore();
   const [m, set] = useMarket();
-  const { listening, toggle } = useSpeech((said) => {
+  const [q, setQ] = useState('');
+  const run = (text) => {
+    const said = (text || '').trim();
+    if (!said) return;
     const ids = matchSpoken(said, m.custom);
     if (!ids.length) { notify(t('‘{name}’에 맞는 재료를 찾지 못했어요. 사진에서 골라 주세요.', { name: said })); return; }
     set((x) => ({ ...x, picked: [...x.picked, ...ids.filter((id) => !x.picked.includes(id))] }));
     notify(t('‘{names}’을(를) 골랐어요', { names: ids.map((id) => label(id, m.custom)).join(', ') }));
     go('/shopping?step=result');
-  });
+  };
+  const { listening, toggle } = useSpeech((said) => { setQ(said); run(said); });
   return (
     <>
       <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />
-      {listening && <span className="muted small">{t('듣는 중…')}</span>}
+      <span className="recipe-search">
+        <input type="search" aria-label={t('재료 이름으로 찾기')} placeholder={listening ? t('듣는 중…') : t('예: 두부, 계란')}
+          value={q} onChange={(e) => setQ(e.target.value)} maxLength={20}
+          onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); run(q); e.currentTarget.blur(); } }} />
+        {q && <button type="button" className="search-x" onClick={() => setQ('')} aria-label={t('검색어 지우기')}><X aria-hidden size={18} strokeWidth={2} /></button>}
+      </span>
     </>
   );
 }
