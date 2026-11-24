@@ -733,10 +733,10 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .recipe-hint { margin: -.6rem 0 0; color: var(--primary); opacity: .6; font-size: .75rem; font-weight: 500; }
 .find-pic .find-emoji { position: static; display: grid; place-items: center; width: 100%; height: 100%; background: none; color: inherit; font-size: 2.4rem; }
 .find-card .ing-add { padding: 0; border: 0; box-shadow: none; background: none; }
-/* 제목 줄: '레시피 검색' 오른쪽에 마이크, 그 오른쪽에 검색칸 (좁은 화면에서는 검색칸이 아랫줄로) */
-.recipe-head { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; }
-.recipe-head h1 { flex: none; }
-.recipe-search { position: relative; display: flex; align-items: center; flex: 1 1 12em; min-width: 0; }
+/* 제목 줄: '레시피 검색' 오른쪽에 마이크, 그 오른쪽에 검색칸 (휴대폰에서도 한 줄, 검색칸이 오른쪽 끝까지) */
+.recipe-head { display: flex; align-items: center; flex-wrap: nowrap; gap: .5rem; }
+.recipe-head h1 { flex: 0 1 auto; min-width: 0; white-space: nowrap; }
+.recipe-search { position: relative; display: flex; align-items: center; flex: 1 1 6em; min-width: 0; margin-left: auto; }
 .recipe-search > input { width: 100%; min-width: 0; padding-right: 2.2rem; }
 .recipe-search > input::-webkit-search-cancel-button { display: none; }
 .search-x { position: absolute; right: .35rem; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
@@ -745,7 +745,12 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .mic-btn.mic-inline { flex: none; width: 44px; height: 44px; min-height: 44px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); }
 .mic-btn.mic-inline svg { width: 24px; height: 24px; max-width: none; max-height: none; }
 .mic-btn.mic-inline.on { border-color: #d23b2f; }
-@media (max-width: 420px) { .recipe-search { flex-basis: 100%; } }
+@media (max-width: 480px) {
+  .recipe-head { gap: .35rem; }
+  .recipe-head h1 { font-size: min(1.3rem, 5.4vw); letter-spacing: -.03em; }
+  .mic-btn.mic-inline { width: 40px; height: 40px; }
+  .recipe-search > input { padding-left: .5rem; }
+}
 /* 즐겨찾기·끼니 펼치기 버튼: 조용하게, 상자 폭에 맞춰 */
 .more-find { width: 100%; justify-content: center; }
 /* 식당 찾기: 검색요리 입력은 가로 전체, 그 아래 왼쪽 2/3 네이버·카카오·구글 버튼, 네이버 오른쪽에 '찾을 메뉴' 입력칸(마이크) */

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, Pencil, UtensilsCrossed, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Heart, Pencil, UtensilsCrossed, X, ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
@@ -98,8 +98,17 @@ export default function RecipeList() {
           {q && <button type="button" className="search-x" onClick={() => setQ('')} aria-label={t('검색어 지우기')}><X aria-hidden size={18} strokeWidth={2} /></button>}
         </span>
       </div>
-      <p className="recipe-hint">{t('아래 메뉴사진을 선택하면 관련 레시피 추천')}</p>
-      <section className="card update-card find-card">
+      {!query && <p className="recipe-hint">{t('아래 메뉴사진을 선택하면 관련 레시피 추천')}</p>}
+      {/* 검색 중에는 찾은 말과 결과 수를 알려 주고, 메뉴 사진은 잠시 가림 */}
+      {query && (
+        <section className="card">
+          <div className="row between wrap">
+            <h2>{t('‘{name}’(으)로 찾은 메뉴 {n}개', { name: query, n: list.length })}</h2>
+            <button className="btn ghost repick-btn" onClick={() => setQ('')}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('메뉴 사진 다시 보기')}</button>
+          </div>
+        </section>
+      )}
+      {!query && <section className="card update-card find-card">
         <div className="chips find-chips" role="group" aria-label={t('분류')}>
           {FILTERS.filter(([c]) => !hiddenPics.includes(c)).map(([c]) => (
             <button key={c} className={`find-pic ${cat === c ? 'on' : ''}`} aria-pressed={cat === c} onClick={() => setCat(cat === c ? '' : c)} {...longPress(() => removePic(c, t(c), false))}>
@@ -115,16 +124,6 @@ export default function RecipeList() {
           ))}
         </div>
         {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('recipeHidden', [])}>{t('지운 기본 사진 {n}개 다시 보이기', { n: hiddenPics.length })}</button></p>}
-        {/* 찾는 메뉴가 없을 때만 보임: 검색한 이름이 미리 들어간 채로 펼쳐져 사진 메뉴로 넣을 수 있게 */}
-        {noHit && <AddIngredient key={query} label="검색 메뉴 추가" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus} defaultName={query} defaultOpen
-          onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
-          onAdd={(name, _c, photo, credit) => {
-            if (FILTER_BY[name] || myMenus.some((x) => x.name === name)) { notify(t('‘{name}’은(는) 이미 있어요', { name })); return; }
-            const id = `m_${Date.now().toString(36)}`;
-            update('recipeMenus', (l) => [...(l || []), { id, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
-            setCat(id); setMeal('all'); setQ('');
-            notify(t('‘{name}’ 메뉴를 추가했어요', { name }));
-          }} />}
         {/* 즐겨찾기·끼니는 보통 숨기고, '더 찾기'를 누르거나 쓰고 있을 때만 보임 */}
         <button type="button" className="btn soft more-find" aria-expanded={showMore} onClick={() => setMore((o) => !o)}>
           {showMore ? t('접기') : t('즐겨찾기·끼니로 더 찾기')}{showMore ? <ChevronUp aria-hidden size={18} strokeWidth={1.75} /> : <ChevronDown aria-hidden size={18} strokeWidth={1.75} />}
@@ -137,8 +136,18 @@ export default function RecipeList() {
             <Seg label={t('끼니')} value={meal} onChange={setMeal} options={[{ value: 'all', label: t('전체') }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label: t(label) }))]} />
           </>
         )}
-      </section>
-      {leftovers.length > 0 && (
+      </section>}
+      {/* 찾는 메뉴가 없을 때만 보임: 검색한 이름이 미리 들어간 채로 펼쳐져 사진 메뉴로 넣을 수 있게 */}
+      {noHit && <AddIngredient key={query} label="검색 메뉴 추가" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus} defaultName={query} defaultOpen
+        onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
+        onAdd={(name, _c, photo, credit) => {
+          if (FILTER_BY[name] || myMenus.some((x) => x.name === name)) { notify(t('‘{name}’은(는) 이미 있어요', { name })); return; }
+          const id = `m_${Date.now().toString(36)}`;
+          update('recipeMenus', (l) => [...(l || []), { id, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
+          setCat(id); setMeal('all'); setQ('');
+          notify(t('‘{name}’ 메뉴를 추가했어요', { name }));
+        }} />}
+      {leftovers.length > 0 && !query && (
         <section className="card">
           <h2>{t('냉장고 재료로 만들 수 있어요')}</h2>
           <ul className="choice-list">
@@ -148,9 +157,9 @@ export default function RecipeList() {
           </ul>
         </section>
       )}
-      <p className="muted">{t('{n}개', { n: list.length })}</p>
+      {!query && <p className="muted">{t('{n}개', { n: list.length })}</p>}
       {query && list.length === 0 && (
-        <p className="notice">{t('‘{name}’으로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, 아래 ‘검색 메뉴 추가’로 넣어 보세요.', { name: query })}</p>
+        <p className="notice">{t('‘{name}’(으)로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, ‘검색 메뉴 추가’로 넣어 보세요.', { name: query })}</p>
       )}
       {cat === FAV && list.length === 0 && (
         <p className="notice">{state.profile.favorites.length ? t('즐겨찾기한 메뉴가 위 조건(끼니·검색)에 맞지 않아 안 보여요. 조건을 풀어 보세요.') : t('아직 즐겨찾기한 메뉴가 없어요. 레시피를 열고 ‘즐겨찾기’를 누르면 여기에 모여요.')}</p>
