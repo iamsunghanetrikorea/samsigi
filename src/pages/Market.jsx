@@ -187,10 +187,10 @@ function AiBreakfast({ names }) {
   );
 }
 
-export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기 재료 추가 입력', unit = '재료', placeholder = '예: 삼겹살, 연근', noCat = false }) {
+export function AddIngredient({ onAdd, custom = [], onRemove, label = '장보기 재료 추가 입력', unit = '재료', placeholder = '예: 삼겹살, 연근', noCat = false, defaultName = '', defaultOpen = false }) {
   const { notify } = useStore();
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
+  const [open, setOpen] = useState(defaultOpen);
+  const [name, setName] = useState(defaultName);
   const [cat, setCat] = useState('채소');
   const [photo, setPhoto] = useState('');
   const [credit, setCredit] = useState(null);

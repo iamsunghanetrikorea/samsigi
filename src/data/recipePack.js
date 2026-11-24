@@ -189,10 +189,12 @@ export function applyEdits(edits = {}) {
 }
 export const originalOf = (id) => ORIGINAL.get(id);
 
-// 다음 업데이트로 추가할 메뉴: 분류마다 아직 없는 메뉴 하나씩
+// 다음 업데이트로 추가할 메뉴: 아직 없는 추천 메뉴를 분류 차례대로 모두 (한 번에 추가 완료)
 export function nextUpdate(addedIds = []) {
   const added = new Set(addedIds);
-  return CATEGORIES.map((c) => PACK.find((r) => r.category === c && !added.has(r.id))).filter(Boolean).map((r) => r.id);
+  const left = PACK.filter((r) => !added.has(r.id));
+  const order = (r) => { const i = CATEGORIES.indexOf(r.category); return i < 0 ? CATEGORIES.length : i; };
+  return left.slice().sort((a, b) => order(a) - order(b)).map((r) => r.id);
 }
 
 // 참고 자료 링크 (유튜브·만개의레시피 검색)

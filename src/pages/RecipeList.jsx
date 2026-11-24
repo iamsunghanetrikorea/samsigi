@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heart, Pencil, UtensilsCrossed, X } from 'lucide-react';
+import { Heart, Pencil, UtensilsCrossed, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPES, MEAL_LABEL, RECIPE_BY_ID } from '../data/recipes';
 import { PACK, nextUpdate } from '../data/recipePack';
@@ -61,6 +61,7 @@ export default function RecipeList() {
   const [onlyOk, setOnlyOk] = useState(true);
   // 제목 줄 검색칸: 직접 쓰거나 마이크로 말해서 메뉴 이름으로 바로 찾기
   const [q, setQ] = useState('');
+  const [more, setMore] = useState(false);
   const { listening, toggle } = useSpeech((said) => setQ(said.slice(0, 20)));
   const leftovers = leftoverRecipes(state.pantry);
   const myMenus = state.recipeMenus || [];
@@ -80,6 +81,8 @@ export default function RecipeList() {
     && (!cat || (cat === FAV ? state.profile.favorites.includes(r.id) : filterOf(cat)(r)))
     && (!query || byName(query)(r))
     && (!onlyOk || !excludeReason(r, state.profile)));
+  const noHit = !!query && list.length === 0; // 적거나 말한 메뉴를 못 찾았을 때
+  const showMore = more || meal !== 'all' || cat === FAV; // 즐겨찾기·끼니를 쓰고 있으면 계속 보임
   const disliked = RECIPES.filter((r) => state.profile.dislikes.includes(r.id));
 
   return (
@@ -112,19 +115,28 @@ export default function RecipeList() {
           ))}
         </div>
         {hiddenPics.length > 0 && <p className="muted small long-help"><button type="button" className="linklike" onClick={() => update('recipeHidden', [])}>{t('지운 기본 사진 {n}개 다시 보이기', { n: hiddenPics.length })}</button></p>}
-        <AddIngredient label="검색 메뉴 추가" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus}
+        {/* 찾는 메뉴가 없을 때만 보임: 검색한 이름이 미리 들어간 채로 펼쳐져 사진 메뉴로 넣을 수 있게 */}
+        {noHit && <AddIngredient key={query} label="검색 메뉴 추가" unit="메뉴" placeholder="예: 잡채, 김치볶음밥" noCat custom={myMenus} defaultName={query} defaultOpen
           onRemove={(id) => { update('recipeMenus', (l) => (l || []).filter((x) => x.id !== id)); if (cat === id) setCat(''); }}
           onAdd={(name, _c, photo, credit) => {
             if (FILTER_BY[name] || myMenus.some((x) => x.name === name)) { notify(t('‘{name}’은(는) 이미 있어요', { name })); return; }
             const id = `m_${Date.now().toString(36)}`;
             update('recipeMenus', (l) => [...(l || []), { id, name, ...(photo ? { photo } : {}), ...(credit ? { credit } : {}) }]);
-            setCat(id); setMeal('all');
+            setCat(id); setMeal('all'); setQ('');
             notify(t('‘{name}’ 메뉴를 추가했어요', { name }));
-          }} />
-        <div className="chips hide-m">
-          <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}><Heart aria-hidden size={18} strokeWidth={1.75} fill={cat === FAV ? 'currentColor' : 'none'} />{t('즐겨찾기 메뉴리스트')} <span className="fav-n">{state.profile.favorites.length}</span></button>
-        </div>
-        <Seg label={t('끼니')} value={meal} onChange={setMeal} options={[{ value: 'all', label: t('전체') }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label: t(label) }))]} />
+          }} />}
+        {/* 즐겨찾기·끼니는 보통 숨기고, '더 찾기'를 누르거나 쓰고 있을 때만 보임 */}
+        <button type="button" className="btn soft more-find" aria-expanded={showMore} onClick={() => setMore((o) => !o)}>
+          {showMore ? t('접기') : t('즐겨찾기·끼니로 더 찾기')}{showMore ? <ChevronUp aria-hidden size={18} strokeWidth={1.75} /> : <ChevronDown aria-hidden size={18} strokeWidth={1.75} />}
+        </button>
+        {showMore && (
+          <>
+            <div className="chips hide-m">
+              <button className={`chip fav-chip ${cat === FAV ? 'on' : ''}`} aria-pressed={cat === FAV} onClick={() => setCat(cat === FAV ? '' : FAV)}><Heart aria-hidden size={18} strokeWidth={1.75} fill={cat === FAV ? 'currentColor' : 'none'} />{t('즐겨찾기 메뉴리스트')} <span className="fav-n">{state.profile.favorites.length}</span></button>
+            </div>
+            <Seg label={t('끼니')} value={meal} onChange={setMeal} options={[{ value: 'all', label: t('전체') }, ...Object.entries(MEAL_LABEL).map(([value, label]) => ({ value, label: t(label) }))]} />
+          </>
+        )}
       </section>
       {leftovers.length > 0 && (
         <section className="card">
@@ -173,20 +185,24 @@ export default function RecipeList() {
         })}
       </RecipeGrid>
       <section className="card update-card">
-        <div className="row between wrap">
-          <div>
-            <h2>🆕 {t('새 메뉴 업데이트')}</h2>
-            <p className="muted small hide-m">{t('한식·중식·양식·간식·찌개·국에서 어르신께 맞게 싱겁게 다듬은 새 메뉴를 분류마다 하나씩 추가해요.')} {t('({n}/{total}개 추가됨)', { n: state.addedRecipes.length, total: PACK.length })}</p>
+        {/* 추가할 추천 메뉴가 남아 있을 때만 보임 — 누르면 남은 메뉴를 한 번에 모두 추가 */}
+        {remaining > 0 && (
+          <div className="row between wrap">
+            <div>
+              <h2>🆕 {t('새 메뉴 업데이트')}</h2>
+              <p className="muted small hide-m">{t('한식·중식·양식·간식·찌개·국에서 어르신께 맞게 싱겁게 다듬은 새 메뉴를 한 번에 모두 추가해요.')} {t('({n}/{total}개 추가됨)', { n: state.addedRecipes.length, total: PACK.length })}</p>
+            </div>
+            <button className="btn primary full-narrow" onClick={doUpdate}>{t('메뉴 자동 추가 (+{n}가지)', { n: remaining })}</button>
           </div>
-          <button className="btn primary full-narrow" onClick={doUpdate} disabled={!remaining}>{remaining ? t('메뉴 자동 추가 (+{n}가지)', { n: remaining }) : t('모든 추천 메뉴 추가 완료')}</button>
-        </div>
+        )}
         {justAdded.length > 0 && (
           <ul className="choice-list">
-            {justAdded.map((id) => RECIPE_BY_ID[id]).filter(Boolean).map((r) => (
+            {justAdded.slice(0, 6).map((id) => RECIPE_BY_ID[id]).filter(Boolean).map((r) => (
               <li key={r.id}><button className="choice" onClick={() => go(`/recipe/${r.id}`)}><Plate recipe={r} /><span className="choice-body"><b>{r.isCustom ? <span className="my-badge">{t('내 메뉴')}</span> : <span className="new-badge">NEW</span>} {t(r.title)}</b><span className="meal-sub">{t(r.category)} · {r.meals.map((m) => t(MEAL_LABEL[m])).join('·')}</span></span></button></li>
             ))}
           </ul>
         )}
+        {justAdded.length > 6 && <p className="muted small">{t('외 {n}가지도 레시피 목록에 들어왔어요', { n: justAdded.length - 6 })}</p>}
         <RecipeMaker onAdded={(id) => { setJustAdded([id]); setCat(''); setMeal('all'); }} />
       </section>
       {disliked.length > 0 && (

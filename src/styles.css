@@ -746,6 +746,8 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 .mic-btn.mic-inline svg { width: 24px; height: 24px; max-width: none; max-height: none; }
 .mic-btn.mic-inline.on { border-color: #d23b2f; }
 @media (max-width: 420px) { .recipe-search { flex-basis: 100%; } }
+/* 즐겨찾기·끼니 펼치기 버튼: 조용하게, 상자 폭에 맞춰 */
+.more-find { width: 100%; justify-content: center; }
 /* 식당 찾기: 검색요리 입력은 가로 전체, 그 아래 왼쪽 2/3 네이버·카카오·구글 버튼, 네이버 오른쪽에 '찾을 메뉴' 입력칸(마이크) */
 .find-tools { display: grid; grid-template-columns: 2fr 1fr; gap: .6rem; align-items: stretch; }
 .find-tools > .map-links { display: flex; flex-direction: column; align-items: stretch; gap: .5rem; margin: 0; min-width: 0; }

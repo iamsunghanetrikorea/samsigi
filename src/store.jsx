@@ -109,7 +109,7 @@ export function StoreProvider({ children }) {
     return result;
   }, []);
 
-  // 레시피 업데이트: 분류마다 새 메뉴 하나씩 추가
+  // 레시피 업데이트: 아직 없는 추천 메뉴를 한 번에 모두 추가
   const addRecipeUpdate = useCallback(() => {
     const s = stateRef.current;
     const ids = nextUpdate(s.addedRecipes);
