@@ -3,6 +3,7 @@
 // steps: [설명, 타이머(분, 선택)], subs: 대체 가능한 재료
 import { ING, NUTRITION_SOURCE } from './ingredients';
 import { BUNSIK } from './bunsik';
+import { COOKBOOK } from './cookbook';
 
 const R = (r) => ({ difficulty: 1, soft: false, tags: [], subs: {}, source: '삼식이家 자체 구성 레시피', ...r });
 
@@ -278,12 +279,12 @@ const BASE_CATEGORY = {
   pollock_soup: '국', beef_radish_soup: '국', tteokguk: '국',
   tofu_mushroom_hotpot: '찌개', kimchi_stew: '찌개', doenjang_stew: '찌개',
 };
-RECIPES.push(...BUNSIK);
+RECIPES.push(...BUNSIK, ...COOKBOOK);
 RECIPES.forEach((r) => { r.category = r.category || BASE_CATEGORY[r.id] || '한식'; });
 
 export const RECIPE_BY_ID = Object.fromEntries(RECIPES.map((r) => [r.id, r]));
 
-// 메뉴 번호: 레시피 모음 순서(기본 메뉴 → 분식 → 업데이트로 추가한 메뉴 → 내 메뉴)대로 1번부터
+// 메뉴 번호: 레시피 모음 순서(기본 메뉴 → 분식 → 요리책 메뉴 → 업데이트로 추가한 메뉴 → 내 메뉴)대로 1번부터
 export const menuNo = (r) => RECIPES.indexOf(r) + 1;
 
 export const DIFFICULTY_LABEL = { 1: '쉬움', 2: '보통', 3: '어려움' };
