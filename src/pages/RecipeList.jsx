@@ -47,7 +47,7 @@ export default function RecipeList() {
         <h1>{t('요리 검색')}</h1>
         <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />
         <span className="recipe-search">
-          <input type="search" aria-label={t('메뉴 이름으로 찾기')} placeholder={listening ? t('듣는 중…') : t('예: 잡채, 김치볶음밥')}
+          <input type="search" aria-label={t('메뉴 이름으로 찾기')} placeholder={listening ? t('듣는 중…') : t('예: 비빔밥, 볶음밥')}
             value={q} onChange={(e) => setQ(e.target.value)} maxLength={20}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.currentTarget.blur(); } }} />
           {q && <button type="button" className="search-x" onClick={() => setQ('')} aria-label={t('검색어 지우기')}><X aria-hidden size={18} strokeWidth={2} /></button>}

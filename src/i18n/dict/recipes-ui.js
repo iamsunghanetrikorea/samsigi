@@ -119,7 +119,7 @@ export default {
   '외 {n}가지도 레시피 목록에 들어왔어요': { zh: '另外 {n} 道也加入了菜谱列表', ja: 'ほかに{n}品もレシピ一覧に入りました', en: '{n} more were added to the recipe list too' },
   '‘{name}’(으)로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, 아래 ‘나의 레시피 추가’로 만들어 보세요.': { zh: '没有找到“{name}”的菜品。请换个名称搜索，或用下面的“添加我的食谱”来创建。', ja: '「{name}」のメニューは見つかりませんでした。別の名前で探すか、下の「マイレシピ追加」で作ってみてください。', en: 'No dish found for “{name}”. Try another name, or create it with ‘Add my recipe’ below.' },
   '메뉴': { zh: '菜品', ja: 'メニュー', en: 'Dish' },
-  '예: 잡채, 김치볶음밥': { zh: '例：杂菜、泡菜炒饭', ja: '例：チャプチェ、キムチチャーハン', en: 'e.g. japchae, kimchi fried rice' },
+  '예: 비빔밥, 볶음밥': { zh: '例：拌饭、炒饭', ja: '例：ビビンバ、チャーハン', en: 'e.g. bibimbap, fried rice' },
   '검색요리 입력': { zh: '输入要搜索的菜', ja: '探したい料理を入力', en: 'Add a dish to search' },
   '요리': { zh: '菜', ja: '料理', en: 'dish' },
   '예: 냉면, 삼계탕': { zh: '例：冷面、参鸡汤', ja: '例：冷麺、参鶏湯', en: 'e.g. cold noodles, ginseng chicken soup' },
