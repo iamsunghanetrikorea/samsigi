@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingBasket, ClipboardList, Camera, Search, ExternalLink, ArrowLeft, Plus, ChevronUp, ChevronDown, X } from 'lucide-react';
+import { ShoppingBasket, ClipboardList, Camera, Search, ExternalLink, Plus, ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useStore } from '../store';
 import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
@@ -67,7 +67,7 @@ function PickSearch() {
     if (!said) return;
     const ids = matchSpoken(said, m.custom);
     if (!ids.length) { notify(t('‘{name}’에 맞는 재료를 찾지 못했어요. 사진에서 골라 주세요.', { name: said })); return; }
-    set((x) => ({ ...x, picked: [...x.picked, ...ids.filter((id) => !x.picked.includes(id))] }));
+    set((x) => ({ ...x, picked: ids })); // 전에 고른 재료는 지우고 이번에 말한 것만
     notify(t('‘{names}’을(를) 골랐어요', { names: ids.map((id) => label(id, m.custom)).join(', ') }));
     go('/shopping?step=result');
   };
@@ -378,10 +378,8 @@ function Result() {
   return (
     <>
       <section className="card">
-        <div className="row between wrap">
-          <h2>{t('고른 재료 {n}가지', { n: names.length })}</h2>
-          <button className="btn ghost repick-btn" onClick={() => go('/shopping')}><ArrowLeft aria-hidden size={18} strokeWidth={1.75} />{t('재료 다시 고르기')}</button>
-        </div>
+        <h2>{t('찾은 메뉴 {n}개', { n: list.length })}</h2>
+        {/* 이번에 고른 재료만 보임 (마이크로 다시 말하면 이 재료로 새로 찾음) */}
         <div className="chips">{names.map((n) => <span key={n} className="tag-have">{n}</span>)}</div>
       </section>
 
