@@ -13,6 +13,7 @@ import Shopping from './Shopping';
 import { googleAiUrl, breakfastAiPrompt } from '../lib/share';
 import { t } from '../i18n';
 import RecipeCard, { RecipeGrid, RecipeGridItem, IngredientTags } from '../components/shadcn-space/RecipeCard';
+import { MicButton, useSpeech } from '../components/Mic';
 
 // 장보기 탭: 재료 고르기(사진) → 추천 레시피, 그리고 기존 장보기 목록
 export default function Market({ route }) {
@@ -20,7 +21,11 @@ export default function Market({ route }) {
   const result = view === 'pick' && route.query.step === 'result';
   return (
     <div className="stack">
-      <h1>{view === 'list' ? t('장보기 목록') : t('식재료로 요리 검색')}</h1>
+      {/* 제목 오른쪽 마이크: 재료를 말하면 바로 골라서 추천 결과까지 보여 줌 */}
+      <div className="recipe-head">
+        <h1>{view === 'list' ? t('장보기 목록') : t('식재료로 요리 검색')}</h1>
+        {view === 'pick' && <PickMic />}
+      </div>
       {view === 'pick' && !result && <p className="recipe-hint">{t('아래 재료사진들을 선택하고 레시피 추천 버튼을 누르세요')}</p>}
       {/* 휴대폰에서는 장보기 목록을 '더보기'에서 열기 때문에 전환 단추를 숨김 */}
       <div className="no-print hide-m">
@@ -29,6 +34,41 @@ export default function Market({ route }) {
       </div>
       {view === 'list' ? <Shopping /> : result ? <Result /> : <Picker />}
     </div>
+  );
+}
+
+// 말한 이름을 사진 재료와 맞춰 봄: 같은 이름 먼저, 없으면 이름에 들어간 말로
+const norm = (x) => (x || '').replace(/\s+/g, '').replace(/달걀/g, '계란').toLowerCase();
+function matchSpoken(said, custom = []) {
+  const pool = [...PICK_ITEMS, ...PICK_EXTRA, ...custom];
+  const names = pool.map((i) => ({ id: i.id, ns: [i.name, shortName(i.name), label(i.id, custom)].filter(Boolean).map(norm) }));
+  const out = [];
+  for (const w of said.split(/[,·/]|\s+/).map((x) => x.trim()).filter(Boolean)) {
+    const n = norm(w);
+    const hit = matchIngredient(w)
+      || names.find((i) => i.ns.includes(n))?.id
+      || (n.length >= 2 ? names.find((i) => i.ns.some((x) => x.includes(n) || n.includes(x)))?.id : null);
+    if (hit && !out.includes(hit)) out.push(hit);
+  }
+  return out;
+}
+
+// 제목 옆 마이크: 말한 재료를 골라 두고 바로 추천 결과 화면으로 (재료 사진은 잠시 숨고 결과가 바로 나옴)
+function PickMic() {
+  const { notify } = useStore();
+  const [m, set] = useMarket();
+  const { listening, toggle } = useSpeech((said) => {
+    const ids = matchSpoken(said, m.custom);
+    if (!ids.length) { notify(t('‘{name}’에 맞는 재료를 찾지 못했어요. 사진에서 골라 주세요.', { name: said })); return; }
+    set((x) => ({ ...x, picked: [...x.picked, ...ids.filter((id) => !x.picked.includes(id))] }));
+    notify(t('‘{names}’을(를) 골랐어요', { names: ids.map((id) => label(id, m.custom)).join(', ') }));
+    go('/shopping?step=result');
+  });
+  return (
+    <>
+      <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />
+      {listening && <span className="muted small">{t('듣는 중…')}</span>}
+    </>
   );
 }
 

@@ -224,6 +224,8 @@ export default {
   '‘{name}’은(는) 이미 있어서 골라 두었어요': { zh: '“{name}”已经有了，已帮您选上', ja: '「{name}」はすでにあるので、選んでおきました', en: '“{name}” is already in the list, so we selected it' },
   '‘{name}’은(는) 이미 추가했어요': { zh: '“{name}”已经添加过了', ja: '「{name}」はすでに追加しています', en: '“{name}” has already been added' },
   '‘{name}’ 재료를 추가하고 골라 두었어요': { zh: '已添加并选上食材“{name}”', ja: '材料「{name}」を追加して選んでおきました', en: 'Added and selected “{name}”' },
+  '‘{names}’을(를) 골랐어요': { zh: '已选择“{names}”', ja: '「{names}」を選びました', en: 'Selected “{names}”' },
+  '‘{name}’에 맞는 재료를 찾지 못했어요. 사진에서 골라 주세요.': { zh: '没有找到与“{name}”匹配的食材，请从照片中选择。', ja: '「{name}」に合う材料が見つかりませんでした。写真から選んでください。', en: 'No ingredient matched “{name}”. Please pick one from the photos.' },
   '이 사진은 가져올 수 없어요': { zh: '无法使用这张照片', ja: 'この写真は取り込めません', en: 'This photo can’t be used' },
   '사진을 읽지 못했어요': { zh: '无法读取照片', ja: '写真を読み込めませんでした', en: 'Couldn’t read the photo' },
   '인터넷 찾기에 실패했어요': { zh: '网上搜索失败', ja: 'インターネット検索に失敗しました', en: 'Online search failed' },

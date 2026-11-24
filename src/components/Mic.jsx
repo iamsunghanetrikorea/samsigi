@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { t, getLang } from '../i18n';
 
 // 말로 입력 (Web Speech API — 크롬·사파리 등 지원 브라우저에서만)
-const Speech = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
+const speechApi = () => (typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null);
 const SPEECH_LANG = { ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
 
 // 마이크를 눌러 말하면 들은 말을 onText로 넘김 (다시 누르면 멈춤)
@@ -12,6 +12,7 @@ export function useSpeech(onText) {
   const [listening, setListening] = useState(false);
   const recRef = useRef(null);
   const toggle = () => {
+    const Speech = speechApi();
     if (!Speech) { notify(t('이 기기·브라우저는 음성 입력을 지원하지 않아요')); return; }
     if (listening) { recRef.current?.stop(); return; }
     const rec = new Speech();
