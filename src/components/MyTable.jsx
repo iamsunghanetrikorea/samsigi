@@ -52,6 +52,7 @@ function Reading({ text, reading }) {
 
 // 밥상 위 넘기는 탁상 달력: 날짜별 성경 구절. ‹ ›로 하루씩 넘기고,
 // 종이를 누르면 달력이 1.5배로 커지고, 커진 상태에서 구절이 잘려 있으면 한 번 더 눌러 크게 보기(창)
+// 성경 구절 달력 — 지금은 '오늘의 밥상'에서 빼 두었습니다 (다른 화면에 넣고 싶으면 이 컴포넌트를 쓰면 됩니다)
 function VerseCalendar() {
   const [date, setDate] = useState(today);
   const [big, setBig] = useState(false);
@@ -184,7 +185,6 @@ export function BabSangPanel() {
             <span className="bs-label">{st(r)}</span>
           </button>
         )}
-        <VerseCalendar />
       </div></div>
     </section>
   );
