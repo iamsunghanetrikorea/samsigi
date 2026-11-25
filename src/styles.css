@@ -605,7 +605,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 
 /* 장보기 '재료 고르기': 분류별 재료 사진을 눌러 여러 개 고름 */
 .ing-board { display: flex; flex-direction: column; gap: .8rem; }
-.ing-cat-h { font-size: 1.05rem; margin: 0 0 .4rem; }
 .ing-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9.3rem, 1fr)); gap: .7rem; }
 .ing-tile { position: relative; }
 .ing-tile label { display: flex; flex-direction: column; align-items: center; gap: .2rem; padding: .35rem; border: 3px solid var(--line); border-radius: 14px; background: var(--surface); cursor: pointer; height: 100%; -webkit-tap-highlight-color: transparent; }
@@ -641,8 +640,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
   .ing-board { gap: 6px; }
   .ing-cat { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
   .ing-grid { display: contents; }
-  .ing-cat-h { margin: 0; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; background: var(--primary-soft); color: var(--primary); font-size: 12px; line-height: 1.15; text-align: center; letter-spacing: -.04em; word-break: keep-all; }
-  .ing-cat-h span { font-size: 26px; }
   .ing-tile label { padding: 0; border-width: 2px; border-radius: 8px; gap: 0; }
   .ing-ph { border-radius: 6px; }
   .ing-emoji { font-size: 32px; }
@@ -864,7 +861,6 @@ ul.recipe-grid { grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%
 :root:not(:lang(ko)) .grid2 > *, :root:not(:lang(ko)) .grid3 > *, :root:not(:lang(ko)) fieldset { min-width: 0; }
 :root:not(:lang(ko)) .row select { flex: 1 1 10em; min-width: 0; max-width: 100%; }
 :root:not(:lang(ko)) main select { max-width: 100%; min-width: 0; }
-.ing-cat-h .nm-full, .ing-cat-h .nm-short { font-size: inherit; }
 
 /* 휴대폰 헤더: 조금 더 높게, '삼식이家' 글자 크게, 국기 크게, 글자크기 버튼은 −/+ */
 .fs-short { display: none; }
@@ -1071,7 +1067,6 @@ input, select, textarea { border-width: 1.5px; border-color: var(--line-strong);
 .inline-btn-name { display: inline-flex; align-items: center; gap: 2px; vertical-align: -2px; }
 .chip.fav-chip { gap: 8px; }
 .yt-ico svg { margin-left: 2px; }
-.ing-cat-h { display: flex; align-items: center; }
 
 /* 머리줄 한 줄 맞춤 (App.jsx useHeaderFit 이 단계를 정함) */
 .topbar { flex-wrap: nowrap; }

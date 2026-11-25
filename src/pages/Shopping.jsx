@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../store';
 import { ING, INGREDIENTS, CATEGORY_ORDER, formatAmount, buyForm } from '../data/ingredients';
 import { buildShopping, leftoverRecipes } from '../lib/shopping';
+import { catLabel } from '../lib/market';
 import { won, round } from '../lib/nutrition';
 import { today, weekDates, addDays, monthDates, monthKey, rangeDates, fmtDate } from '../lib/date';
 import { download, toCSV } from '../lib/exporter';
@@ -28,8 +29,8 @@ export default function Shopping() {
 
   const exportCSV = () => {
     const rows = [['장보기', '분류', '품목', '필요량', '보유량', '살 양', '단가(원/100g)', '예상 금액(원)', '사용 메뉴'].map((h) => t(h))];
-    for (const tr of trips) for (const r of tr.rows) rows.push([tr.label, t(r.cat), t(r.buyName), fmtG(r.needBuy, r.unit), fmtG(r.owned, ING[r.id].unit), fmtG(r.buyGrams, r.unit), r.price, Math.round(r.cost), r.uses.map((u) => t(u)).join(' / ')]);
-    for (const x of extras) rows.push([t('추가'), t(ING[x.id].cat), t(ING[x.id].name), fmtG(x.grams, ING[x.id].unit), '', '', '', '', t(x.from)]);
+    for (const tr of trips) for (const r of tr.rows) rows.push([tr.label, catLabel(r.cat), t(r.buyName), fmtG(r.needBuy, r.unit), fmtG(r.owned, ING[r.id].unit), fmtG(r.buyGrams, r.unit), r.price, Math.round(r.cost), r.uses.map((u) => t(u)).join(' / ')]);
+    for (const x of extras) rows.push([t('추가'), catLabel(ING[x.id].cat), t(ING[x.id].name), fmtG(x.grams, ING[x.id].unit), '', '', '', '', t(x.from)]);
     download(`${t('장보기')}_${dates[0] || td}.csv`, toCSV(rows), 'text/csv');
   };
 
@@ -71,7 +72,7 @@ export default function Shopping() {
               const showCat = i === 0 || tr.rows[i - 1].cat !== r.cat;
               return (
                 <li key={r.id} className={`${done ? 'done' : ''} ${r.toBuy <= 0 ? 'owned' : ''}`}>
-                  {showCat && <div className="cat">{t(r.cat)}</div>}
+                  {showCat && <div className="cat">{catLabel(r.cat)}</div>}
                   <div className="shop-row">
                     <label className="check big">
                       <input type="checkbox" checked={done} onChange={() => toggle(key)} />
@@ -147,7 +148,7 @@ function Pantry() {
         <select aria-label={t('재료')} value={id} onChange={(e) => setId(e.target.value)}>
           <option value="">{t('재료 고르기')}</option>
           {CATEGORY_ORDER.map((c) => (
-            <optgroup key={c} label={t(c)}>{INGREDIENTS.filter((i) => i.cat === c).map((i) => <option key={i.id} value={i.id}>{t(i.name)}</option>)}</optgroup>
+            <optgroup key={c} label={catLabel(c)}>{INGREDIENTS.filter((i) => i.cat === c).map((i) => <option key={i.id} value={i.id}>{t(i.name)}</option>)}</optgroup>
           ))}
         </select>
         <input aria-label={t('양')} type="number" inputMode="numeric" placeholder={id ? ING[id].unit : 'g'} value={g} onChange={(e) => setG(e.target.value)} style={{ maxWidth: '7em' }} />

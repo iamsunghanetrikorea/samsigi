@@ -11,7 +11,9 @@ export const isBasic = (id) => ING[id]?.cat === '양념' || ['broth', 'rice', 'm
 const MINOR = new Set(['onion', 'green_onion', 'garlic']);
 
 export const PICK_CATS = [...CATEGORY_ORDER.filter((c) => c !== '양념'), '기타', '양념'];
-export const CAT_LABEL = { 곡류: '곡류·면' };
+// 화면에 보일 분류 이름: 긴 이름은 앞 낱말만 (재료 자료의 분류 이름 자체는 그대로 둠)
+export const CAT_LABEL = { '두부·콩': '두부', '계란·유제품': '계란', '김치·가공': '김치' };
+export const catLabel = (c) => t(CAT_LABEL[c] || c);
 export const CAT_EMOJI = { 곡류: '🌾', 채소: '🥬', 버섯: '🍄', 과일: '🍎', '두부·콩': '🫘', 육류: '🥩', 수산물: '🐟', '계란·유제품': '🥚', '김치·가공': '🥫', 기타: '🍽️', 양념: '🧂' };
 
 // 화면에 보일 짧은 이름: '국수(삶은 것)' → '국수', '버섯(느타리·표고)' → '버섯'

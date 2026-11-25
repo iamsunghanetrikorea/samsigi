@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
 import { DIFFICULTY_LABEL } from '../data/recipes';
-import { PICK_CATS, PICK_ITEMS, PICK_EXTRA, EXTRA_BY, CAT_LABEL, CAT_EMOJI, shortName, ingLabel, matchIngredient, recommend, dishesWithoutRecipe } from '../lib/market';
+import { PICK_CATS, PICK_ITEMS, PICK_EXTRA, EXTRA_BY, CAT_EMOJI, catLabel, shortName, ingLabel, matchIngredient, recommend, dishesWithoutRecipe } from '../lib/market';
 import { Seg, longPress, useHeadHeight } from '../components/ui';
 import { go } from '../router';
 import { MyTableButton } from '../components/MyTable';
@@ -98,7 +98,7 @@ const useMarket = () => {
 
 // 화면에 보일 이름 (지금 언어)
 const label = (id, custom) => (ING[id] ? ingLabel(id) : EXTRA_BY[id] ? t(EXTRA_BY[id].name) : custom.find((c) => c.id === id)?.name || '');
-const catName = (c) => t(CAT_LABEL[c] || c);
+const catName = catLabel;
 // 사진 이름: 짧은 이름이 있으면 휴대폰에서는 짧은 이름만 한 줄로 (일본어·영어)
 const Nm = ({ full, short }) => (short && short !== full ? <><span className="nm-full">{full}</span><span className="nm-short">{short}</span></> : full);
 
@@ -143,9 +143,9 @@ function Picker() {
         {PICK_CATS.filter((c) => !pickCat || c === pickCat).map((cat) => {
           const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...PICK_EXTRA.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)].filter((i) => !hidden.has(i.id));
           if (!items.length) return null;
+          // 분류 이름은 왼쪽 단추에 있으므로 사진 칸에는 따로 적지 않음 (화면읽기 프로그램에는 aria-label로 알림)
           return (
             <section key={cat} className="ing-cat" aria-label={catName(cat)}>
-              <h2 className="ing-cat-h"><Nm full={catName(cat)} short={tShort(CAT_LABEL[cat] || cat)} /></h2>
               <ul className="ing-grid">
                 {items.map((i) => {
                   const on = picked.has(i.id);

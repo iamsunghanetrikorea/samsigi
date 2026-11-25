@@ -10,6 +10,7 @@ export default {
   '수산물': { zh: '水产品', ja: '魚介類', en: 'Seafood' },
   '계란·유제품': { zh: '鸡蛋·乳制品', ja: '卵・乳製品', en: 'Eggs & dairy' },
   '김치·가공': { zh: '泡菜·加工食品', ja: 'キムチ・加工食品', en: 'Kimchi & processed foods' },
+  '김치': { zh: '泡菜', ja: 'キムチ', en: 'Kimchi' }, // 장보기 분류 단추에 쓰는 짧은 이름
   '양념': { zh: '调料', ja: '調味料', en: 'Seasonings' },
 
   // 곡류
