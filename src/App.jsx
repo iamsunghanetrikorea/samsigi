@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useStore } from './store';
 import { useRoute } from './router';
+import { useSwipeNav } from './lib/swipe';
 import Home from './pages/Home';
 import Plan from './pages/Plan';
 import RecipePage from './pages/Recipe';
@@ -38,6 +39,7 @@ const TAB_NAV = [
   { path: '/more', label: '더보기', icon: Menu },
 ];
 const MORE_PATHS = ['/more', '/plan', '/stats', '/settings', '/help'];
+const TAB_PATHS = TAB_NAV.map((n) => n.path); // 휴대폰에서 좌우로 밀 때 옮겨 갈 차례
 const FONT_STEPS = [18, 20, 22, 24, 26];
 
 export default function App() {
@@ -48,9 +50,16 @@ export default function App() {
   const changeLang = (l) => update('settings', (s) => ({ ...s, lang: l }));
 
   const [barRef] = useHeaderFit([lang, state.settings.fontSize, state.profile?.name, state.profile?.completed]);
-  if (!state.profile?.completed) return <div key={lang}><div className="onb-lang no-print"><LangButton lang={lang} onChange={changeLang} /></div><Onboarding /><Toast toast={toast} /></div>;
 
   const p = route.path;
+  const isOn = (path) => (path === '/' ? p === '/' : path === '/recipes' ? p === '/recipes' || p.startsWith('/recipe/') : p.startsWith(path));
+  const inMore = MORE_PATHS.includes(p) || (p === '/shopping' && route.query.view === 'list'); // 장보기 목록은 휴대폰 '더보기' 안
+  const tabOn = (n) => (n.path === '/more' ? inMore : n.path === '/shopping' ? isOn(n.path) && !inMore : isOn(n.path));
+  // 휴대폰에서 화면을 좌우로 밀면 아래 메뉴 차례대로 이전·다음 화면으로
+  useSwipeNav(TAB_PATHS, TAB_NAV.findIndex(tabOn), !!state.profile?.completed);
+
+  if (!state.profile?.completed) return <div key={lang}><div className="onb-lang no-print"><LangButton lang={lang} onChange={changeLang} /></div><Onboarding /><Toast toast={toast} /></div>;
+
   let page;
   if (p === '/') page = <Home />;
   else if (p.startsWith('/plan')) page = <Plan route={route} />;
@@ -63,9 +72,6 @@ export default function App() {
   else if (p === '/more' || p === '/help') page = <More route={route} />;
   else page = <Home />;
 
-  const isOn = (path) => (path === '/' ? p === '/' : path === '/recipes' ? p === '/recipes' || p.startsWith('/recipe/') : p.startsWith(path));
-  const inMore = MORE_PATHS.includes(p) || (p === '/shopping' && route.query.view === 'list'); // 장보기 목록은 휴대폰 '더보기' 안
-  const tabOn = (n) => (n.path === '/more' ? inMore : n.path === '/shopping' ? isOn(n.path) && !inMore : isOn(n.path));
   const fs = state.settings.fontSize || 20;
   const setFont = (dir) => {
     const i = Math.max(0, Math.min(FONT_STEPS.length - 1, FONT_STEPS.indexOf(fs) + dir));
