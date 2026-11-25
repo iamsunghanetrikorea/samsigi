@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { ShoppingBasket, ClipboardList, Camera, Search, ExternalLink, Plus, ChevronUp, ChevronDown, X } from 'lucide-react';
 import { useStore } from '../store';
 import { ING } from '../data/ingredients';
 import { ING_PHOTOS } from '../data/ingPhotos';
 import { DIFFICULTY_LABEL } from '../data/recipes';
 import { PICK_CATS, PICK_ITEMS, PICK_EXTRA, EXTRA_BY, CAT_LABEL, CAT_EMOJI, shortName, ingLabel, matchIngredient, recommend, dishesWithoutRecipe } from '../lib/market';
-import { Seg, longPress } from '../components/ui';
+import { Seg, longPress, useHeadHeight } from '../components/ui';
 import { go } from '../router';
 import { MyTableButton } from '../components/MyTable';
 import { tShort } from '../i18n/short';
@@ -19,10 +19,11 @@ import { MicButton, useSpeech } from '../components/Mic';
 export default function Market({ route }) {
   const view = route.query.view === 'list' ? 'list' : 'pick';
   const result = view === 'pick' && route.query.step === 'result';
+  const headRef = useHeadHeight(); // 제목·검색줄 높이를 알려 둬서 왼쪽 분류 칸이 그 바로 아래에 붙게 함
   return (
     <div className="stack">
       {/* 제목 오른쪽 마이크: 재료를 말하면 바로 골라서 추천 결과까지 보여 줌 */}
-      <div className="recipe-head">
+      <div className="recipe-head" ref={headRef}>
         <h1>{view === 'list' ? t('장보기 목록') : t('재료 검색')}</h1>
         {view === 'pick' && <PickSearch />}
       </div>
@@ -104,6 +105,10 @@ const Nm = ({ full, short }) => (short && short !== full ? <><span className="nm
 function Picker() {
   const { notify } = useStore();
   const [m, set] = useMarket();
+  const [pickCat, setPickCat] = useState(''); // 왼쪽 재료 분류 (채소·육류…) — 빈 값이면 전체
+  // 분류를 바꾸면 사진 칸을 맨 위부터 보여 줌
+  const scrollRef = useRef(null);
+  useLayoutEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [pickCat]);
   const picked = new Set(m.picked);
   const toggle = (id) => set((x) => ({ ...x, picked: x.picked.includes(id) ? x.picked.filter((y) => y !== id) : [...x.picked, id] }));
   const names = m.picked.map((id) => label(id, m.custom)).filter(Boolean);
@@ -122,8 +127,20 @@ function Picker() {
 
   return (
     <>
+      {/* 왼쪽에 재료 분류(제자리 고정), 오른쪽에 그 분류의 재료 사진만 오르내림 */}
+      <div className="kind-layout ing-layout">
+        <nav className="kind-tabs" aria-label={t('재료 분류')}>
+          <button type="button" className={`kind-tab ${pickCat === '' ? 'on' : ''}`} aria-pressed={pickCat === ''} onClick={() => setPickCat('')}>{t('전체')}</button>
+          {PICK_CATS.map((c) => (
+            <button key={c} type="button" className={`kind-tab ${pickCat === c ? 'on' : ''}`} aria-pressed={pickCat === c} onClick={() => setPickCat(pickCat === c ? '' : c)}>
+              <span className="kind-emoji" aria-hidden>{CAT_EMOJI[c]}</span>{catName(c)}
+            </button>
+          ))}
+        </nav>
+        <div className="kind-body">
+          <div className="kind-scroll" ref={scrollRef}>
       <div className="ing-board">
-        {PICK_CATS.map((cat) => {
+        {PICK_CATS.filter((c) => !pickCat || c === pickCat).map((cat) => {
           const items = [...PICK_ITEMS.filter((i) => i.cat === cat), ...PICK_EXTRA.filter((i) => i.cat === cat), ...m.custom.filter((c) => c.cat === cat)].filter((i) => !hidden.has(i.id));
           if (!items.length) return null;
           return (
@@ -149,6 +166,9 @@ function Picker() {
             </section>
           );
         })}
+      </div>
+          </div>
+        </div>
       </div>
 
       {hidden.size > 0 && <p className="muted small long-help no-print"><button type="button" className="linklike" onClick={() => set((x) => ({ ...x, hidden: [] }))}>{t('지운 기본 재료 {n}가지 다시 보이기', { n: hidden.size })}</button></p>}

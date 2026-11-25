@@ -758,14 +758,40 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 /* 메뉴 사진 카드 격자: 글자를 키워도 카드가 화면(또는 칸)보다 넓어지지 않게 */
 ul.recipe-grid { grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); }
 
-/* 메뉴 종류: 화면 왼쪽에 세로 분류 단추, 오른쪽에 그 종류의 메뉴 목록 */
-.kind-layout { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .8rem; align-items: start; }
+/* 메뉴 종류: 화면 왼쪽에 세로 분류 단추(제자리 고정), 오른쪽에 그 종류의 메뉴 사진만 오르내리는 칸 */
+.kind-layout { --kind-top: calc(var(--topbar-h, 70px) + var(--rhead-h, 56px)); /* 머리줄+검색줄 아래부터 */
+  --kind-extra: 0px; /* 분류 칸 위에 다른 안내줄이 더 있는 화면에서 그만큼 더 뺌 */
+  --pane-h: calc(100dvh - var(--kind-top) - var(--kind-extra) - 8.5rem); /* 사진 칸 높이 (아래 메뉴줄 자리 뺌) */
+  display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: .8rem; align-items: start; }
 .kind-layout.no-tabs { grid-template-columns: minmax(0, 1fr); } /* 이름으로 찾는 중에는 분류 줄이 없으니 한 칸으로 */
-.kind-tabs { display: flex; flex-direction: column; gap: .5rem; }
+/* 메뉴 종류 칸: 사진을 올려도 따라 움직이지 않게 화면에 붙여 둠 */
+.kind-tabs { position: sticky; top: calc(var(--kind-top) + .5rem); display: flex; flex-direction: column; gap: .5rem; }
 .kind-tab { appearance: none; width: 100%; min-height: 52px; padding: .5rem .3rem; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); font: inherit; font-weight: 600; line-height: 1.2; cursor: pointer; }
 .kind-tab:hover { border-color: var(--primary); }
 .kind-tab.on { background: var(--primary); border-color: var(--primary); color: #fff; }
-.kind-body { min-width: 0; display: flex; flex-direction: column; gap: .9rem; }
+/* 사진 칸: 왼쪽 종류 칸과 선으로 나누고, 이 안에서만 오르내림 */
+.kind-body { min-width: 0; display: flex; flex-direction: column; gap: .4rem; border-left: 1px solid var(--line); padding-left: .8rem; }
+.kind-layout.no-tabs .kind-body { border-left: 0; padding-left: 0; }
+.kind-count { margin: 0; }
+.kind-scroll { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  max-height: var(--pane-h); padding: .2rem .3rem .4rem 0; }
+@media (min-width: 1100px) { /* 아래 메뉴줄이 없는 큰 화면에서는 사진 칸을 더 길게 */
+  .kind-layout { --pane-h: calc(100dvh - var(--kind-top) - var(--kind-extra) - 5rem); }
+}
+/* 장보기 '재료 고르기': 분류 수가 많아 단추를 조금 작게, 다 들어가지 않으면 이 칸 안에서만 오르내림 */
+.ing-layout { --kind-extra: 7rem; } /* 안내줄 + '재료 고르기/장보기 목록' 단추줄 자리 */
+.ing-layout .kind-tabs { gap: .35rem; max-height: var(--pane-h); overflow-y: auto; overscroll-behavior: contain; }
+.ing-layout .kind-tab { min-height: 42px; padding: .3rem .2rem; font-size: .88rem; letter-spacing: -.03em; display: flex; align-items: center; justify-content: center; gap: .2rem; }
+.kind-emoji { font-size: 1.1rem; line-height: 1; }
+@media (max-width: 640px) {
+  .ing-layout { --kind-extra: 2.5rem; } /* 휴대폰에서는 단추줄이 숨어 있음 */
+  .ing-layout .ing-cat { grid-template-columns: repeat(4, 1fr); } /* 왼쪽 분류 칸만큼 좁아진 만큼 한 줄에 4칸 */
+}
+@media (max-width: 480px) { .ing-layout .ing-cat { grid-template-columns: repeat(3, 1fr); } } /* 휴대폰에서는 사진을 크게 3칸 */
+@media (max-width: 480px) { /* 휴대폰에서는 사진 칸이 좁아지지 않게 나눔선 없이 사이만 띄움 */
+  .kind-body { border-left: 0; padding-left: 0; }
+  .kind-scroll { padding-right: 0; }
+}
 @media (max-width: 420px) {
   .kind-layout { grid-template-columns: 4.6rem minmax(0, 1fr); gap: .5rem; }
   .kind-tab { min-height: 46px; font-size: min(.95rem, 3.9vw); letter-spacing: -.03em; padding: .4rem .15rem; }

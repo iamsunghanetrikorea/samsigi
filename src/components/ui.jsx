@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { NUTRIENTS, round } from '../lib/nutrition';
 import { t } from '../i18n';
@@ -106,4 +106,21 @@ export function longPress(onLong, ms = 600) {
     onClickCapture: (e) => { if (Date.now() - lastLong < 1500) { e.preventDefault(); e.stopPropagation(); lastLong = 0; } },
     onKeyDown: (e) => { if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); onLong(); } },
   };
+}
+
+// 화면 위에 붙어 있는 제목·검색줄의 높이를 CSS에 알려 둠 (--rhead-h)
+// → 왼쪽 분류 칸이 그 바로 아래에 붙고, 오른쪽 사진 칸 높이도 거기에 맞춰짐
+export function useHeadHeight() {
+  const ref = useRef(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const fit = () => document.documentElement.style.setProperty('--rhead-h', `${Math.round(el.getBoundingClientRect().height)}px`);
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    document.fonts?.ready.then(fit);
+    return () => ro.disconnect();
+  }, []);
+  return ref;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Pencil, X, ArrowLeft } from 'lucide-react';
 import { useStore } from '../store';
 import { RECIPES, MEAL_LABEL, RECIPE_BY_ID, CATEGORIES } from '../data/recipes';
@@ -11,6 +11,7 @@ import { go } from '../router';
 import Plate from '../components/Plate';
 import RecipeMaker, { RecipeEditor } from '../components/RecipeMaker';
 import { MyTableButton } from '../components/MyTable';
+import { useHeadHeight } from '../components/ui';
 import { t } from '../i18n';
 import RecipeCard, { RecipeGrid, RecipeGridItem } from '../components/shadcn-space/RecipeCard';
 import { MicButton, useSpeech } from '../components/Mic';
@@ -32,6 +33,11 @@ export default function RecipeList() {
   const [kind, setKind] = useState(''); // 왼쪽 메뉴 종류 (한식·중식…)
   const { listening, toggle } = useSpeech((said) => setQ(said.slice(0, 20)));
   const leftovers = leftoverRecipes(state.pantry);
+  // 화면에 붙어 있는 제목·검색줄 높이를 알려 둬서, 왼쪽 메뉴 종류 칸과 사진 스크롤 칸이 그 바로 아래에서 시작하게 함
+  const headRef = useHeadHeight();
+  // 종류를 바꾸거나 이름으로 찾으면 사진 칸을 맨 위부터 보여 줌
+  const scrollRef = useRef(null);
+  useLayoutEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [kind, q]);
   const byName = (name) => (r) => r.title.includes(name) || t(r.title).includes(name) || r.items.some(([id]) => ING[id]?.name.includes(name.replace(/달걀/g, '계란')));
   const query = q.trim();
   const list = RECIPES.filter((r) => (!query || byName(query)(r))
@@ -43,7 +49,7 @@ export default function RecipeList() {
   return (
     <div className="stack">
       {/* 제목 오른쪽에 마이크, 그 오른쪽에 검색칸 — 말하거나 적으면 메뉴 이름으로 바로 찾음 */}
-      <div className="recipe-head">
+      <div className="recipe-head" ref={headRef}>
         <h1>{t('요리 검색')}</h1>
         <MicButton listening={listening} onClick={toggle} className="mic-btn mic-inline" />
         <span className="recipe-search">
@@ -84,10 +90,12 @@ export default function RecipeList() {
           </nav>
         )}
         <div className="kind-body">
-      {!query && <p className="muted">{t('{n}개', { n: list.length })}</p>}
+      {!query && <p className="muted kind-count">{t('{n}개', { n: list.length })}</p>}
       {query && list.length === 0 && (
         <p className="notice">{t('‘{name}’(으)로 찾은 메뉴가 없어요. 다른 이름으로 찾아보시거나, 아래 ‘나의 레시피 추가’로 만들어 보세요.', { name: query })}</p>
       )}
+      {/* 사진만 이 칸 안에서 오르내림 — 왼쪽 메뉴 종류는 제자리에 그대로 */}
+      <div className="kind-scroll" ref={scrollRef}>
       <RecipeGrid>
         {list.map((r) => {
           const n = sumItems(mealItems(r, { kcal: targets.perMeal[r.meals[0]]?.kcal }).items.map((i) => [i.id, i.g]));
@@ -117,6 +125,7 @@ export default function RecipeList() {
           );
         })}
       </RecipeGrid>
+      </div>
         </div>
       </div>
       <section className="card update-card">
