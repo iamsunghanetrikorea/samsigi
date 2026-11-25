@@ -234,8 +234,6 @@ export default {
   '사진을 읽지 못했어요': { zh: '无法读取照片', ja: '写真を読み込めませんでした', en: 'Couldn’t read the photo' },
   '인터넷 찾기에 실패했어요': { zh: '网上搜索失败', ja: 'インターネット検索に失敗しました', en: 'Online search failed' },
   '인공지능 레시피추천': { zh: 'AI食谱推荐', ja: 'AIレシピのおすすめ', en: 'AI recipe ideas' },
-  '고른 재료({names})로 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.': { zh: 'Google AI会在网上查找信息，用您选的食材（{names}）推荐3～4种适合早餐清淡食用的食材和菜品。', ja: '選んだ材料（{names}）で、朝に軽く食べられる材料とメニューを3〜4つずつ、Google AIがインターネットで調べておすすめします。', en: 'Google AI searches the web and suggests 3–4 light breakfast ingredients and dishes using what you picked ({names}).' },
-  '재료를 고르지 않아도 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.': { zh: '即使不选食材，Google AI也会在网上查找信息，推荐3～4种适合早餐清淡食用的食材和菜品。', ja: '材料を選ばなくても、朝に軽く食べられる材料とメニューを3〜4つずつ、Google AIがインターネットで調べておすすめします。', en: 'Even without picking ingredients, Google AI searches the web and suggests 3–4 light breakfast ingredients and dishes.' },
   '먼저 새 {unit} 이름을 적어 주세요': { zh: '请先输入新{unit}的名称', ja: 'まず新しい{unit}の名前を書いてください', en: 'Please type the new {unit} name first' },
   '새 {unit} 이름을 적어 주세요': { zh: '请输入新{unit}的名称', ja: '新しい{unit}の名前を書いてください', en: 'Please type the new {unit} name' },
   '새 {unit} 이름': { zh: '新{unit}名称', ja: '新しい{unit}の名前', en: 'New {unit} name' },

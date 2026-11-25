@@ -256,9 +256,8 @@ function AiBreakfast({ names }) {
   // 질문은 주소에 담겨 가므로 복사(클립보드 권한 창이 뜰 수 있음) 없이 바로 이동
   const ask = () => window.location.assign(googleAiUrl(breakfastAiPrompt(names)));
   return (
-    <section className="card ai-box no-print" aria-labelledby="ai-h">
-      <h2 id="ai-h">{t('인공지능 레시피추천')}</h2>
-      <p className="muted small">{names.length ? t('고른 재료({names})로 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.', { names: names.join(', ') }) : t('재료를 고르지 않아도 아침에 가볍게 먹을 재료와 메뉴를 3~4가지씩, 구글 AI가 인터넷 정보를 찾아 추천해 드려요.')}</p>
+    <section className="card ai-box no-print">
+      {/* 설명 없이 단추만 — 누르면 고른 재료로 구글 AI에게 물어봄 */}
       <button type="button" className="btn ai-btn" onClick={ask}>{t('인공지능 레시피추천')}</button>
     </section>
   );

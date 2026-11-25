@@ -723,7 +723,6 @@ input[type='checkbox'] { width: 28px; height: 28px; min-height: 0; accent-color:
 
 /* 인공지능 레시피추천 블록 */
 .ai-box { display: flex; flex-direction: column; gap: .5rem; border-color: #c9b8f3; background: linear-gradient(180deg, #f6f2ff, var(--surface)); }
-.ai-box h2, .ai-box p { margin: 0; }
 .ai-btn { width: 100%; justify-content: center; min-height: 54px; font-size: 1.05rem; background: #6d4ad9; border-color: #6d4ad9; color: #fff; }
 .ai-btn:hover { background: #5b39c4; }
 :root[data-contrast='high'] .ai-box { background: var(--surface); border-color: var(--text); }
